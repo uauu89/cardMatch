@@ -1,5 +1,7 @@
 let cardArray = [1, 2, 3, 4, 5, 6, 7, 8];
 
+let openCard = "x".repeat(cardArray.length*2).split("");
+
 function cardShuffle(array){
     let cardArrayCopy = [...array, ...array];
     let cardArrayCount = cardArrayCopy.length;
@@ -85,9 +87,13 @@ function singleStart(){
 
 singleStart();
 
+
+// 인덱스 번호 구하기 위해 forEach로 바꾸기
+
 for(let i of cardWrap){
     i.addEventListener("click", (e)=>{
-
+        console.log(e.currentTarget.dataset.value);
+        
         if(!e.currentTarget.classList.contains("card_click") && !e.currentTarget.classList.contains("correct") && checkCardNum < 2){
             i.classList.add("card_click");
             checkCardNum++;
