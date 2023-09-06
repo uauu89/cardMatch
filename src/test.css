@@ -57,10 +57,10 @@ div{
     background-color: #cef;
 }
 
-.card_click .card_back{
+.card_open .card_back{
     transform: rotateY(180deg);
 }
-.card_click .card_front{
+.card_open .card_front{
     transform: rotateY(360deg);
 }
 
@@ -69,4 +69,10 @@ div{
 }
 .correct .card_front{
     transform: rotateY(360deg);
+}
+
+
+.user .card_front{
+    border-color: #f00;
+    box-shadow: inset 0 0 10px 0 #f00;
 }
