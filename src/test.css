@@ -76,3 +76,8 @@ div{
     border-color: #f00;
     box-shadow: inset 0 0 10px 0 #f00;
 }
+
+.com .card_front{
+    border-color: #00f;
+    box-shadow: inset 0 0 10px 0 #00f;
+}
