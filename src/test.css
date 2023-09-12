@@ -12,6 +12,7 @@ div{
     display: flex;
     gap: 10px;
     width: 70%;
+    min-width: 800px;
     flex-wrap: wrap;
     padding: 50px;
     justify-content: center;

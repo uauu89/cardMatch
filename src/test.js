@@ -1,8 +1,11 @@
-let cardArray, openCard, cardArrayCopy;
+let cardArray, openCard, cardArrayCopy, matchCard;
 let userDelay = false;
 
-let whosTurn = 0;
+let com_tunrCount = 0;
 
+let userSelectedCard = [];
+
+let timeDelay = 500;
 /*
 모든 인덱스값을 가진 배열에서 맞춘 카드의 인덱스 값을 replice로 제거를 하는게 더 낫지 않을까
 > 오픈되었던 카드인지 아닌지 구별 불가능
@@ -25,7 +28,7 @@ document.querySelector("#newGame").addEventListener("click", e=>{
     init();
 })
 
-function init(){
+function init(){  
     setCardArray();
     cardShuffleSimple(cardArrayCopy);
     insertCard(cardArrayCopy);
@@ -87,14 +90,20 @@ function init(){
 
 
 function pushOpenCard(idx){
-    openCard[idx] = document.querySelectorAll(".card_wrap")[idx].dataset.value;
+
+    let targetValue = document.querySelectorAll(".card_wrap")[idx].dataset.value;
+
+    openCard[idx] = targetValue;
+    userSelectedCard.push(targetValue);
+
     document.querySelectorAll(".card_wrap")[idx].classList.add("card_open");
+    document.querySelector("#test_openArray").innerHTML = openCard;
 }
 
-function checkMatching(arr, who){
+function checkMatching(who){
     let winner = "";
-    if(arr[0] === arr[1]){
-        who === 0? winner = "card_wrap correct user": winner = "card_wrap correct com";
+    if(userSelectedCard[0] === userSelectedCard[1]){
+        who === "user"? winner = "card_wrap correct user": winner = "card_wrap correct com";
         for(let i of document.querySelectorAll(".card_open")){
             i.setAttribute("class", winner);
         }
@@ -103,11 +112,13 @@ function checkMatching(arr, who){
             i.classList.remove("card_open");
         }
     }
+
+    userSelectedCard = [];
 }
 
 
 function turn_user(){
-    let userSelectedCard = [];
+    
     document.querySelectorAll(".card_wrap").forEach((card, idx) => {
 
         card.addEventListener("click", e=>{
@@ -115,32 +126,15 @@ function turn_user(){
             if(userDelay && !card.classList.contains("card_open") && !card.classList.contains("correct")){
                 userDelay = false;
 
-                // e.currentTarget.classList.add("card_open");
-                // openCard[idx] = e.currentTarget.dataset.value;
-
                 pushOpenCard(idx);
-
-                userSelectedCard.push(e.currentTarget.dataset.value);
-
                 setTimeout(()=>{
                     userDelay = true;
 
                     if(userSelectedCard.length === 2){
-                        checkMatching(userSelectedCard, whosTurn);
+                        checkMatching("user");
 
-                        // if(userSelectedCard[0] === userSelectedCard[1]){
-                        //     console.log("match success")
-                        //     for(let i of document.querySelectorAll(".card_open")){
-                        //         i.setAttribute("class", "card_wrap correct user");
-                        //     }
-                        // }else{
-                        //     for(let i of document.querySelectorAll(".card_open")){
-                        //         i.classList.remove("card_open");
-                        //     }
-                        // }
-                        userSelectedCard = [];
                     }
-                }, 500);
+                }, timeDelay);
             }
         })
     });
@@ -194,12 +188,13 @@ function com_createArray(){
             openCardMod.push(idx);
         }
     })
+
     let test_openArray = [...openCardMod].sort(()=>Math.random() - 0.5);
     if(test_openArray.length){
         let idx = test_openArray.shift();
         pushOpenCard(idx);
     }else{
-        test_openArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_oepn)");
+        test_openArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_open)");
         let randomNum = Math.floor(Math.random()*test_openArray.length);
         pushOpenCard(randomNum);
     }
@@ -209,12 +204,40 @@ function com_createArray(){
 
 
 
+/* ----------------------------------------- */
+function com_selectRandom(){
+    let noOpenArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_open)");
+    let selectedIdx = noOpenArray[Math.floor(Math.random()*noOpenArray.length)].dataset.index;
+    pushOpenCard(selectedIdx);
+}
+
+function com_selectOpen(){
+    
+}
+
+
+function com_turn(){
+
+    if(true){   //나중에 matchCard t/f 조건 추가
+        com_selectRandom();
+        com_tunrCount++;
+        document.querySelector("#test_etc").innerHTML = userSelectedCard;
+    }
+    if(com_tunrCount === 2){
+        com_tunrCount = 0;
+        setTimeout(()=>checkMatching("com"), timeDelay);
+    }
+}
+
+// matchCard
+/* ----------------------------------------- */
+
 
 
 
 
 document.querySelector("#aiTest").addEventListener("click", e=>{
-    turn_com();
+    com_turn();
 })
 document.querySelector("#checkArray").addEventListener("click", e=>{
     com_createArray();
