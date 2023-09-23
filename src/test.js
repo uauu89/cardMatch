@@ -1,45 +1,24 @@
-let cardArray, openCard, cardArrayCopy, matchCard;
+let cardArray, cardArrayCopy, openCard;
+let selectedCard = [];
+
+let whosTurn = "user";
+
 let userDelay = false;
 
 let com_turnCount = 0;
 
-let selectedCard = [];
 
 let timeDelay = 500;
 
 
+let score_com = 0,
+    score_user = 0;
 
-/*
-함수 리스트
-
-
-
-*/
-/*
-모든 인덱스값을 가진 배열에서 맞춘 카드의 인덱스 값을 replice로 제거를 하는게 더 낫지 않을까
-> 오픈되었던 카드인지 아닌지 구별 불가능
-> 현재 오픈된 카드인지 아닌지 구별 불가능
-
-
-함수화 할 것들
-openCard에 인덱스번호 추가하는 것만 (타이머와 분리)
-짝을 맞췄을 경우 correct 판정하기 (변수로 유저 = 0 /컴퓨터 = 1 구분해서 누가 맞췄는지 구분하도록 작성?)
-
-현재 aiTest 문제점
-
-openCard 배열에 각 인덱스 위치에 카드번호를 저장
-그런데 aiArray에서 x를 제거하고 value값을 인덱스번호로 이용해서 오류
-
-
-*/
 
 // 테스트용 임시 함수 --------------------------
-function test_printOpenCard(text){
-    document.querySelector("#test_openArray").innerHTML = text;
-}
-function test_printMatchCard(text){
-    document.querySelector("#test_matchArray").innerHTML = text;
-}
+
+init();     // 임시 바로시작 
+
 // /테스트용 임시 함수 --------------------------
 
 
@@ -47,14 +26,14 @@ function init(){
     setCardArray();
     cardShuffleSimple(cardArrayCopy);
     insertCard(cardArrayCopy);
-    
     cardCheck(false);
 
-
-    turn_user();
+    printScore();
+    // turn_user();
+    
+    playTurn();
 
 }
-
 function setCardArray(){
     cardArray = [];
     let i = 0;
@@ -62,28 +41,42 @@ function setCardArray(){
         cardArray.push(i+1)
         i++;
     }
-
     cardArrayCopy = [...cardArray, ...cardArray];
-    // openCard = "x".repeat(cardArray.length*2).split("");
     openCard = new Array(cardArray.length*2).fill(null);
 }
-
 function cardShuffleSimple(array){
     array.sort(()=>Math.random() - 0.5);
 }
-
 function insertCard(array){
     let dom_insertHTML = "";
     array.forEach((i, idx)=>{
         dom_insertHTML += `
         <div class="card_wrap" data-value=${i} data-index=${idx}>
-            <div class="card card_front">${i}</div>
-            <div class="card card_back"></div>
+            <div class="card card_front">
+                <div class="deco border top left"></div>
+                <div class="deco top left"></div>
+                <div class="deco border top right"></div>
+                <div class="deco top right"></div>
+                <div class="deco border bottom left"></div>
+                <div class="deco bottom left"></div>
+                <div class="deco border bottom right"></div>
+                <div class="deco bottom right"></div>
+                ${i}
+            </div>
+            <div class="card card_back">
+                <div class="deco border top left"></div>
+                <div class="deco top left"></div>
+                <div class="deco border top right"></div>
+                <div class="deco top right"></div>
+                <div class="deco border bottom left"></div>
+                <div class="deco bottom left"></div>
+                <div class="deco border bottom right"></div>
+                <div class="deco bottom right"></div>
+            </div>
         </div>`;
     });
     document.querySelector(".wrap").innerHTML = dom_insertHTML;
 }
-
 function cardCheck(bool){
     if(bool){
         document.querySelectorAll(".card_wrap").forEach((card, idx)=>{
@@ -103,8 +96,10 @@ function cardCheck(bool){
     }
 }
 
-
-
+function printScore(){
+    document.querySelector("#userScore span").innerText = score_user;
+    document.querySelector("#comScore span").innerText = score_com;
+}
 function pushOpenCard(idx){
 
     let targetCard = document.querySelectorAll(".card_wrap")[idx];
@@ -114,185 +109,152 @@ function pushOpenCard(idx){
 
     targetCard.classList.add("card_open");
     targetCard.classList.add("opend");
-    
-    test_printOpenCard(openCard)
 }
-
 function checkMatching(who){
-    let winner = "";
+    let winner = "card_wrap correct ";
     if(selectedCard[0] === selectedCard[1]){
-        who === "user"? winner = "card_wrap correct user": winner = "card_wrap correct com";
+        if(who === "user"){
+            winner += "user";
+            score_user++;
+        }else{
+            winner += "com";
+            score_com++;
+        }
+        printScore();
         for(let i of document.querySelectorAll(".card_open")){
             i.setAttribute("class", winner);
         }
+
+        for(let i of document.querySelectorAll(".correct")){
+            openCard[i.dataset.index] = null
+        };
+        
     }else{
         for(let i of document.querySelectorAll(".card_open")){
             i.classList.remove("card_open");
         }
     }
-
     selectedCard = [];
 }
 
 
+function playTurn(){
+    turn_user();
+}
+
 function turn_user(){
-    
     document.querySelectorAll(".card_wrap").forEach((card, idx) => {
 
         card.addEventListener("click", e=>{
-
-            if(userDelay && !card.classList.contains("card_open") && !card.classList.contains("correct")){
-                userDelay = false;
-
-                pushOpenCard(idx);
-                setTimeout(()=>{
-                    userDelay = true;
-
-                    if(selectedCard.length === 2){
-                        checkMatching("user");
-                    }
-                }, timeDelay);
+            if(whosTurn === "user"){
+                if(userDelay && !card.classList.contains("card_open") && !card.classList.contains("correct")){
+                    userDelay = false;
+    
+                    pushOpenCard(idx);
+                    setTimeout(()=>{
+                        userDelay = true;
+    
+                        if(selectedCard.length === 2){
+                            checkMatching("user");
+                            whosTurn = "com";
+                            for(let count = 0; count < 2; count++){
+                                setTimeout(turn_com, timeDelay * (count+1));
+                            }
+                        }
+                    }, timeDelay);
+                }
             }
         })
     });
 }
 function turn_com(){
-    // const getElCount = arr => arr.reduce((ac, v) => (
-    //     { ...ac, [v]: (ac[v] || 0) + 1 }), {});
+        let com_idx;
+        com_turnCount++;
     
-    // const array = ['A', 'B', 'C', 'D', 'A', 'A', 'C', 'E', 'D', 'E', 'A'];
-    // const test = getElCount(array);
-    // console.log(test);
-
-    // console.log(document.querySelectorAll(".card_wrap:not(.correct)").length);
-    // let aiArray = [...document.querySelectorAll(".card_wrap:not(.correct)")].sort(()=>Math.random() - 0.5);
-    // let aiArray = openCard.filter((num)=>{
-    //     return num !== "x";
-    // });
-
-    let aiArray = [];
-
-    openCard.forEach((i, idx)=>{
-        if(i !== "x"){
-            aiArray.push(idx);
-        }
-    })
+        if(selectedCard.length){    // 해당 턴에 선택된 카드가 있는 경우
+            
+            if(com_checkOpen(selectedCard[0])){    // 해당 턴에 선택된 카드와 오픈되었던 카드 중에 맞는 짝이 있는 경우
+                console.log("1-1")
+                com_idx = com_selectOpen(selectedCard[0]);
+                // > 해당 카드를 선택
     
-    if(aiArray.length){
-        aiArray.sort(()=>Math.random() - 0.5);
-        let firstIndex =aiArray.shift();
-        document.querySelectorAll(".card_wrap:not(.correct)")[firstIndex].classList.add("card_open");
-        setTimeout(()=>{
-            let secondIndex = aiArray.shift();
-            document.querySelectorAll(".card_wrap:not(.correct)")[secondIndex].classList.add("card_open");
-        }, 300)
-
-        setTimeout(()=>{
-            for(let i of document.querySelectorAll(".card_open")){
-                i.classList.remove("card_open");
+            }else{                                  // 해당 턴에 선택된 카드와 오픈되었던 카드 중에 맞는 짝이 없는 경우
+                console.log("1-2")
+                com_idx = com_selectRandom();
+                // 난이도 하 > 모든 카드 중에 랜덤 오픈
+                // 난이도 상 > 오픈 된 적이 없는 카드 중에 랜덤 오픈
             }
-        }, 1000)
-
-    }else{
-        console.log("aiArray false");
-    }
-}
-
-function com_createArray(){
-    let openCardMod = [];
-    openCard.forEach((i, idx)=>{
-        if(i !== "x"){
-            openCardMod.push(idx);
+        }else{                      // 해당 턴에 선택된 카드가 없는 경우
+    
+            if(com_selectFair()){      // 오픈된 카드 중에 짝이 맞는 카드가 있는 경우
+                console.log("2-1")
+                com_idx = com_selectFair();
+                // 짝이 맞는 카드 오픈 >> 두번 째 선택에서 조건문 첫번째에 해당되어 추가 조치 필요 없을 듯
+    
+            }else{              // 오픈된 카드 중에 짝이 맞는 카드가 없는 경우
+    
+                // 카드 랜덤 오픈
+                console.log("2-2")
+                com_idx = com_selectRandom();
+    
+            }
         }
-    })
-
-    let test_openArray = [...openCardMod].sort(()=>Math.random() - 0.5);
-    if(test_openArray.length){
-        let idx = test_openArray.shift();
-        pushOpenCard(idx);
-    }else{
-        test_openArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_open)");
-        let randomNum = Math.floor(Math.random()*test_openArray.length);
-        pushOpenCard(randomNum);
-    }
+    
+        pushOpenCard(com_idx);
+    
+        if(com_turnCount === 2){
+            com_turnCount = 0;
+            setTimeout(()=>{
+                checkMatching("com");
+                whosTurn = "user";
+            }, timeDelay);
+        }
 }
 
+function com_checkOpen(num){
+    let targetArray = openCard.filter(i => i);
+    return targetArray.indexOf(num) === targetArray.length? 
+        false:
+        targetArray.indexOf(num, targetArray.indexOf(num)+1)>-1 ? true : false;
+}
+function com_selectOpen(num){
+    let firstIndex = openCard.indexOf(num);
+    let lastIndex = openCard.lastIndexOf(num);
 
-
-
-
-/* ----------------------------------------- */
-function com_selectRandom(){
+    return document.querySelectorAll(".card_wrap")[firstIndex].classList.contains("card_open") ? lastIndex : firstIndex;
+}
+function com_selectRandom(){    // 오픈되지 않았던 카드 중에서 랜덤선택
     let noOpenArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_open)");
     let selectedIdx = noOpenArray[Math.floor(Math.random()*noOpenArray.length)].dataset.index;
-    pushOpenCard(selectedIdx);
+    return selectedIdx;
 }
+function com_selectFair(){  // 오픈된 카드쌍을 선택
+    let firstIndex, lastIndex;
 
-function com_selectOpend(){ //필요 없는 함수, 삭제하기
-    let OpenArray = document.querySelectorAll(".opend:not(.card_open)");
-    let selectedIdx = OpenArray[Math.floor(Math.random()*OpenArray.length)].dataset.index;
-    pushOpenCard(selectedIdx);
+    for(let i = 0; i < openCard.length; i++){
+        if(openCard[i] == null){
+            continue;
+        }else{
+            firstIndex = openCard.indexOf(openCard[i]);
+            lastIndex = openCard.lastIndexOf(openCard[i]);
+        }
+        if(firstIndex !== lastIndex){
+            break;
+        }
+    }
+    return firstIndex !== lastIndex ? firstIndex: false;
 }
-
-function com_selectFound(){
-    // openCard
-    // let testArray = [1, 4, null, null, 2, 3, 5, null, 4, null, 1, 3];
-    // testArray.find(e=>{
-    //     console.log(e)
-    // })
-    let removeIdx = document.querySelector(".card_open").dataset.index;
-    let checkArray = [...openCard];
-    checkArray.splice(removeIdx, 1, null);
-
-    test_printMatchCard(checkArray);
-
-    if(checkArray.indexOf(selectedCard[0]) > 0){
-        console.log(checkArray.indexOf(selectedCard[0]));
-        pushOpenCard(checkArray.indexOf(selectedCard[0]));
-    }else{
-        com_selectRandom();
-    }
-    
-}
-
-
-function com_turn(){
-
-    if(document.querySelectorAll(".opend:not(.card_open)").length && selectedCard.length){
-        com_selectFound();
-        com_turnCount++;
-        document.querySelector("#test_etc").innerHTML = selectedCard;
-    }else{
-        com_selectRandom();
-        com_turnCount++;
-        document.querySelector("#test_etc").innerHTML = selectedCard;
-    }
-
-    if(!true){   //나중에 matchCard t/f 조건 추가
-        com_selectRandom();
-        com_turnCount++;
-        document.querySelector("#test_etc").innerHTML = selectedCard;
-    }
-    if(com_turnCount === 2){
-        com_turnCount = 0;
-        setTimeout(()=>checkMatching("com"), timeDelay);
-    }
-}
-
-// matchCard
-/* ----------------------------------------- */
 
 
 document.querySelector("#newGame").addEventListener("click", e=>{
     init();
 })
 
-
 document.querySelector("#aiTest").addEventListener("click", e=>{
-    com_turn();
+    turn_com();
 })
-document.querySelector("#checkArray").addEventListener("click", e=>{
-    com_createArray();
-})
+
+
+
 
 

@@ -5,13 +5,16 @@ div{
     box-sizing: border-box;
 }
 
+
 .wrap{
+    margin: 0 auto;
     border: 1px solid #ccc;
-    background-color: #ddd;
+    /* background-color: #ddd; */
+    background-color: #f4f4f4;
     /* height: 500px; */
     display: flex;
     gap: 10px;
-    width: 70%;
+    width: 90%;
     min-width: 800px;
     flex-wrap: wrap;
     padding: 50px;
@@ -36,9 +39,8 @@ div{
     width: 120px;
     height: 180px;
     border-radius: 5px;
-    border: 3px solid #000;
+    border: 2px solid #608a69;
     position: absolute;
-    /* background-color: #efefef; */
     
     transition: transform 0.5s;
     backface-visibility: hidden;
@@ -46,17 +48,86 @@ div{
 
 .card_front{
     transform: rotateY(180deg);
-    background-color: #fff;
-    font-size: 32px;
+    /* background-color: #fff; */
+    background-image: linear-gradient(to left, #fff 50%, #f4f4f4 50%);
+    font-size: 40px;
     font-weight: bold;
+    color: #47634d;
     /* text-align: center; */
     display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: 2px 2px 3px 0px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
 }
 .card_back{
-    background-color: #cef;
+    /* background-color: #53B167; */
+    background-image: linear-gradient(to left, #fff 50%, #53B167 50%);
+    overflow: hidden;
+    /* position: relative; */
+
+    box-shadow: 2px 2px 3px 0px rgba(0, 0, 0, 0.5);
 }
+
+.deco{
+    position: absolute;
+    border-style: solid;
+    border-width: 41px 28px;
+}
+.deco.top{
+    top: 0;
+    transform: translateY(2px);
+}
+.deco.bottom{
+    bottom: 0;
+    transform: translateY(-2px);
+}
+.deco.left{
+    right: 50%;
+}
+.deco.right{
+    left: 50%;
+}
+.card_back .deco.top.left{border-color: transparent #fff transparent transparent;}
+.card_back .deco.top.right{border-color: transparent transparent transparent #fff;}
+.card_back .deco.bottom.left{border-color: transparent #53B167 transparent transparent;}
+.card_back .deco.bottom.right{border-color: transparent transparent transparent #53B167;}
+
+.deco.border{
+    border-width: 45px 30px;
+}
+.deco.border.top{
+    transform: translateY(-2px);
+}
+.deco.border.bottom{
+    transform: translateY(2px);
+}
+
+.card_back .deco.border.top.left{border-color: transparent #53B167 transparent transparent;}
+.card_back .deco.border.top.right{border-color: transparent transparent transparent #53B167;}
+.card_back .deco.border.bottom.left{border-color: transparent #fff transparent transparent;}
+.card_back .deco.border.bottom.right{border-color: transparent transparent transparent #fff;}
+
+
+
+
+.card_front .deco{
+    z-index: -1;
+}
+
+.card_front .deco.top.left{border-color: transparent #fff transparent transparent;}
+.card_front .deco.top.right{border-color: transparent transparent transparent #fff;}
+.card_front .deco.bottom.left{border-color: transparent #f4f4f4 transparent transparent;}
+.card_front .deco.bottom.right{border-color: transparent transparent transparent #f4f4f4;}
+
+.card_front .deco.border.top.left{border-color: transparent #f4f4f4 transparent transparent;}
+.card_front .deco.border.top.right{border-color: transparent transparent transparent #f4f4f4;}
+.card_front .deco.border.bottom.left{border-color: transparent #fff transparent transparent;}
+.card_front .deco.border.bottom.right{border-color: transparent transparent transparent #fff;}
+
+
+
+
 
 .card_open .card_back{
     transform: rotateY(180deg);
@@ -73,12 +144,34 @@ div{
 }
 
 
-.user .card_front{
-    border-color: #f00;
+.user .card_front::after{
+    content: "";
+    display: block;
+    position: absolute;
+    border-radius: 5px;
+    /* left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0; */
+    width: 100%;
+    height: 100%;
+    border: 4px solid #975757;
     box-shadow: inset 0 0 10px 0 #f00;
+    z-index: 1;
 }
 
-.com .card_front{
-    border-color: #00f;
+.com .card_front::after{
+    content: "";
+    display: block;
+    position: absolute;
+    border-radius: 5px;
+    /* left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0; */
+    width: 100%;
+    height: 100%;
+    border: 4px solid #575797;
     box-shadow: inset 0 0 10px 0 #00f;
+    z-index: 1;
 }
