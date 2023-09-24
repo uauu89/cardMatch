@@ -434,9 +434,34 @@
 
 @media (max-width: 835px) {
     .gameBoard{
-        padding: 50px 20px;
+        padding: 30px 20px;
+        margin-top: 150px;
+
     }
     .optionModal_wrap{
         width: 90%;
     }
+    .wrap{
+        width: 95%;
+    }
+
+}
+@media (max-width: 500px){
+    .gameBoard{
+        padding: 30px 10px;
+    }
+
+    .card_wrap{
+        width: 96px;
+        height: 144px;
+    }
+    
+    .card{
+        width: 96px;
+        height: 144px;
+    }
+
+    .deco{border-width: 32px 22px;}
+    .deco.border{border-width: 36px 24px;}
+
 }
