@@ -4,22 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>func test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="test.css">
 </head>
 <body>
-    <div class="notice">
-        <input type="number" id="inputNum" min="2" max="10" value="6">
-        <p id="userScore">user score : <span></span></p>
-        <p id="comScore">com score : <span></span></p>
-        <!-- <p>array : openCard: <span id="test_openArray"></span></p> -->
-        <!-- <p>array : matchCard: <span id="test_matchArray"></span></p> -->
-        <!-- <p>etc info: <span id="test_etc"></span></p> -->
+    <div class="ui">
+        <div class="header">
+            <a href="#" class="btn_option optionOpen"><i class="fa-solid fa-gear"></i></a>
+            <a href="#" class="btn_option optionClose"><i class="fa-solid fa-x"></i></a>
+            <a href="#" class="btn_openBtnGroup"><i class="fa-solid fa-caret-down"></i></a>
+            
+            <div class="optionModal_wrap">
+                <ul>
+                    <li>테스트 문구</li>
+                    <li>테스트 문구</li>
+                    <li>테스트 문구</li>
+                </ul>
+                <button type="button" id="newGame">new game</button>
+                <button type="button" id="aiTest">ai test</button>
+                <button type="button" id="funcTest">func test</button>
+                <input type="text" id="timerSetting">
+                <input type="number" id="inputNum" min="2" max="10" value="6">
+            </div>
+
+            <div class="notice_score">
+                <p class="score_user">유저 점수 : <span></span></p>
+                <p class="score_com">컴퓨터 점수 : <span></span></p>
+            </div>
+
+            <div class="timer_wrap">
+                <div class="clockHands half"></div>
+                <div class="clockHands full"></div>
+                <div class="clockHands cover"></div>
+                <div class="clockNum"><i class="fa-solid fa-infinity"></i></div>
+            </div>
+
+        </div>
+            
+        <div class="group_btn">
+            <div class="group_btnInner">
+                <button type="button" id="btn_newSingle" class="btn_newGame">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    새 게임<span></span>혼자
+                </button>
+                <button type="button" id="btn_newVs" class="btn_newGame">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    새 게임<span></span>대전
+                </button>
+            </div>
+        </div>
+        
     </div>
     <div class="wrap">
-        <!-- <div class="inner"></div> -->
+        <div class="gameBoard">
+        </div>
+
     </div>
-    <button type="button" id="newGame">new game</button>
-    <button type="button" id="aiTest">ai test</button>
+    
     <script src="test.js"></script>
     
 </body>

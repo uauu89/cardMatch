@@ -10,6 +10,8 @@ let com_turnCount = 0;
 
 let timeDelay = 500;
 
+let timerValue = 10;
+
 
 let score_com = 0,
     score_user = 0;
@@ -75,7 +77,7 @@ function insertCard(array){
             </div>
         </div>`;
     });
-    document.querySelector(".wrap").innerHTML = dom_insertHTML;
+    document.querySelector(".gameBoard").innerHTML = dom_insertHTML;
 }
 function cardCheck(bool){
     if(bool){
@@ -97,8 +99,8 @@ function cardCheck(bool){
 }
 
 function printScore(){
-    document.querySelector("#userScore span").innerText = score_user;
-    document.querySelector("#comScore span").innerText = score_com;
+    document.querySelector(".score_user span").innerText = score_user;
+    document.querySelector(".score_com span").innerText = score_com;
 }
 function pushOpenCard(idx){
 
@@ -257,4 +259,57 @@ document.querySelector("#aiTest").addEventListener("click", e=>{
 
 
 
+// ---------------------------
 
+document.querySelector(".optionOpen").addEventListener("click", (e)=>{
+    e.preventDefault();
+    document.querySelector(".header").classList.add("active");
+})
+
+document.querySelector(".optionClose").addEventListener("click", (e)=>{
+    e.preventDefault();
+    document.querySelector(".header").classList.remove("active");
+})
+
+document.querySelector(".btn_openBtnGroup").addEventListener("click", (e)=>{
+    e.preventDefault();
+    e.currentTarget.classList.toggle("active");
+    document.querySelector(".group_btn").classList.toggle("active");
+})
+
+
+
+
+document.querySelector("#funcTest").addEventListener("click", ()=>{
+    timerSetting();
+})
+
+
+function timerSetting(){
+    timerValue = document.querySelector("#timerSetting").value;
+    document.documentElement.style.setProperty("--clockTime", timerValue+"s");
+
+    for(let i of document.querySelectorAll(".clockHands")){
+        i.classList.add("animation");
+    }
+
+    setTimeout(()=>{
+        for(let i of document.querySelectorAll(".clockHands")){
+            i.classList.remove("animation");
+        }   
+    }, timerValue*1000+100);
+
+    let targetTime = timerValue;
+
+    document.querySelector(".timer_wrap .clockNum").innerText = targetTime;
+    
+    let timerCount = setInterval(()=>{
+        document.querySelector(".timer_wrap .clockNum").innerText = --targetTime;
+        console.log("timerValue : ", targetTime)
+        if(targetTime === 0){
+            clearInterval(timerCount);
+        }
+    }, 1000);
+    
+
+}
