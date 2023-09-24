@@ -190,15 +190,15 @@
 }
 
 @keyframes clock_half {
-    0%{rotate: 0deg;}
-    50%{rotate: 180deg;}
-    100%{rotate: 180deg;}
+    0%{transform: rotate(0deg);}
+    50%{transform: rotate(180deg);}
+    100%{transform: rotate(180deg);}
 }
 
 @keyframes clock_full {
-    0%{rotate: 0deg;}
-    50%{rotate: 180deg;}
-    100%{rotate: 360deg;}
+    0%{transform: rotate(0deg);}
+    50%{transform: rotate(180deg);}
+    100%{transform: rotate(360deg);}
 }
 @keyframes clock_cover {
     0%{visibility: visible;}
