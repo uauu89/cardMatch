@@ -16,8 +16,7 @@
     --color_green1: #608A69;
     --color_gray1: #f4f4f4;
 
-    --clockTime: 10s;
-
+    --turn_count: 30s;
 }
 
 ::-webkit-scrollbar {
@@ -31,6 +30,74 @@
 ::-webkit-scrollbar-track {
 	background: var(--color_main); 
 }
+
+
+
+
+
+
+
+
+
+
+/* 옵션창 작업중 ------------------------ */
+.transparent{
+    opacity: 0;
+    position: absolute;
+}
+
+.flex{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.flex span{
+    display: block;
+}
+
+.group_difficulty{
+    display: flex;
+    gap: 5px;
+    flex: 1;
+    /* width: 100%; */
+}
+
+.group_difficulty li{
+    flex: 1;
+}
+.btn_difficulty{
+    display: block;
+    padding: 10px;
+    /* height: 44px; */
+    background-color: #fff;
+    border: 2px solid var(--color_main);
+    border-radius: 3px;
+    /* flex: 1; */
+    cursor: pointer;
+    color: #408E51;
+    font-weight: 600;
+    /* line-height: 16px; */
+    text-align: center;
+}
+
+input[name=difficulty]:focus-visible + .btn_difficulty{
+    outline: auto;
+    outline-color: #000;
+}
+
+input[name=difficulty]:checked + .btn_difficulty{
+    background-color: var(--color_main);
+    color: #fff;
+}
+
+/* /옵션창 작업중 ------------------------ */
+
+
+
+
+
+
+
 
 .wrap{
     width: 90%;
@@ -70,14 +137,14 @@
     top: 0;
     right: 10px;
     display: block;
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     background-color: var(--color_main);
-    border-bottom-left-radius: 35px;
+    border-bottom-left-radius: 30px;
     color: #fff;
-    font-size: 30px;
+    font-size: 26px;
     text-align: center;
-    line-height: 50px;
+    line-height: 44px;
     z-index: 2;
     
 }
@@ -99,7 +166,7 @@
     padding: 30px;
     /* border: 3px solid var(--color_main);
     background-color: #fff; */
-    background-color: #f4f4f4;
+    background-color: var(--color_gray1);
     border-bottom-left-radius: 10px;
 
     box-shadow: -3px 5px 4px rgba(0, 0, 0, 0.25);
@@ -107,6 +174,7 @@
 
     transform: translateX(100%);
     transition: 0.3s;
+    font-size: 14px;
 }
 
 .active .optionModal_wrap{
@@ -180,13 +248,13 @@
 }
 
 .clockHands.half.animation{
-    animation: clock_half var(--clockTime) forwards linear;
+    animation: clock_half var(--turn_count) forwards linear;
 }
 .clockHands.full.animation{
-    animation: clock_full var(--clockTime) forwards linear;
+    animation: clock_full var(--turn_count) forwards linear;
 }
 .clockHands.cover.animation{
-    animation: clock_cover var(--clockTime) forwards linear;
+    animation: clock_cover var(--turn_count) forwards linear;
 }
 
 @keyframes clock_half {
@@ -389,15 +457,15 @@
     position: absolute;
     right: 10px;
     bottom: 0;
-    width: 50px;
-    height: 50px;
+    width: 44px;
+    height: 44px;
     border-top-left-radius: 20px;
     background-color: var(--color_main);
     
-    font-size: 40px;
+    font-size: 36px;
     color: #fff;
     text-align: center;
-    line-height: 50px;
+    line-height: 40px;
 }
 .btn_openBtnGroup i{
     transition: 0.5s;
@@ -464,4 +532,22 @@
     .deco{border-width: 32px 22px;}
     .deco.border{border-width: 36px 24px;}
 
+    .timer_wrap{
+        width: 80px;
+        height: 80px;
+        top: 10px;
+    }
+    .notice_score{
+        height: 100px;
+        padding: 10px 0;
+    }
+
+}
+
+
+.difficulty{
+    background-color: #f00;
+    width: 350px;
+    height: 50px;
+    color: #242;
 }

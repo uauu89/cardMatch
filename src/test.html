@@ -20,11 +20,37 @@
                     <li>테스트 문구</li>
                     <li>테스트 문구</li>
                 </ul>
-                <button type="button" id="newGame">new game</button>
-                <button type="button" id="aiTest">ai test</button>
-                <button type="button" id="funcTest">func test</button>
-                <input type="text" id="timerSetting">
-                <input type="number" id="inputNum" min="2" max="10" value="6">
+                <div class="flex">
+                    <span>난이도</span> 
+                    <ul class="group_difficulty">
+                        <li>
+                            <input type="radio" name="difficulty" id="difficulty1" class="transparent">
+                            <label for="difficulty1" class="btn_difficulty">라벨1</label>
+                        </li>
+                        <li>
+                            <input type="radio" name="difficulty" id="difficulty2" class="transparent" checked>
+                            <label for="difficulty2" class="btn_difficulty">라벨2</label>
+                        </li>
+                        <li>
+                            <input type="radio" name="difficulty" id="difficulty3" class="transparent">
+                            <label for="difficulty3" class="btn_difficulty">라벨3</label>
+                        </li>
+                        <li>
+                            <input type="radio" name="difficulty" id="difficulty4" class="transparent">
+                            <label for="difficulty4" class="btn_difficulty">라벨4</label>
+                        </li>
+                    </ul>
+                </div>
+                <p>
+                    <button type="button" id="funcTest">func test</button>
+                    <button type="button" id="funcTest2">func test2</button>
+                    <input type="number" id="input_countTime" min="1" max="99" value="30">
+                    <input type="number" id="inputNum" min="2" max="10" value="6">
+                </p>
+                <p>
+                    <button type="button" class="btn_optionSave">설정 저장</button>
+                    <button type="button" class="btn_optionDefault">기본 설정</button>
+                </p>
             </div>
 
             <div class="notice_score">
