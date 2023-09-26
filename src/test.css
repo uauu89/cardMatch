@@ -170,6 +170,7 @@ body{
     opacity: 0;
     position: absolute;
 }
+
 .textCenter{text-align: center;}
 .textRight{text-align: right;}
 .unit{
@@ -193,6 +194,7 @@ body{
     background-color: #fff;
     border: 3px solid var(--color_main);
     border-radius: 5px;
+    flex-shrink: 0;
 }
 .checkboxStyle.small{
     width: 14px;
@@ -684,6 +686,12 @@ input.transparent:checked + label{
     .ui .header{
         grid-template-columns: 1fr 1fr 60px;
     }
+    .optionModal_wrap{
+        position: fixed;
+        /* width: 600px; */
+        padding: 30px 10px;
+    }
+
     .group_btnInner{
         gap: unset;
         justify-content: space-evenly;
