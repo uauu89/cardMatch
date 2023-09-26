@@ -23,9 +23,9 @@ let diceResult;
 let difficulty = {
     // 랜덤 숫자가 아래 값보다 낮을 경우 작동, 0 >> 작동안함, 1 >> 항상작동
     "random" : {
-        "random" : 0.9,
+        "opend" : 0.99,
         "notOpen" : 0.95,
-        "opend" : 0.99
+        // "random" : 0.9,
     },
     "select" : 0.3,
     "pair" : 0.3,
@@ -59,7 +59,7 @@ function newGame_vs(){
     printScore();
     
     playTurn();
-    setTimeout(countStart, 100);
+    // setTimeout(countStart, 100);
     
 }
 
@@ -88,9 +88,9 @@ function setDifficulty(){
                 case "difficulty1":
                     difficulty = {
                         "random" : {
-                            "random" : 1,
+                            "opend" : 0,
                             "notOpen" : 0,
-                            "opend" : 0
+                            // "random" : 1,
                         },
                         "select" : 0,
                         "pair" : 0,
@@ -102,9 +102,9 @@ function setDifficulty(){
                     
                     difficulty = {
                         "random" : {
-                            "random" : 0.5,
+                            "opend" : 0,
                             "notOpen" : 1,
-                            "opend" : 0
+                            // "random" : 0.5,
                         },
                         "select" : 0.4,
                         "pair" : 0.3,
@@ -115,9 +115,9 @@ function setDifficulty(){
                 case "difficulty3":
                     difficulty = {
                         "random" : {
-                            "random" : 0,
+                            "opend" : 0,
                             "notOpen" : 1,
-                            "opend" : 0
+                            // "random" : 0,
                         },
                         "select" : 0.8,
                         "pair" : 0.7,
@@ -128,9 +128,9 @@ function setDifficulty(){
                 case "difficulty4":
                     difficulty = {
                         "random" : {
-                            "random" : 0,
+                            "opend" : 0,
                             "notOpen" : 1,
-                            "opend" : 0
+                            // "random" : 0,
                         },
                         "select" : 1,
                         "pair" : 1,
@@ -365,9 +365,9 @@ function com_selectOpen(num){   // 현재 오픈된 카드의 짝을 선택
 }
 function com_selectRandom(){    // 오픈되지 않았던 카드 중에서 랜덤선택
     let diceResult = dice();
-    let targetArray;
+    let targetArray = [];
 
-
+/*
     if(diceResult < difficulty.random.random){
         targetArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_open)");
 
@@ -378,6 +378,18 @@ function com_selectRandom(){    // 오픈되지 않았던 카드 중에서 랜�
         if(targetArray.length === 0){       //오픈했던 카드가 존재하지 않는 경우 미오픈 카드를 선택 (바로 위 조건)
             targetArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_open):not(.opend)");
         }
+    }
+*/
+
+    if(diceResult < difficulty.random.opend){
+        targetArray = document.querySelectorAll(".opend:not(.card_open)");
+        if(targetArray.length === 0){       //오픈했던 카드가 존재하지 않는 경우 미오픈 카드를 선택
+            targetArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_open):not(.opend)");
+        }
+    }else if(diceResult < difficulty.random.notOpen){
+        targetArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_open):not(.opend)");
+    }else{
+        targetArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_open)");
     }
 
 
@@ -419,13 +431,13 @@ btn_newVs.addEventListener("click", ()=>newGame_vs());
 
 document.querySelector(".optionOpen").addEventListener("click", (e)=>{
     e.preventDefault();
-    document.querySelector(".header").classList.add("active");
+    document.querySelector(".header").classList.toggle("active");
 })
 
-document.querySelector(".optionClose").addEventListener("click", (e)=>{
-    e.preventDefault();
-    document.querySelector(".header").classList.remove("active");
-})
+// document.querySelector(".optionClose").addEventListener("click", (e)=>{
+//     e.preventDefault();
+//     document.querySelector(".header").classList.remove("active");
+// })
 
 document.querySelector(".btn_openBtnGroup").addEventListener("click", (e)=>{
     e.preventDefault();
@@ -447,6 +459,37 @@ document.querySelector("#input_countTime").addEventListener("input", e=>{
 document.querySelector("#funcTest").addEventListener("click", ()=>{
     countStart();
 })
+
+
+
+// for(let i of document.querySelectorAll("*")){
+//     i.addEventListener("focus", e=>{
+//         console.log(e.currentTarget);
+//     })
+// }
+
+
+
+
+window.addEventListener("resize", e=>{
+    let screenSize = window.innerWidth;
+    cardSize_responsive(screenSize);
+})
+
+
+
+function cardSize_responsive(num){
+
+    if(num < 459){
+        document.documentElement.style.setProperty("--cardSize_ratio", 0.6);
+    }else if(num < 592){
+        document.documentElement.style.setProperty("--cardSize_ratio", 0.8);
+    }else{
+        document.documentElement.style.setProperty("--cardSize_ratio", 1);
+    }
+
+    
+}
 
 function countSetting(num){
     count_origin = num;

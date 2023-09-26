@@ -7,6 +7,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Noto+Sans+KR:wght@400;700&display=swap');
+
 @import url("customReset.css");
 
 
@@ -17,6 +19,24 @@
     --color_gray1: #f4f4f4;
 
     --turn_count: 30s;
+
+
+    --cardSize_ratio : 1;
+    
+    --cardSize_width: calc(120px * var(--cardSize_ratio));
+    --cardSize_height: calc(180px * var(--cardSize_ratio));
+
+    --cardSize_decoBorderWidth: calc(var(--cardSize_width) * 0.25);
+    --cardSize_decoBorderHeight: calc(var(--cardSize_height) * 0.25);
+
+    --cardSize_decoWidth: calc(var(--cardSize_decoBorderWidth) - 2px);
+    --cardSize_decoHeight: calc(var(--cardSize_decoBorderHeight) - 4px);
+
+
+}
+
+body{
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 ::-webkit-scrollbar {
@@ -32,65 +52,6 @@
 }
 
 
-
-
-
-
-
-
-
-
-/* 옵션창 작업중 ------------------------ */
-.transparent{
-    opacity: 0;
-    position: absolute;
-}
-
-.flex{
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-.flex span{
-    display: block;
-}
-
-.group_difficulty{
-    display: flex;
-    gap: 5px;
-    flex: 1;
-    /* width: 100%; */
-}
-
-.group_difficulty li{
-    flex: 1;
-}
-.btn_difficulty{
-    display: block;
-    padding: 10px;
-    /* height: 44px; */
-    background-color: #fff;
-    border: 2px solid var(--color_main);
-    border-radius: 3px;
-    /* flex: 1; */
-    cursor: pointer;
-    color: #408E51;
-    font-weight: 600;
-    /* line-height: 16px; */
-    text-align: center;
-}
-
-input[name=difficulty]:focus-visible + .btn_difficulty{
-    outline: auto;
-    outline-color: #000;
-}
-
-input[name=difficulty]:checked + .btn_difficulty{
-    background-color: var(--color_main);
-    color: #fff;
-}
-
-/* /옵션창 작업중 ------------------------ */
 
 
 
@@ -118,6 +79,12 @@ input[name=difficulty]:checked + .btn_difficulty{
 
 .ui .header{
     position: relative;
+    /* display: flex; */
+    /* justify-content: space-between; */
+    /* justify-content: start; */
+    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
 .ui .header::before{
@@ -131,6 +98,9 @@ input[name=difficulty]:checked + .btn_difficulty{
     right: 0;
     z-index: 10;
 }
+
+
+/* 옵션창 작업중 ------------------------ */
 
 .btn_option{
     position: fixed;
@@ -150,11 +120,20 @@ input[name=difficulty]:checked + .btn_difficulty{
 }
 
 .optionOpen i{
-    transition: rotate 1.2s ease-in-out;
+    transition: transform 1.2s ease-in-out;
 }
 
 .optionOpen:hover i{
-    rotate: 180deg;
+    transform: rotate(360deg);
+}
+.active .fa-gear:before{
+    content: "\58";
+}
+.active .optionOpen i{
+    transform: rotate(360deg);
+}
+.active .optionOpen:hover i{
+    transition: none;
 }
 
 .optionModal_wrap{
@@ -163,9 +142,8 @@ input[name=difficulty]:checked + .btn_difficulty{
     top: 0;
     width: 600px;
     height: 800px;
-    padding: 30px;
-    /* border: 3px solid var(--color_main);
-    background-color: #fff; */
+    padding: 30px 50px 30px 30px;
+
     background-color: var(--color_gray1);
     border-bottom-left-radius: 10px;
 
@@ -175,20 +153,206 @@ input[name=difficulty]:checked + .btn_difficulty{
     transform: translateX(100%);
     transition: 0.3s;
     font-size: 14px;
+    visibility: hidden;
+    color: #242;
 }
 
 .active .optionModal_wrap{
     transform: translateX(0%);
     right: 10px;
+    visibility: visible;
 }
 
-.optionClose{
-    display: none;
-}
 
-.active .optionClose{
+
+
+.transparent{
+    opacity: 0;
+    position: absolute;
+}
+.textCenter{text-align: center;}
+.textRight{text-align: right;}
+.unit{
     display: block;
+    width: 20px;
+    text-align: center;
 }
+
+
+.group_checkbox{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkboxStyle{
+    display: block;
+    position: relative;
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border: 3px solid var(--color_main);
+    border-radius: 5px;
+}
+.checkboxStyle.small{
+    width: 14px;
+    height: 14px;
+}
+.checkboxStyle.medium{
+    width: 20px;
+    height: 20px;
+}
+.checkboxStyle.big{
+    width: 24px;
+    height: 24px;
+}
+input.transparent:checked + .checkboxStyle::before{
+    position: absolute;
+    left: 6px;
+    bottom: 4px;
+    display: block;
+    content: "";
+    width: 4px;
+    height: 10px;
+    background-color: #fff;
+    border-radius: 2px;
+    transform-origin: 2px 8px;
+    transform: rotate(-40deg);
+}
+input.transparent:checked + .checkboxStyle::after{
+    position: absolute;
+    left: 6px;
+    bottom: 4px;
+    display: block;
+    content: "";
+    width: 4px;
+    height: 16px;
+    background-color: #fff;
+    border-radius: 2px;
+    transform-origin: 2px 14px;
+    transform: rotate(40deg);
+}
+
+
+.optionModal_wrap h2{
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color_main);
+}
+.optionModal_wrap h3{
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 30px;
+}
+.modal_depth{
+    margin-left: 10px;
+}
+.modal_depth.sub>li{
+    margin-top: 20px;
+    height: 30px;
+}
+li.flex{
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+.inputWrap, .inputWrap input{
+    font-size: 14px;
+    font-weight: 700;
+    color: #408E51;
+}
+.inputWrap{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    border: 2px solid var(--color_main);
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 0 10px;
+}
+.inputWrap input{
+    width: 80px;
+    line-height: 26px;
+    border: none;
+    background: transparent;
+}
+.inputWrap input::-webkit-inner-spin-button{
+    margin-left: 5px;
+}
+.inputWrap input:focus{
+    outline: none;
+}
+.inputWrap:focus-within{
+    outline: 2px solid black;
+}
+
+
+
+
+
+.optionModal_wrap .btn_commonStyle{
+    line-height: 26px;
+}
+
+.btn_commonStyle{
+    display: block;
+    background-color: #fff;
+    border: 2px solid var(--color_main);
+    border-radius: 5px;
+    color: #408E51;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    line-height: 26px;
+}
+.btn_commonStyle:hover{
+    background-color: var(--color_main);
+    color: #fff;
+}
+
+
+
+
+
+
+.group_modalBtn{
+    display: flex;
+    gap: 5px;
+    flex: 1;
+    margin-left: 0;
+}
+
+.group_modalBtn > li{
+    flex: 1;
+}
+
+
+input.transparent:focus-visible + label{
+    outline: auto;
+    outline-color: #000;
+}
+
+input.transparent:checked + label{
+    background-color: var(--color_main);
+    color: #fff;
+}
+
+/* /옵션창 작업중 ------------------------ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .notice_score{
     height: 140px;
@@ -197,14 +361,21 @@ input[name=difficulty]:checked + .btn_difficulty{
     flex-direction: column;
     justify-content: space-evenly;
     margin-left: 5%;
+
+    font-weight: 700;
+    color: #242;
 }
+
+
 
     /* timer */
 .timer_wrap{
-    position: absolute;
-    left: 50%;
-    top: 20px;
-    transform: translateX(-50%);
+    margin: 0 auto;
+    position: relative;
+    /* position: absolute; */
+    /* left: 50%; */
+    /* top: 20px; */
+    /* transform: translateX(-50%); */
     width: 100px;
     height: 100px;
 
@@ -223,7 +394,7 @@ input[name=difficulty]:checked + .btn_difficulty{
 
     color: #242;
     font-size: 48px;
-    font-weight: 900;
+    font-weight: 700;
 
     /* font-family: 'Black Ops One', cursive; */
     /* font-family: 'Inter', sans-serif; */
@@ -280,7 +451,7 @@ input[name=difficulty]:checked + .btn_difficulty{
     /* new game button */
 .group_btn{
     overflow: hidden;
-    position: absolute;
+    /* position: absolute; */
 }
 .group_btnInner{
     display: flex;
@@ -289,12 +460,7 @@ input[name=difficulty]:checked + .btn_difficulty{
 .btn_newGame{
     padding: 10px;
     height: 44px;
-    background-color: #fff;
-    border: 2px solid var(--color_main);
-    border-radius: 5px;
     font-size: 20px;
-    font-weight: 900;
-    color: #408E51;
     display: flex;
     flex-shrink: 0;
     align-items: center;
@@ -313,10 +479,6 @@ input[name=difficulty]:checked + .btn_difficulty{
     transition: 0.3s;
 }
 
-.btn_newGame:hover{
-    color: #fff;
-    background-color: var(--color_main);
-}
 .btn_newGame:hover i{
     color: #fff;
     rotate: 360deg;
@@ -356,16 +518,16 @@ input[name=difficulty]:checked + .btn_difficulty{
 
 .card_wrap{
     position: relative;
-    width: 120px;
-    height: 180px;
+    width: var(--cardSize_width);
+    height: var(--cardSize_height);
     cursor: pointer;
 }
 
 
 .card{
     position: absolute;
-    width: 120px;
-    height: 180px;
+    width: var(--cardSize_width);
+    height: var(--cardSize_height);
     border-radius: 5px;
     border: 2px solid var(--color_green1);
     transition: transform 0.5s;
@@ -391,7 +553,8 @@ input[name=difficulty]:checked + .btn_difficulty{
 .deco{
     position: absolute;
     border-style: solid;
-    border-width: 41px 28px;
+    /* border-width: 41px 28px; */
+    border-width: var(--cardSize_decoHeight) var(--cardSize_decoWidth);
 }
 .deco.top{top: 0; transform: translateY(2px);}
 .deco.bottom{bottom: 0; transform: translateY(-2px);}
@@ -403,7 +566,8 @@ input[name=difficulty]:checked + .btn_difficulty{
 .card_back .deco.bottom.left{border-color: transparent var(--color_main) transparent transparent;}
 .card_back .deco.bottom.right{border-color: transparent transparent transparent var(--color_main);}
 
-.deco.border{border-width: 45px 30px;}
+/* .deco.border{border-width: 45px 30px;} */
+.deco.border{border-width: var(--cardSize_decoBorderHeight) var(--cardSize_decoBorderWidth);}
 .deco.border.top{transform: translateY(-2px);}
 .deco.border.bottom{transform: translateY(2px);}
 
@@ -471,7 +635,7 @@ input[name=difficulty]:checked + .btn_difficulty{
     transition: 0.5s;
 }
 .btn_openBtnGroup.active i{
-    rotate: 180deg;
+    transform: rotate(180deg);
 }
 
 
@@ -483,11 +647,13 @@ input[name=difficulty]:checked + .btn_difficulty{
         transition: 0.5s;
         height: 0px;
         position: relative;
+        visibility: hidden;
     }
 
     .group_btn.active{
         height: auto;
         padding-bottom: 60px;
+        visibility: visible;
     }
 
     .group_btnInner{
@@ -515,27 +681,27 @@ input[name=difficulty]:checked + .btn_difficulty{
 
 }
 @media (max-width: 500px){
+    .ui .header{
+        grid-template-columns: 1fr 1fr 60px;
+    }
+    .group_btnInner{
+        gap: unset;
+        justify-content: space-evenly;
+    }
+    .group_btnInner i{
+        display: none;
+    }
+
     .gameBoard{
+        margin-top: 110px;
         padding: 30px 10px;
     }
-
-    .card_wrap{
-        width: 96px;
-        height: 144px;
-    }
-    
-    .card{
-        width: 96px;
-        height: 144px;
-    }
-
-    .deco{border-width: 32px 22px;}
-    .deco.border{border-width: 36px 24px;}
 
     .timer_wrap{
         width: 80px;
         height: 80px;
-        top: 10px;
+        margin: 0;
+        /* top: 10px; */
     }
     .notice_score{
         height: 100px;
@@ -544,10 +710,3 @@ input[name=difficulty]:checked + .btn_difficulty{
 
 }
 
-
-.difficulty{
-    background-color: #f00;
-    width: 350px;
-    height: 50px;
-    color: #242;
-}
