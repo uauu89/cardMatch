@@ -17,6 +17,7 @@
     --color_main: #53B167;
     --color_green1: #608A69;
     --color_gray1: #f4f4f4;
+    --color_gray2: #ddd;
 
     --turn_count: 30s;
 
@@ -31,7 +32,6 @@
 
     --cardSize_decoWidth: calc(var(--cardSize_decoBorderWidth) - 2px);
     --cardSize_decoHeight: calc(var(--cardSize_decoBorderHeight) - 4px);
-
 
 }
 
@@ -141,7 +141,9 @@ body{
     right: 0;
     top: 0;
     width: 600px;
-    height: 800px;
+    max-height: 840px;
+    /* max-height: min-content; */
+    height: 100vh;
     padding: 30px 50px 30px 30px;
 
     background-color: var(--color_gray1);
@@ -155,16 +157,21 @@ body{
     font-size: 14px;
     visibility: hidden;
     color: #242;
+    /* overflow: scroll; */
+    overflow-y: scroll;
 }
 
 .active .optionModal_wrap{
     transform: translateX(0%);
-    right: 10px;
+    /* right: 0px; */
     visibility: visible;
 }
 
 
 
+.cursorPointer{
+    cursor: pointer;
+}
 
 .transparent{
     opacity: 0;
@@ -196,22 +203,11 @@ body{
     border-radius: 5px;
     flex-shrink: 0;
 }
-.checkboxStyle.small{
-    width: 14px;
-    height: 14px;
-}
-.checkboxStyle.medium{
-    width: 20px;
-    height: 20px;
-}
-.checkboxStyle.big{
-    width: 24px;
-    height: 24px;
-}
+
 input.transparent:checked + .checkboxStyle::before{
     position: absolute;
-    left: 6px;
-    bottom: 4px;
+    left: 4px;
+    bottom: 2px;
     display: block;
     content: "";
     width: 4px;
@@ -223,8 +219,8 @@ input.transparent:checked + .checkboxStyle::before{
 }
 input.transparent:checked + .checkboxStyle::after{
     position: absolute;
-    left: 6px;
-    bottom: 4px;
+    left: 4px;
+    bottom: 2px;
     display: block;
     content: "";
     width: 4px;
@@ -249,14 +245,40 @@ input.transparent:checked + .checkboxStyle::after{
 .modal_depth{
     margin-left: 10px;
 }
+.modal_depth label{
+    white-space: nowrap;
+}
 .modal_depth.sub>li{
     margin-top: 20px;
-    height: 30px;
+    /* height: 30px; */
 }
+.modal_depthDetail{
+    margin-left: 20px;    
+}
+
+.modal_depthDetail p{
+    font-size: 12px;
+    margin: 10px 0 5px;
+}
+
 li.flex{
     display: flex;
     align-items: center;
     gap: 30px;
+}
+li.grid{
+    display: grid;
+    grid-template-columns: 70px auto;
+    align-items: center;
+    column-gap: 30px;
+    row-gap: 10px;
+}
+
+li.grid.template3{
+    grid-template-columns: 70px min-content max-content;
+}
+.gridCol_2{
+    grid-column: 2;
 }
 .inputWrap, .inputWrap input{
     font-size: 14px;
@@ -264,7 +286,8 @@ li.flex{
     color: #408E51;
 }
 .inputWrap{
-    display: flex;
+    /* display: flex; */
+    display: inline-flex;
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
@@ -272,6 +295,7 @@ li.flex{
     border-radius: 5px;
     background-color: #fff;
     padding: 0 10px;
+    justify-self: start;
 }
 .inputWrap input{
     width: 80px;
@@ -289,6 +313,14 @@ li.flex{
     outline: 2px solid black;
 }
 
+
+.inputWrap.disabled{
+    border-color: var(--color_gray2);
+    color: var(--color_gray2);
+}
+.inputWrap.disabled input{
+    color: var(--color_gray2);
+}
 
 
 
@@ -339,6 +371,60 @@ input.transparent:checked + label{
     background-color: var(--color_main);
     color: #fff;
 }
+
+.group_range{
+    display: grid;
+    grid-template-columns: auto max-content;
+    gap: 10px;
+    align-items: center;
+}
+
+.group_range input[type=range]{
+    cursor: pointer;
+    appearance: none;
+    background-color: transparent;
+    box-sizing: border-box;
+    height: 10px;
+    background: linear-gradient(to right, var(--color_main) 50%, #fff 50%);
+    border-radius: 3px;
+    box-shadow: inset 0 0 0 1px var(--color_main);
+}
+.group_range input[type=range]::-webkit-slider-thumb{
+    appearance: none;
+    background-color: transparent;
+    box-sizing: border-box;
+    width: 60px;
+    height: 24px;
+    background-color: #fff;
+    border: 2px solid #408E51;
+    border-radius: 4px;
+}
+.group_range input[type=range]::-moz-range-thumb{
+    appearance: none;
+    background-color: transparent;
+    box-sizing: border-box;
+    width: 60px;
+    height: 24px;
+    background-color: #fff;
+    border: 2px solid #408E51;
+    border-radius: 4px;
+}
+
+
+
+.modal_groupBtn p{
+    text-align: right;
+    margin: 50px 0 10px;
+}
+
+.modal_groupBtnInner{
+    display: flex;
+    gap: 30px;
+    justify-content: end;
+    
+}
+
+
 
 /* /옵션창 작업중 ------------------------ */
 
@@ -511,7 +597,7 @@ input.transparent:checked + label{
     border: 1px solid #ccc;
     background-color: var(--color_gray1);
     margin-top: 200px;
-    padding: 50px;
+    padding: 50px 40px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;

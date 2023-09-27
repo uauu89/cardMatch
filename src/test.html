@@ -19,43 +19,30 @@
                     <li>
                         <h3>공통 옵션</h3>
                         <ul class="modal_depth sub">
-                            <li class="flex">
+                            <li class="grid">
                                 <label for="input_cardNum">카드 범위</label>
                                 <div class="inputWrap textRight">
                                     <input type="number" id="input_cardNum" class="textRight" min="2" value="6">
                                     <span class="unit"></span>
                                 </div>
                             </li>
-                            <li class="flex">
+
+                            <li class="grid template3">
                                 <label for="input_cardNum">시간 제한</label>
                                 <div class="inputWrap textRight">
                                     <input type="number" id="input_countTime" class="textRight" min="1" max="99" value="30">
                                     <span class="unit">s</span>
                                 </div>
+
                                 <div class="group_checkbox">
-                                    <label for="input_countNoTime">제한 없음</label>
+                                    <label for="input_countNoTime" class="cursorPointer">제한 없음</label>
                                     <input type="checkbox" id="input_countNoTime" class="transparent">
-                                    <label for="input_countNoTime" class="checkboxStyle"></label>
+                                    <label for="input_countNoTime" class="checkboxStyle cursorPointer"></label>
                                 </div>
+
                             </li>
-                            <li class="flex">
-                                <div class="group_checkbox">
-                                    <label for="input_countNoTimeSmall">제한</label>
-                                    <input type="checkbox" id="input_countNoTimeSmall" class="transparent">
-                                    <label for="input_countNoTimeSmall" class="checkboxStyle small"></label>
-                                </div>
-                                <div class="group_checkbox">
-                                    <label for="input_countNoTimeMedium">제한</label>
-                                    <input type="checkbox" id="input_countNoTimeMedium" class="transparent">
-                                    <label for="input_countNoTimeMedium" class="checkboxStyle medium"></label>
-                                </div>
-                                <div class="group_checkbox">
-                                    <label for="input_countNoTimeBig">제한</label>
-                                    <input type="checkbox" id="input_countNoTimeBig" class="transparent">
-                                    <label for="input_countNoTimeBig" class="checkboxStyle big"></label>
-                                </div>
-                            </li>
-                            <li class="flex">
+                            
+                            <li class="grid">
                                 카드 크기
                                 <ul class="group_modalBtn">
                                     <li>
@@ -70,46 +57,122 @@
                                         <input type="radio" name="cardSize" id="cardSize3" class="transparent">
                                         <label for="cardSize3" class="btn_commonStyle">소</label>
                                     </li>
+                                </ul>
+                                <div class="group_checkbox gridCol_2">
+                                    <label for="input_autoSize" class="cursorPointer">화면 크기에 따라 자동 변경</label>
+                                    <input type="checkbox" id="input_autoSize" class="transparent" checked>
+                                    <label for="input_autoSize" class="checkboxStyle cursorPointer"></label>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li>
+                        <h3>대전 옵션</h3>
+                        <ul class="modal_depth sub">
+                            <li class="grid">
+                                <label for="input_keepTurn" class="cursorPointer">연속 선택 여부</label>
+                                <div class="group_checkbox">
+                                    <input type="checkbox" id="input_keepTurn" class="transparent">
+                                    <label for="input_keepTurn" class="checkboxStyle cursorPointer"></label>
+                                </div>
+                            </li>
+                            <li class="grid">
+                                난이도
+                                <ul class="group_modalBtn">
+                                    <li>
+                                        <input type="radio" name="difficulty" id="difficulty1" class="transparent">
+                                        <label for="difficulty1" class="btn_commonStyle btn_difficulty">1단계</label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" name="difficulty" id="difficulty2" class="transparent" checked>
+                                        <label for="difficulty2" class="btn_commonStyle btn_difficulty">2단계</label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" name="difficulty" id="difficulty3" class="transparent">
+                                        <label for="difficulty3" class="btn_commonStyle btn_difficulty">3단계</label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" name="difficulty" id="difficulty4" class="transparent">
+                                        <label for="difficulty4" class="btn_commonStyle btn_difficulty">4단계</label>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="modal_depthDetail">
+                                <div>난이도 세부 옵션</div>
+                                <ul class="modal_depth">
+                                    <li>
+                                        <p>남은 카드 비율</p>
+                                        <div class="group_range">
+                                            <input type="range" id="detail_remainRatio">
+                                            <div class="inputWrap textRight">
+                                                <input type="number" class="textRight" min="0" max="100" value="50">
+                                                <span class="unit">%</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <p>임의선택 : 이미 열어 본 카드를 다시 선택할 확률</p>
+                                        <div class="group_range">
+                                            <input type="range" id="testId">
+                                            <div class="inputWrap textRight">
+                                                <input type="number" class="textRight" min="0" max="100" value="50">
+                                                <span class="unit">%</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <p>임의선택 : 열어보지 않은 카드를 선택할 확률</p>
+                                        <div class="group_range">
+                                            <input type="range" id="testId2">
+                                            <div class="inputWrap textRight">
+                                                <input type="number" class="textRight" min="0" max="100" value="50">
+                                                <span class="unit">%</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <p>확정선택 : 현재 선택한 카드와 맞는 카드를 선택할 확률</p>
+                                        <div class="group_range">
+                                            <input type="range" id="testId3">
+                                            <div class="inputWrap textRight">
+                                                <input type="number" class="textRight" min="0" max="100" value="50">
+                                                <span class="unit">%</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <p>확정선택 : 이미 열어 본 카드 중 짝이 맞는 카드를 선택할 확률</p>
+                                        <div class="group_range">
+                                            <input type="range" id="testId4">
+                                            <div class="inputWrap textRight">
+                                                <input type="number" class="textRight" min="0" max="100" value="50">
+                                                <span class="unit">%</span>
+                                            </div>
+                                        </div>
+                                    </li>
 
                                 </ul>
+
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <h3>대전 옵션</h3>
-                    </li>
                 </ul>
-                <div class="flex">
-                    <span>난이도</span> 
-                    <ul class="group_modalBtn">
-                        <li>
-                            <input type="radio" name="difficulty" id="difficulty1" class="transparent">
-                            <label for="difficulty1" class="btn_commonStyle btn_difficulty">라벨1</label>
-                        </li>
-                        <li>
-                            <input type="radio" name="difficulty" id="difficulty2" class="transparent" checked>
-                            <label for="difficulty2" class="btn_commonStyle btn_difficulty">라벨2</label>
-                        </li>
-                        <li>
-                            <input type="radio" name="difficulty" id="difficulty3" class="transparent">
-                            <label for="difficulty3" class="btn_commonStyle btn_difficulty">라벨3</label>
-                        </li>
-                        <li>
-                            <input type="radio" name="difficulty" id="difficulty4" class="transparent">
-                            <label for="difficulty4" class="btn_commonStyle btn_difficulty">라벨4</label>
-                        </li>
-                    </ul>
+                <div class="modal_groupBtn">
+                    <p>※ 변경된 옵션은 다음 게임부터 적용됩니다.</p>
+                    <div class="modal_groupBtnInner">
+                        <button type="button" id="btn_newSingle2" class="btn_commonStyle btn_newGame">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            새 게임<span></span>혼자
+                        </button>
+                        <button type="button" id="btn_newVs2" class="btn_commonStyle btn_newGame">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            새 게임<span></span>대전
+                        </button>
+                    </div>
                 </div>
-                <p>
-                    <button type="button" id="funcTest">func test</button>
-                    <button type="button" id="funcTest2">func test2</button>
-                    <!-- <input type="number" id="input_countTime" min="1" max="99" value="30"> -->
-                    <input type="number" id="inputNum" min="2" max="10" value="6">
-                </p>
-                <p>
-                    <button type="button" class="btn_optionSave">설정 저장</button>
-                    <button type="button" class="btn_optionDefault">기본 설정</button>
-                </p>
+
             </div>
 
             <div class="notice_score">
