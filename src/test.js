@@ -4,6 +4,7 @@ let selectedCard = [];
 let whosTurn = "user";
 
 let userDelay = false;
+let turnContinuos = false;
 let pairCase = false;
 
 let com_turnCount = 0;
@@ -23,13 +24,11 @@ let diceResult;
 
 let difficulty = {
     // 랜덤 숫자가 아래 값보다 낮을 경우 작동, 0 >> 작동안함, 1 >> 항상작동
-    "random" : {
-        "opend" : 1,
-        "notOpen" : 0,
-        // "random" : 0.9,
-    },
-    "select" : 0,
-    "pair" : 1,
+    "Opend" : 1,
+    "NotOpen" : 0,
+    // "random" : 0.9,
+    "Select" : 0,
+    "Pair" : 1,
     "trick" : 0
 }
 
@@ -38,7 +37,14 @@ let difficulty = {
 
 newGame_vs()
 
-setDifficulty();
+insert_difficultyDefault();
+
+document.querySelector("#difficulty2").click();
+
+document.querySelector("#input_keepTurn").addEventListener("change", e=>{
+    turnContinuos = e.currentTarget.checked ? true: false; 
+})
+
 // /테스트용 임시 함수 --------------------------
 
 
@@ -57,9 +63,11 @@ function newGame_vs(){
     cardShuffleSimple(cardArrayCopy);
     insertCard(cardArrayCopy);
     cardCheck(false);
+    
     printScore();
     
     playTurn();
+    init_setDifficulty();
     // setTimeout(countStart, 100);
     
 }
@@ -76,76 +84,10 @@ function init(who){
 
 
 function dice(){
-    return Math.random();
+    return Math.floor(Math.random()*100);
 }
 
-function setDifficulty(){
-    // let selectValue;
 
-    document.querySelectorAll("input[name=difficulty]").forEach((i, idx)=>{
-        i.addEventListener("change", (e)=>{
-            let selectValue = e.currentTarget.id;
-            switch(selectValue){
-                case "difficulty1":
-                    difficulty = {
-                        "random" : {
-                            "opend" : 0,
-                            "notOpen" : 0,
-                            // "random" : 1,
-                        },
-                        "select" : 0,
-                        "pair" : 0,
-                        "trick" : 0
-                    }
-                    console.log("1 : ", difficulty);
-                    break;
-                case "difficulty2":
-                    
-                    difficulty = {
-                        "random" : {
-                            "opend" : 0,
-                            "notOpen" : 1,
-                            // "random" : 0.5,
-                        },
-                        "select" : 0.4,
-                        "pair" : 0.3,
-                        "trick" : 0
-                    }
-                    console.log("2 : ", difficulty);
-                    break;
-                case "difficulty3":
-                    difficulty = {
-                        "random" : {
-                            "opend" : 0,
-                            "notOpen" : 1,
-                            // "random" : 0,
-                        },
-                        "select" : 0.8,
-                        "pair" : 0.7,
-                        "trick" : 0
-                    }
-                    console.log("3 : ", difficulty);
-                    break;
-                case "difficulty4":
-                    difficulty = {
-                        "random" : {
-                            "opend" : 0,
-                            "notOpen" : 1,
-                            // "random" : 0,
-                        },
-                        "select" : 1,
-                        "pair" : 1,
-                        "trick" : 0
-                    }
-                    console.log("4 : ", difficulty);
-                    break;
-                default:
-            }
-        })
-    })
-
-
-}
 
 
 
@@ -236,7 +178,12 @@ function pushOpenCard(idx){
 }
 function checkMatching(who){
     let winner = "card_wrap correct ";
-    if(selectedCard[0] === selectedCard[1]){
+
+    let result = selectedCard[0] === selectedCard[1];
+    selectedCard = [];
+
+    // if(selectedCard[0] === selectedCard[1]){
+    if(result){
         if(who === "user"){
             winner += "user";
             score_user++;
@@ -245,6 +192,7 @@ function checkMatching(who){
             score_com++;
         }else{
             winner += "user";
+            // 싱글 > 점수시스템 아직 안만듦
         }
         printScore(who);
         for(let i of document.querySelectorAll(".card_open")){
@@ -254,13 +202,14 @@ function checkMatching(who){
         for(let i of document.querySelectorAll(".correct")){
             openCard[i.dataset.index] = null
         };
-        
+        return true;
     }else{
         for(let i of document.querySelectorAll(".card_open")){
             i.classList.remove("card_open");
         }
+        return false;
     }
-    selectedCard = [];
+    
 }
 
 
@@ -288,6 +237,44 @@ function turn_single(){
     });
 }
 
+// 원본 백업
+// function turn_user(){
+//     document.querySelectorAll(".card_wrap").forEach((card, idx) => {
+
+//         card.addEventListener("click", e=>{
+//             if(whosTurn === "user"){
+//                 if(userDelay && !card.classList.contains("card_open") && !card.classList.contains("correct")){
+//                     userDelay = false;
+    
+//                     pushOpenCard(idx);
+//                     setTimeout(()=>{
+//                         userDelay = true;
+    
+//                         if(selectedCard.length === 2){
+//                             checkMatching("user");
+//                             countStop();
+
+//                             // if(turnContinuos){
+//                             //     countStart();
+//                             // }else{
+//                             //     whosTurn = "com";
+//                             //     for(let count = 0; count < 2; count++){
+//                             //         setTimeout(turn_com, timeDelay * (count+1));
+//                             //     }
+//                             // }
+//                             whosTurn = "com";
+//                                 for(let count = 0; count < 2; count++){
+//                                     setTimeout(turn_com, timeDelay * (count+1));
+//                                 }
+
+//                         }
+//                     }, timeDelay);
+//                 }
+//             }
+//         })
+//     });
+// }
+
 function turn_user(){
     document.querySelectorAll(".card_wrap").forEach((card, idx) => {
 
@@ -297,23 +284,57 @@ function turn_user(){
                     userDelay = false;
     
                     pushOpenCard(idx);
+
+                    if(selectedCard.length === 2){
+                        countStop();
+                        let result = checkMatching("user");
+                        if(turnContinuos && result){
+                            setTimeout(()=>{
+                                countStart();
+                                userDelay = true;
+                            }, timeDelay)
+                        }else{
+                            setTimeout(()=>{
+                                countStart();
+                                userDelay = true;
+                            }, timeDelay)
+                        }
+                    }else{
+                        setTimeout(()=>{
+                            countStart();
+                            userDelay = true;
+                        }, timeDelay)
+                    }
+/*
                     setTimeout(()=>{
                         userDelay = true;
     
                         if(selectedCard.length === 2){
                             checkMatching("user");
                             countStop();
+
+                            // if(turnContinuos){
+                            //     countStart();
+                            // }else{
+                            //     whosTurn = "com";
+                            //     for(let count = 0; count < 2; count++){
+                            //         setTimeout(turn_com, timeDelay * (count+1));
+                            //     }
+                            // }
                             whosTurn = "com";
-                            for(let count = 0; count < 2; count++){
-                                setTimeout(turn_com, timeDelay * (count+1));
-                            }
+                                for(let count = 0; count < 2; count++){
+                                    setTimeout(turn_com, timeDelay * (count+1));
+                                }
+
                         }
                     }, timeDelay);
+        */
                 }
             }
         })
     });
 }
+
 function turn_com(){
         let com_idx;
         
@@ -395,12 +416,12 @@ function com_selectRandom(){    // 오픈되지 않았던 카드 중에서 랜�
     }
 */
 
-    if(diceResult < difficulty.random.opend){
+    if(diceResult < difficulty.Opend){
         targetArray = document.querySelectorAll(".opend:not(.card_open)");
         if(targetArray.length === 0){       //오픈했던 카드가 존재하지 않는 경우 미오픈 카드를 선택
             targetArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_open):not(.opend)");
         }
-    }else if(diceResult < difficulty.random.notOpen){
+    }else if(diceResult < difficulty.NotOpen){
         targetArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_open):not(.opend)");
     }else{
         targetArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_open)");
@@ -587,10 +608,6 @@ function countStop(){
 
 
 
-
-
-// 옵션창 작동 관련
-
 function inputCountNoTime(){
 
     let inputCheck = document.querySelector("#input_countNoTime"),
@@ -609,30 +626,148 @@ function inputCountNoTime(){
 inputCountNoTime();
 
 
-function inputRange(){
+
+
+
+
+document.querySelector(".modal_depthDetail a").addEventListener("click", e=>{
+    e.preventDefault();
+    document.querySelector(".arcodion_wrap").classList.toggle("active");
+})
+
+
+
+
+//  옵션창 난이도 관련 함수들 ---------------------
+
+/*
+
+input type=range 값을 input type=number 로 옮기는 함수
+input type=number 값을 input type=range로 옮기는 함수
+
+input type=range 값으로 css 적용하는 함수
+
+
+실제 난이도로 적용하는 함수
+
+
+*/
+
+
+
+function style_difficultyBg(targetDom, value){
+    targetDom.style.background = `linear-gradient(to right, var(--color_main) ${value}%, #fff ${value}%)`;
+}
+function update_difficulty_otherType(targetType, targetDataCategory, value){
+    document.querySelector(`input[type=${targetType}][data-category$=${targetDataCategory}]`).value = value;
+}
+
+function input_difficultyDetail(){
     let inputRange = document.querySelectorAll(".group_range input[type=range]");
     let inputNumber = document.querySelectorAll(".group_range input[type=number]");
-    
-    inputRange.forEach((i)=>{
+
+    inputRange.forEach(i=>{
         i.addEventListener("input", e=>{
-            let targetValue = e.currentTarget.value;
-            e.currentTarget.style.background = `linear-gradient(to right, var(--color_main) ${targetValue}%, #fff ${targetValue}%)`;
-            e.currentTarget.nextElementSibling.querySelector("input[type=number]").value = targetValue;
+            style_difficultyBg(e.currentTarget, e.currentTarget.value);
+            update_difficulty_otherType("number", e.currentTarget.dataset.category, e.currentTarget.value);
         })
     })
-    inputNumber.forEach((i)=>{
+
+    inputNumber.forEach(i=>{
         i.addEventListener("change", e=>{
-            let targetValue = e.currentTarget.value;
-            if(targetValue < 0 || targetValue > 100 || !Number.isInteger(targetValue)){
+            let rangeDom = e.currentTarget.closest(".inputWrap").previousElementSibling;
+            // || !Number.isInteger(e.currentTarget.value)
+            if(e.currentTarget.value < 0 || e.currentTarget.value > 100 || Number.isInteger(e.currentTarget.value)){
                 alert("0 ~ 100 사이의 정수를 입력해주세요");
-                e.currentTarget.value = e.currentTarget.closest(".inputWrap").previousElementSibling.value;
+                e.currentTarget.value = rangeDom.value;
             }else{
-                let inputRange = e.currentTarget.closest(".inputWrap").previousElementSibling;
-                inputRange.value = targetValue;
-                inputRange.style.background = `linear-gradient(to right, var(--color_main) ${targetValue}%, #fff ${targetValue}%)`;
+                e.currentTarget.value = parseInt(e.currentTarget.value);
+                style_difficultyBg(rangeDom, e.currentTarget.value);
+                update_difficulty_otherType("range", e.currentTarget.dataset.category, e.currentTarget.value);
             }
         })
     })
 }
 
-inputRange();
+function apply_difficultyDetail(){
+
+}
+
+
+
+
+input_difficultyDetail();
+
+function init_setDifficulty(){
+    difficulty ={
+        "Opend" : document.querySelector("#detail_randomOpend").value,
+        "NotOpen" : document.querySelector("#detail_randomNotOpen").value,
+        // "random" : 0.9,
+        "Select" : document.querySelector("#detail_designatedSelect").value,
+        "Pair" : document.querySelector("#detail_designatedPair").value,
+        "trick" : 0
+    }
+}
+
+function insert_difficultyDefault(){
+    document.querySelectorAll("input[name=difficulty]").forEach(i=>{
+        i.addEventListener("change", e=>{
+            let selectValue = e.currentTarget.id;
+            let var_difficulty;
+            switch(selectValue){
+                case "difficulty1":
+                    var_difficulty = {
+                        "Opend" : 0,
+                        "NotOpen" : 0,
+                        // "random" : 1,
+                        "Select" : 0,
+                        "Pair" : 0,
+                        "trick" : 0
+                    }
+                    break;
+                case "difficulty2":
+                    
+                    var_difficulty = {
+                        "Opend" : 0,
+                        "NotOpen" : 100,
+                        // "random" : 0.5,
+                        "Select" : 40,
+                        "Pair" : 30,
+                        "trick" : 0
+                    }
+                    break;
+                case "difficulty3":
+                    var_difficulty = {
+                        "Opend" : 0,
+                        "NotOpen" : 100,
+                        // "random" : 0,
+                        "Select" : 80,
+                        "Pair" : 70,
+                        "trick" : 0
+                    }
+                    break;
+                case "difficulty4":
+                    var_difficulty = {
+                        "Opend" : 50,
+                        "NotOpen" : 100,
+                        // "random" : 0,
+                        "Select" : 100,
+                        "Pair" : 100,
+                        "trick" : 0
+                    }
+                    break;
+                default:
+            }
+            let loopArray = ["Opend", "NotOpen", "Select", "Pair"];
+            loopArray.forEach(i=>{
+                let targetRange = document.querySelector(`input[type=range][data-category$=${i}]`);
+                style_difficultyBg(targetRange, var_difficulty[i]);
+                update_difficulty_otherType("range", i, var_difficulty[i]);
+                update_difficulty_otherType("number", i, var_difficulty[i]);
+            })
+
+        })
+    })
+
+
+}

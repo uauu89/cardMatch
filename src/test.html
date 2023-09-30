@@ -86,7 +86,7 @@
                                         <label for="difficulty1" class="btn_commonStyle btn_difficulty">1단계</label>
                                     </li>
                                     <li>
-                                        <input type="radio" name="difficulty" id="difficulty2" class="transparent" checked>
+                                        <input type="radio" name="difficulty" id="difficulty2" class="transparent">
                                         <label for="difficulty2" class="btn_commonStyle btn_difficulty">2단계</label>
                                     </li>
                                     <li>
@@ -100,60 +100,62 @@
                                 </ul>
                             </li>
                             <li class="modal_depthDetail">
-                                <div>난이도 세부 옵션</div>
-                                <ul class="modal_depth">
-                                    <li>
-                                        <p>남은 카드 비율</p>
-                                        <div class="group_range">
-                                            <input type="range" id="detail_remainRatio">
-                                            <div class="inputWrap textRight">
-                                                <input type="number" class="textRight" min="0" max="100" value="50">
-                                                <span class="unit">%</span>
+                                <div>난이도 세부 내용 <a href="option_difficultyDetail">▼</a></div>
+                                <div class="arcodion_wrap">
+                                    <ul id="option_difficultyDetail" class="modal_depth">
+                                        <li>
+                                            <p>남은 카드 비율</p>
+                                            <div class="group_range">
+                                                <input type="range" id="detail_remainRatio" data-category="detail_remainRatio">
+                                                <div class="inputWrap textRight">
+                                                    <input type="number" class="textRight" data-category="detail_remainRatio" min="0" max="100">
+                                                    <span class="unit">%</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <p>임의선택 : 이미 열어 본 카드를 다시 선택할 확률</p>
-                                        <div class="group_range">
-                                            <input type="range" id="testId">
-                                            <div class="inputWrap textRight">
-                                                <input type="number" class="textRight" min="0" max="100" value="50">
-                                                <span class="unit">%</span>
+                                        </li>
+                                        <li>
+                                            <p>임의선택 : 이미 열어 본 카드를 다시 선택할 확률</p>
+                                            <div class="group_range">
+                                                <input type="range" id="detail_randomOpend" data-category="detail_randomOpend">
+                                                <div class="inputWrap textRight">
+                                                    <input type="number" class="textRight" data-category="detail_randomOpend" min="0" max="100">
+                                                    <span class="unit">%</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <p>임의선택 : 열어보지 않은 카드를 선택할 확률</p>
-                                        <div class="group_range">
-                                            <input type="range" id="testId2">
-                                            <div class="inputWrap textRight">
-                                                <input type="number" class="textRight" min="0" max="100" value="50">
-                                                <span class="unit">%</span>
+                                        </li>
+                                        <li>
+                                            <p>임의선택 : 열어보지 않은 카드를 선택할 확률</p>
+                                            <div class="group_range">
+                                                <input type="range" id="detail_randomNotOpen" data-category="detail_randomNotOpen">
+                                                <div class="inputWrap textRight">
+                                                    <input type="number" class="textRight" data-category="detail_randomNotOpen" min="0" max="100">
+                                                    <span class="unit">%</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <p>확정선택 : 현재 선택한 카드와 맞는 카드를 선택할 확률</p>
-                                        <div class="group_range">
-                                            <input type="range" id="testId3">
-                                            <div class="inputWrap textRight">
-                                                <input type="number" class="textRight" min="0" max="100" value="50">
-                                                <span class="unit">%</span>
+                                        </li>
+                                        <li>
+                                            <p>확정선택 : 현재 선택한 카드와 맞는 카드를 선택할 확률</p>
+                                            <div class="group_range">
+                                                <input type="range" id="detail_designatedSelect" data-category="detail_designatedSelect">
+                                                <div class="inputWrap textRight">
+                                                    <input type="number" class="textRight" data-category="detail_designatedSelect" min="0" max="100">
+                                                    <span class="unit">%</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <p>확정선택 : 이미 열어 본 카드 중 짝이 맞는 카드를 선택할 확률</p>
-                                        <div class="group_range">
-                                            <input type="range" id="testId4">
-                                            <div class="inputWrap textRight">
-                                                <input type="number" class="textRight" min="0" max="100" value="50">
-                                                <span class="unit">%</span>
+                                        </li>
+                                        <li>
+                                            <p>확정선택 : 이미 열어 본 카드 중 짝이 맞는 카드를 선택할 확률</p>
+                                            <div class="group_range">
+                                                <input type="range" id="detail_designatedPair" data-category="detail_designatedPair">
+                                                <div class="inputWrap textRight">
+                                                    <input type="number" class="textRight" data-category="detail_designatedPair" min="0" max="100">
+                                                    <span class="unit">%</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>
-
-                                </ul>
+                                        </li>
+    
+                                    </ul>
+                                </div>
 
                             </li>
                         </ul>

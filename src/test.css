@@ -245,6 +245,23 @@ input.transparent:checked + .checkboxStyle::after{
 .modal_depth{
     margin-left: 10px;
 }
+
+
+.arcodion_wrap{
+    display: grid;
+    grid-template-rows: 0fr;
+    /* overflow: hidden; */
+    transition: 0.5s;
+}
+.arcodion_wrap.active{
+    grid-template-rows: 1fr;
+}
+
+.arcodion_wrap .modal_depth{
+    overflow: hidden;
+}
+
+
 .modal_depth label{
     white-space: nowrap;
 }
