@@ -945,3 +945,57 @@ input.transparent:checked + label{
 
 }
 
+
+@media (max-width: 459px){
+    .group_btn{
+        grid-template-columns: 1fr;
+        padding: 0 30px 0 20px;
+    }
+    .btn_newGame{
+        justify-content: center;
+    }
+    .btn_newGame i{
+        display: block;
+    }
+    .modal_groupBtn > p{
+        text-align: left;
+    }
+
+    .group_btnInner, .modal_groupBtnInner{
+        flex-direction: column;
+        gap: unset;
+    }
+
+    .optionModal_wrap{
+        width: 100%;
+        padding: 10px;
+    }
+    
+
+    
+    .mobile_gridRow2{
+        grid-row: 2;
+    }
+    .mobile_gridCol2{
+        grid-column: 2;
+    }
+
+    li.mobile_grid{
+        grid-template-columns: 1fr;
+    }
+    
+
+    li.mobile_grid .gridCol_2{
+        grid-column: auto;
+    }
+
+    .modal_depthDetail{
+        margin-left: unset;
+    }
+    .group_range{
+        margin: 20px 0;
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+}
