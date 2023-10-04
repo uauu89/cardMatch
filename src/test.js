@@ -21,7 +21,8 @@ let count_origin = 30,
 
 
 let score_com = 0,
-    score_user = 0;
+    score_user = 0,
+    score_combo = 0;
 
 let func_timeCounter, func_countTimeOut, func_userDelayTimeOut, func_comDelayTimeOut;
 let diceResult;
@@ -64,6 +65,7 @@ function dice(){
 function printScore(){
     if(whosTurn === "single"){
         document.querySelector(".score_user span").innerText = score_user;
+        document.querySelector(".score_com span").innerText = score_combo;
     }else{
         document.querySelector(".score_user span").innerText = score_user;
         document.querySelector(".score_com span").innerText = score_com;
@@ -105,6 +107,7 @@ function btnFunction(){
 
 function newGame_single(){
     gameMode = "single";
+    // whosTurn = "single";
     
     init("single");
     printScore();
@@ -112,6 +115,7 @@ function newGame_single(){
 }
 function newGame_vs(){
     gameMode = "vs";
+    // whosTurn = "user";
     init("user");
     printScore();
     turn_user();
@@ -119,30 +123,37 @@ function newGame_vs(){
     
 }
 function init(who){
-    selectedCard = [];
-    com_turnCount = 0;
-    userDelay = false;
-    switch_playing = true;
-    whosTurn = who;
-    score_com = score_user = 0
     count_stop();
     clearTimeout(func_comDelayTimeOut);
-    document.querySelector(".gameOver_wrap").classList.remove("active");
-    set_scoreBoard();
-    set_cardArray();
-    set_cardSetting(cardArrayCopy);
+
+    selectedCard = [];
+    com_turnCount = 0;
+    score_com = score_user = 0
+    userDelay = false;
+    switch_playing = true;
+    
+    whosTurn = who;
     set_difficulty();
     set_countTime();
     set_keepTurn();
+    
+    set_scoreBoard();
+    set_cardArray();
+    document.querySelector(".gameOver_wrap").classList.remove("active");
+    set_cardSetting(cardArrayCopy);
     set_animation();
     
 }
 
 function set_scoreBoard(){
     if(whosTurn === "single"){
-        document.querySelector(".score_com").classList.add("hidden");
+        document.querySelector(".score_user").innerHTML = `점수 : <span></span>`;
+        document.querySelector(".score_com").innerHTML = `콤보 : <span></span>`;
+        // document.querySelector(".score_com").classList.add("hidden");
     }else{
-        document.querySelector(".score_com").classList.remove("hidden");
+        document.querySelector(".score_user").innerHTML = `유저 : <span></span>`;
+        document.querySelector(".score_com").innerHTML = `컴퓨터 : <span></span>`;
+        // document.querySelector(".score_com").classList.remove("hidden");
     }
 }
 function set_cardArray(){
@@ -195,16 +206,14 @@ function set_cardSetting(array){
         setTimeout(()=>{i.classList.remove("initAnimation")}, (idx+1)*50+300)
     })
 
-    setTimeout(()=>{
-        cardCheck();
-    }, document.querySelectorAll(".card_wrap").length*50+100);
+    setTimeout(cardCheck, document.querySelectorAll(".card_wrap").length*50+350);
 }
 function set_userDelay(time){
     clearTimeout(func_userDelayTimeOut);
     userDelay = false;
     func_userDelayTimeOut = setTimeout(()=>{
         userDelay = true;
-    count_start();
+        count_start();
     }, time);
 }
 function set_countTime(){
@@ -237,7 +246,6 @@ function cardCheck(){
         if(case_showAnimation){
             cardWrap.forEach((card, idx)=>{
                 setTimeout(() => {
-                    console.log("test");
                     card.classList.add("card_open")
                 }, idx*200);
         
@@ -245,10 +253,10 @@ function cardCheck(){
                     card.classList.remove("card_open")
                 }, idx*100+(cardWrap.length*200)+3000);
             })
-            set_userDelay(cardWrap.length*300+3000);
+            set_userDelay(cardWrap.length*300+3300);
         }else{
             userDelay = true;
-            set_userDelay(0);
+            set_userDelay(300);
         }
     }else{
         set_userDelay(cardWrap.length*50+350);
@@ -268,47 +276,66 @@ function pushOpenCard(idx){
 function check_markingRight(){
     selectedCard = [];
     let defaultClass = "card_wrap correct ";
-    whosTurn === "com"? score_com++: score_user++;
-    printScore();
-
+    // ++score_combo;
+    gameMode === "single" ? 
+        score_user += 100 * ++score_combo:
+        whosTurn === "com"? score_com += 100 * ++score_combo: score_user+=100 * ++score_combo;
+        
     for(let i of document.querySelectorAll(".card_open")){
         i.setAttribute("class", defaultClass+whosTurn);
     }
-
+    
     for(let i of document.querySelectorAll(".correct")){
         openCard[i.dataset.index] = null
     };
-
+    
+    printScore();
     check_gameOver();
 }
 function check_markingWrong(){
     selectedCard = [];
+    score_combo = 0;
     for(let i of document.querySelectorAll(".card_open")){
         i.classList.remove("card_open");
     }
+    printScore();
 }
 function check_gameOver(){
     
-    if(cardArray.length === score_com + score_user){
-        let result = [];
-        if(score_com > score_user){
-            result = ["패배", "패배하셨습니다"];
-        }else if(score_com < score_user){
-            result = ["승리", "승리하셨습니다"];
-        }else{
-            result = ["무승부", "비기셨습니다"];
-        }
-        count_stop();
+    if(cardArrayCopy.length === document.querySelectorAll(".correct").length){
         switch_playing = false;
+        count_stop();
+        document.querySelector(".timer_wrap").setAttribute("class", "timer_wrap");
         document.querySelector(".gameOver_wrap").classList.add("active");
-        document.querySelector(".gameOver_inner").innerHTML = `
-            <h2>${result[0]}</h2>
-            <p>${score_user} : ${score_com}로 ${result[1]}.</p>
-            <div>
-                <p>게임이 끝났습니다.</p>
-                <p>새 게임 버튼으로 새로운 게임을 시작할 수 있습니다.</p>
-            </div>
-        `
+
+        if(gameMode === "single"){
+            document.querySelector(".gameOver_inner").innerHTML = `
+                <h2>게임 종료</h2>
+                <p>최종점수 : ${score_user}</p>
+                <div>
+                    <p>게임이 끝났습니다.</p>
+                    <p>새 게임 버튼으로 새로운 게임을 시작할 수 있습니다.</p>
+                </div>
+            `
+        }else{
+            let result = [];
+            if(score_com > score_user){
+                result = ["패배", "패배했습니다"];
+            }else if(score_com < score_user){
+                result = ["승리", "승리했습니다"];
+            }else{
+                result = ["무승부", "비겼습니다"];
+            }
+            document.querySelector(".gameOver_inner").innerHTML = `
+                <h2>${result[0]}</h2>
+                <p>${score_user}점 : ${score_com}점으로 ${result[1]}.</p>
+                <div>
+                    <p>게임이 끝났습니다.</p>
+                    <p>새 게임 버튼으로 새로운 게임을 시작할 수 있습니다.</p>
+                </div>
+            `
+        }
+
     }
 }
 
@@ -321,14 +348,19 @@ function turn_single(){
 
                 pushOpenCard(idx);
                 setTimeout(()=>{
-                    userDelay = true;
-
                     if(selectedCard.length === 2){
+                        count_stop();
                         if(selectedCard[0] === selectedCard[1]){
                             check_markingRight();
                         }else{
                             check_markingWrong();
                         }
+                        setTimeout(()=>{
+                            userDelay = true;
+                            count_start();
+                        }, timeDelay);
+                    }else{
+                        userDelay = true;
                     }
                 }, timeDelay);
             }
@@ -352,12 +384,14 @@ function turn_user(){
                                 check_markingRight();
     
                                 if(turnContinuos){
-                                    userDelay = true;
-                                    if(case_noCount){
+                                    setTimeout(()=>{
+                                        userDelay = true;
                                         count_start();
-                                    }
+                                    }, 10)
                                 }else{
                                     whosTurn = "com";
+                                    score_combo = 0;
+                                    printScore();
                                     for(let count = 0; count < 2; count++){
                                         setTimeout(turn_com, timeDelay * (count+1));
                                     };
@@ -383,6 +417,7 @@ function turn_user(){
 }
 function turn_com(){
     if(switch_playing){
+        count_comTurn();
         let com_idx;
         
         diceResult = dice();
@@ -434,6 +469,8 @@ function turn_com(){
                         }
                     }else{
                         whosTurn = "user";
+                        score_combo = 0;
+                        printScore();
                         userDelay = true;
                         count_start();
                     }
@@ -503,51 +540,66 @@ function com_selectPair(){  // 과거 오픈되었던 카드 배열중에서 짝
 }
 
 function count_start(){
-
-    if(!case_noCount){
+    if(switch_playing){
         document.querySelector(".timer_wrap").setAttribute("class", "timer_wrap user");
-        for(let i of document.querySelectorAll(".clockHands")){
-            i.classList.add("animation");
-        }
     
-        func_countTimeOut = setTimeout(()=>count_stop(), count_origin*1000+500);
-    
-        count_copy = count_origin;
-    
-        document.querySelector(".timer_wrap .clockNum").innerText = count_copy;
-        
-        func_timeCounter = setInterval(()=>{
-            document.querySelector(".timer_wrap .clockNum").innerText = --count_copy;
-            if(count_copy === 0){
-                clearInterval(func_timeCounter);
-    
-                userDelay = true;
-                for(let i of document.querySelectorAll(".card_open")){
-                    i.classList.remove("card_open");
-                };
-                whosTurn = "com";
-                selectedCard = [];
-                for(let count = 0; count < 2; count++){
-                    setTimeout(turn_com, timeDelay * (count+1));
-                }
-    
+        if(!case_noCount){
+            for(let i of document.querySelectorAll(".clockHands")){
+                i.classList.add("animation");
             }
-        }, 1000);
-    }else{
-        document.querySelector(".timer_wrap .clockNum").innerHTML = `<i class="fa-solid fa-infinity"></i>`;
-    }
+        
+            func_countTimeOut = setTimeout(count_stop, count_origin*1000+500);
+        
+            count_copy = count_origin;
+        
+            document.querySelector(".timer_wrap .clockNum").innerText = count_copy;
+            
+            func_timeCounter = setInterval(()=>{
+                document.querySelector(".timer_wrap .clockNum").innerText = --count_copy;
+                if(count_copy === 0){
+                    clearInterval(func_timeCounter);
+                    check_markingWrong();
+        
+                    userDelay = true;
+                    // for(let i of document.querySelectorAll(".card_open")){
+                    //     i.classList.remove("card_open");
+                    // };
 
+                    if(gameMode === "vs"){
+                        whosTurn = "com";
+                        // selectedCard = [];
+                        
+                        for(let count = 0; count < 2; count++){
+                            setTimeout(turn_com, timeDelay * (count+1));
+                        }
+                    }else{
+                        // selectedCard = [];
+                        setTimeout(count_start, 1000);
+                    }
+                }
+            }, 1000);
+        }else{
+            document.querySelector(".timer_wrap .clockNum").innerHTML = `<i class="fa-solid fa-infinity"></i>`;
+        }
+
+    }
+    
     
 }
 function count_stop(){
-        clearTimeout(func_countTimeOut);
-        for(let i of document.querySelectorAll(".clockHands")){
-            i.classList.remove("animation");
-        }
-        document.querySelector(".timer_wrap").setAttribute("class", "timer_wrap com");
-        document.querySelector(".timer_wrap .clockNum").innerHTML = `<i class="fa-solid fa-robot"></i>`;
+    clearTimeout(func_countTimeOut);
     
-        clearInterval(func_timeCounter);
+    for(let i of document.querySelectorAll(".clockHands")){
+        i.classList.remove("animation");
+    }
+    document.querySelector(".timer_wrap .clockNum").innerHTML = "";
+    clearInterval(func_timeCounter);
+    
+    
+}
+function count_comTurn(){
+    document.querySelector(".timer_wrap").setAttribute("class", "timer_wrap com");
+    document.querySelector(".timer_wrap .clockNum").innerHTML = `<i class="fa-solid fa-robot"></i>`;
 }
 
 function option_cardNum(){
