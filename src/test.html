@@ -35,11 +35,10 @@
                                 </div>
 
                                 <div class="group_checkbox">
-                                    <label for="input_countNoTime" class="cursorPointer">제한 없음</label>
-                                    <input type="checkbox" id="input_countNoTime" class="transparent">
-                                    <label for="input_countNoTime" class="checkboxStyle cursorPointer"></label>
+                                    <label for="input_noCount" class="cursorPointer">제한 없음</label>
+                                    <input type="checkbox" id="input_noCount" class="transparent">
+                                    <label for="input_noCount" class="checkboxStyle cursorPointer"></label>
                                 </div>
-
                             </li>
                             
                             <li class="grid">
@@ -65,6 +64,20 @@
                                 </div>
                             </li>
 
+                        </ul>
+                    </li>
+
+                    <li>
+                        <h3>싱글 옵션</h3>
+                        <ul class="modal_depth sub">
+                            <li class="grid">
+                                <label for="input_noAnimation" class="cursorPointer">카드 확인 여부</label>
+                                <div class="group_checkbox">
+                                    <input type="checkbox" id="input_noAnimation" class="transparent" checked>
+                                    <label for="input_noAnimation" class="checkboxStyle cursorPointer"></label>
+                                </div>
+
+                            </li>
                         </ul>
                     </li>
 
@@ -100,15 +113,15 @@
                                 </ul>
                             </li>
                             <li class="modal_depthDetail">
-                                <div>난이도 세부 내용 <a href="option_difficultyDetail">▼</a></div>
+                                <div class="btn_difficultyDetail"><a href="option_difficultyDetail" class="btn_difficultyDetail2">난이도 세부 내용 <i class="fa-solid fa-caret-down"></i></a></div>
                                 <div class="arcodion_wrap">
                                     <ul id="option_difficultyDetail" class="modal_depth">
                                         <li>
-                                            <p>남은 카드 비율</p>
+                                            <p>남은 카드 비율  ※열어본 카드비율이 설정값 이하일 경우 열어 본 카드 선택 </p>
                                             <div class="group_range">
-                                                <input type="range" id="detail_remainRatio" data-category="detail_remainRatio">
+                                                <input type="range" id="detail_ratioRemains" data-category="detail_ratioRemains">
                                                 <div class="inputWrap textRight">
-                                                    <input type="number" class="textRight" data-category="detail_remainRatio" min="0" max="100">
+                                                    <input type="number" class="textRight" data-category="detail_ratioRemains" min="0" max="100">
                                                     <span class="unit">%</span>
                                                 </div>
                                             </div>
@@ -162,13 +175,13 @@
                     </li>
                 </ul>
                 <div class="modal_groupBtn">
-                    <p>※ 변경된 옵션은 다음 게임부터 적용됩니다.</p>
+                    <p>※ 카드 크기를 제외한 변경된 옵션은 다음 게임부터 적용됩니다.</p>
                     <div class="modal_groupBtnInner">
-                        <button type="button" id="btn_newSingle2" class="btn_commonStyle btn_newGame">
+                        <button type="button" id="btn_newSingle2" class="btn_commonStyle btn_newGame single">
                             <i class="fa-solid fa-rotate-right"></i>
                             새 게임<span></span>혼자
                         </button>
-                        <button type="button" id="btn_newVs2" class="btn_commonStyle btn_newGame">
+                        <button type="button" id="btn_newVs2" class="btn_commonStyle btn_newGame vs">
                             <i class="fa-solid fa-rotate-right"></i>
                             새 게임<span></span>대전
                         </button>
@@ -192,11 +205,11 @@
         </div>
         <div class="group_btn">
             <div class="group_btnInner">
-                <button type="button" id="btn_newSingle" class="btn_commonStyle btn_newGame">
+                <button type="button" id="btn_newSingle" class="btn_commonStyle btn_newGame single">
                     <i class="fa-solid fa-rotate-right"></i>
                     새 게임<span></span>혼자
                 </button>
-                <button type="button" id="btn_newVs" class="btn_commonStyle btn_newGame">
+                <button type="button" id="btn_newVs" class="btn_commonStyle btn_newGame vs">
                     <i class="fa-solid fa-rotate-right"></i>
                     새 게임<span></span>대전
                 </button>
@@ -208,7 +221,11 @@
     <div class="wrap">
         <div class="gameBoard">
         </div>
-
+    </div>
+    <div class="gameOver_wrap active">
+        <div class="gameOver_inner">
+            <p>새 게임 버튼으로 새로운 게임을 시작할 수 있습니다.</p>
+        </div>
     </div>
     
     <script src="test.js"></script>

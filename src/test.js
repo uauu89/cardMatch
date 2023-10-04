@@ -1,11 +1,15 @@
 let cardArray, cardArrayCopy, openCard;
 let selectedCard = [];
 
+let gameMode = "single";
 let whosTurn = "user";
 
 let userDelay = false;
 let turnContinuos = false;
 let pairCase = false;
+let switch_playing = true;
+let case_noCount = false;
+let case_showAnimation = true;
 
 let com_turnCount = 0;
 
@@ -19,80 +23,129 @@ let count_origin = 30,
 let score_com = 0,
     score_user = 0;
 
-let func_timeCounter, func_countTimeOut, func_userDelayTimeOut, func_comDealyTimeOut;
+let func_timeCounter, func_countTimeOut, func_userDelayTimeOut, func_comDelayTimeOut;
 let diceResult;
 
 let difficulty = {
     // 랜덤 숫자가 아래 값보다 낮을 경우 작동, 0 >> 작동안함, 1 >> 항상작동
-    "Opend" : 1,
+    "Remains": 0,
+    "Opend" : 0,
     "NotOpen" : 0,
-    // "random" : 0.9,
     "Select" : 0,
-    "Pair" : 1,
-    "trick" : 0
+    "Pair" : 0,
 }
 
 
-// 테스트용 임시 함수 --------------------------
 
-newGame_vs()
+disLink();
+btnFunction();
 
-insert_difficultyDefault();
+option_cardNum();
+option_countTime();
+option_cardSize();
+option_noCount();
+option_difficultyDetail();
+difficulty_selectBtn();
 
-document.querySelector("#difficulty2").click();
 
-document.querySelector("#input_keepTurn").addEventListener("change", e=>{
-    turnContinuos = e.currentTarget.checked ? true: false; 
+
+window.addEventListener("resize", e=>{
+    option_cardResponsive(window.innerWidth);
 })
 
-// /테스트용 임시 함수 --------------------------
 
-
-function newGame_single(){
-    init("single");
-    setCardArray();
-    cardShuffleSimple(cardArrayCopy);
-    insertCard(cardArrayCopy);
-    cardCheck(true);
-    turn_single();
-}
-
-function newGame_vs(){
-    init("user");
-    setCardArray();
-    cardShuffleSimple(cardArrayCopy);
-    insertCard(cardArrayCopy);
-    cardCheck(false);
-    
-    printScore();
-    
-    playTurn();
-    init_setDifficulty();
-    // setTimeout(countStart, 100);
-    
-}
-
-function init(who){
-    countStop();
-    clearTimeout(func_comDealyTimeOut);
-    selectedCard = [];
-    com_turnCount = 0;
-    userDelay = false;
-    whosTurn = who;
-    
-}
+document.querySelector("#difficulty2").click();
+window.dispatchEvent(new Event("resize"));
 
 
 function dice(){
     return Math.floor(Math.random()*100);
 }
+function printScore(){
+    if(whosTurn === "single"){
+        document.querySelector(".score_user span").innerText = score_user;
+    }else{
+        document.querySelector(".score_user span").innerText = score_user;
+        document.querySelector(".score_com span").innerText = score_com;
+    }
+}
+function disLink(){
+    document.querySelectorAll("a").forEach(i=>{
+        i.addEventListener("click", e=>{
+            e.preventDefault();
+        })
+    })
+}
+function btnFunction(){
+    document.querySelectorAll(".btn_newGame.single").forEach(i=>{
+        i.addEventListener("click", ()=>{newGame_single()});
+    })
+    document.querySelectorAll(".btn_newGame.vs").forEach(i=>{
+        i.addEventListener("click", ()=>{newGame_vs()});
+    })
 
+    document.querySelector(".optionOpen").addEventListener("click", ()=>{
+        document.querySelector(".header").classList.toggle("active");
+    })
+    document.querySelector(".btn_openBtnGroup").addEventListener("click", e=>{
+        e.currentTarget.classList.toggle("active");
+        document.querySelector(".group_btn").classList.toggle("active");
+    })
 
+    document.querySelector(".btn_difficultyDetail").addEventListener("click", e=>{
+        e.currentTarget.classList.toggle("active");
+    })
 
+    document.querySelectorAll(".btn_newGame").forEach(i=>{
+        i.addEventListener("click", ()=>{
+            document.querySelector(".header").classList.remove("active");
+        })
+    })
+}
 
+function newGame_single(){
+    gameMode = "single";
+    
+    init("single");
+    printScore();
+    turn_single();
+}
+function newGame_vs(){
+    gameMode = "vs";
+    init("user");
+    printScore();
+    turn_user();
+    
+    
+}
+function init(who){
+    selectedCard = [];
+    com_turnCount = 0;
+    userDelay = false;
+    switch_playing = true;
+    whosTurn = who;
+    score_com = score_user = 0
+    count_stop();
+    clearTimeout(func_comDelayTimeOut);
+    document.querySelector(".gameOver_wrap").classList.remove("active");
+    set_scoreBoard();
+    set_cardArray();
+    set_cardSetting(cardArrayCopy);
+    set_difficulty();
+    set_countTime();
+    set_keepTurn();
+    set_animation();
+    
+}
 
-
-function setCardArray(){
+function set_scoreBoard(){
+    if(whosTurn === "single"){
+        document.querySelector(".score_com").classList.add("hidden");
+    }else{
+        document.querySelector(".score_com").classList.remove("hidden");
+    }
+}
+function set_cardArray(){
     cardArray = [];
     let i = 0;
     while(i < document.querySelector("#input_cardNum").value){
@@ -102,14 +155,15 @@ function setCardArray(){
     cardArrayCopy = [...cardArray, ...cardArray];
     openCard = new Array(cardArray.length*2).fill(null);
 }
-function cardShuffleSimple(array){
+function set_cardShuffle(array){
     array.sort(()=>Math.random() - 0.5);
 }
-function insertCard(array){
+function set_cardSetting(array){
+    set_cardShuffle(array);
     let dom_insertHTML = "";
     array.forEach((i, idx)=>{
         dom_insertHTML += `
-        <div class="card_wrap" data-value=${i} data-index=${idx}>
+        <div class="card_wrap init" data-value=${i} data-index=${idx}>
             <div class="card card_front">
                 <div class="deco border top left"></div>
                 <div class="deco top left"></div>
@@ -135,35 +189,69 @@ function insertCard(array){
     });
     document.querySelector(".gameBoard").innerHTML = dom_insertHTML;
 
+    document.querySelectorAll(".card_wrap").forEach((i, idx)=>{
+        setTimeout(()=>{i.classList.remove("init")}, idx*50)
+        setTimeout(()=>{i.classList.add("initAnimation")}, (idx+1)*50)
+        setTimeout(()=>{i.classList.remove("initAnimation")}, (idx+1)*50+300)
+    })
+
+    setTimeout(()=>{
+        cardCheck();
+    }, document.querySelectorAll(".card_wrap").length*50+100);
 }
-function cardCheck(bool){
+function set_userDelay(time){
     clearTimeout(func_userDelayTimeOut);
     userDelay = false;
-    if(bool){
-        document.querySelectorAll(".card_wrap").forEach((card, idx)=>{
-            setTimeout(() => {
-                card.classList.add("card_open")
-            }, idx*200);
-    
-            setTimeout(() => {
-                card.classList.remove("card_open")
-            }, idx*100+(cardArray.length*2*200)+3000);
-        })
-        func_userDelayTimeOut = setTimeout(()=>{
-            userDelay = true;
-        }, (cardArray.length*2*300+3000));
-    }else{
+    func_userDelayTimeOut = setTimeout(()=>{
         userDelay = true;
+    count_start();
+    }, time);
+}
+function set_countTime(){
+    case_noCount = document.querySelector("#input_noCount").checked? true: false;
+
+    if(!case_noCount){
+        count_origin = document.querySelector("#input_countTime").value;
+        document.documentElement.style.setProperty("--turn_count", count_origin+"s");
     }
 }
+function set_animation(){
+    case_showAnimation = document.querySelector("#input_noAnimation").checked? true: false;
+}
+function set_difficulty(){
+    difficulty ={
+        "Remains" : document.querySelector("#detail_ratioRemains").value,
+        "Opend" : document.querySelector("#detail_randomOpend").value,
+        "NotOpen" : document.querySelector("#detail_randomNotOpen").value,
+        "Select" : document.querySelector("#detail_designatedSelect").value,
+        "Pair" : document.querySelector("#detail_designatedPair").value,
+    }
+}
+function set_keepTurn(){
+    turnContinuos = document.querySelector("#input_keepTurn").checked? true: false;
+}
 
-
-function printScore(who){
-    if(who === "single"){
-        document.querySelector(".score_user span").innerText = "score_user";
+function cardCheck(){
+    let cardWrap = document.querySelectorAll(".card_wrap");
+    if(gameMode === "single"){
+        if(case_showAnimation){
+            cardWrap.forEach((card, idx)=>{
+                setTimeout(() => {
+                    console.log("test");
+                    card.classList.add("card_open")
+                }, idx*200);
+        
+                setTimeout(() => {
+                    card.classList.remove("card_open")
+                }, idx*100+(cardWrap.length*200)+3000);
+            })
+            set_userDelay(cardWrap.length*300+3000);
+        }else{
+            userDelay = true;
+            set_userDelay(0);
+        }
     }else{
-        document.querySelector(".score_user span").innerText = score_user;
-        document.querySelector(".score_com span").innerText = score_com;
+        set_userDelay(cardWrap.length*50+350);
     }
 }
 function pushOpenCard(idx){
@@ -176,45 +264,52 @@ function pushOpenCard(idx){
     targetCard.classList.add("card_open");
     targetCard.classList.add("opend");
 }
-function checkMatching(who){
-    let winner = "card_wrap correct ";
 
-    let result = selectedCard[0] === selectedCard[1];
+function check_markingRight(){
     selectedCard = [];
+    let defaultClass = "card_wrap correct ";
+    whosTurn === "com"? score_com++: score_user++;
+    printScore();
 
-    // if(selectedCard[0] === selectedCard[1]){
-    if(result){
-        if(who === "user"){
-            winner += "user";
-            score_user++;
-        }else if(who === "com"){
-            winner += "com";
-            score_com++;
-        }else{
-            winner += "user";
-            // 싱글 > 점수시스템 아직 안만듦
-        }
-        printScore(who);
-        for(let i of document.querySelectorAll(".card_open")){
-            i.setAttribute("class", winner);
-        }
-
-        for(let i of document.querySelectorAll(".correct")){
-            openCard[i.dataset.index] = null
-        };
-        return true;
-    }else{
-        for(let i of document.querySelectorAll(".card_open")){
-            i.classList.remove("card_open");
-        }
-        return false;
+    for(let i of document.querySelectorAll(".card_open")){
+        i.setAttribute("class", defaultClass+whosTurn);
     }
-    
+
+    for(let i of document.querySelectorAll(".correct")){
+        openCard[i.dataset.index] = null
+    };
+
+    check_gameOver();
 }
-
-
-function playTurn(){
-    turn_user();
+function check_markingWrong(){
+    selectedCard = [];
+    for(let i of document.querySelectorAll(".card_open")){
+        i.classList.remove("card_open");
+    }
+}
+function check_gameOver(){
+    
+    if(cardArray.length === score_com + score_user){
+        let result = [];
+        if(score_com > score_user){
+            result = ["패배", "패배하셨습니다"];
+        }else if(score_com < score_user){
+            result = ["승리", "승리하셨습니다"];
+        }else{
+            result = ["무승부", "비기셨습니다"];
+        }
+        count_stop();
+        switch_playing = false;
+        document.querySelector(".gameOver_wrap").classList.add("active");
+        document.querySelector(".gameOver_inner").innerHTML = `
+            <h2>${result[0]}</h2>
+            <p>${score_user} : ${score_com}로 ${result[1]}.</p>
+            <div>
+                <p>게임이 끝났습니다.</p>
+                <p>새 게임 버튼으로 새로운 게임을 시작할 수 있습니다.</p>
+            </div>
+        `
+    }
 }
 
 function turn_single(){
@@ -229,118 +324,67 @@ function turn_single(){
                     userDelay = true;
 
                     if(selectedCard.length === 2){
-                        checkMatching("single");
+                        if(selectedCard[0] === selectedCard[1]){
+                            check_markingRight();
+                        }else{
+                            check_markingWrong();
+                        }
                     }
                 }, timeDelay);
             }
         })
     });
 }
-
-// 원본 백업
-// function turn_user(){
-//     document.querySelectorAll(".card_wrap").forEach((card, idx) => {
-
-//         card.addEventListener("click", e=>{
-//             if(whosTurn === "user"){
-//                 if(userDelay && !card.classList.contains("card_open") && !card.classList.contains("correct")){
-//                     userDelay = false;
-    
-//                     pushOpenCard(idx);
-//                     setTimeout(()=>{
-//                         userDelay = true;
-    
-//                         if(selectedCard.length === 2){
-//                             checkMatching("user");
-//                             countStop();
-
-//                             // if(turnContinuos){
-//                             //     countStart();
-//                             // }else{
-//                             //     whosTurn = "com";
-//                             //     for(let count = 0; count < 2; count++){
-//                             //         setTimeout(turn_com, timeDelay * (count+1));
-//                             //     }
-//                             // }
-//                             whosTurn = "com";
-//                                 for(let count = 0; count < 2; count++){
-//                                     setTimeout(turn_com, timeDelay * (count+1));
-//                                 }
-
-//                         }
-//                     }, timeDelay);
-//                 }
-//             }
-//         })
-//     });
-// }
-
 function turn_user(){
     document.querySelectorAll(".card_wrap").forEach((card, idx) => {
 
         card.addEventListener("click", e=>{
-            if(whosTurn === "user"){
+            if(whosTurn === "user" && switch_playing){
                 if(userDelay && !card.classList.contains("card_open") && !card.classList.contains("correct")){
                     userDelay = false;
-    
                     pushOpenCard(idx);
 
-                    if(selectedCard.length === 2){
-                        countStop();
-                        let result = checkMatching("user");
-                        if(turnContinuos && result){
-                            setTimeout(()=>{
-                                countStart();
-                                userDelay = true;
-                            }, timeDelay)
-                        }else{
-                            setTimeout(()=>{
-                                countStart();
-                                userDelay = true;
-                            }, timeDelay)
-                        }
-                    }else{
-                        setTimeout(()=>{
-                            countStart();
-                            userDelay = true;
-                        }, timeDelay)
-                    }
-/*
                     setTimeout(()=>{
-                        userDelay = true;
-    
+                        
                         if(selectedCard.length === 2){
-                            checkMatching("user");
-                            countStop();
-
-                            // if(turnContinuos){
-                            //     countStart();
-                            // }else{
-                            //     whosTurn = "com";
-                            //     for(let count = 0; count < 2; count++){
-                            //         setTimeout(turn_com, timeDelay * (count+1));
-                            //     }
-                            // }
-                            whosTurn = "com";
+                            count_stop();
+                            if(selectedCard[0] === selectedCard[1]){
+                                check_markingRight();
+    
+                                if(turnContinuos){
+                                    userDelay = true;
+                                    if(case_noCount){
+                                        count_start();
+                                    }
+                                }else{
+                                    whosTurn = "com";
+                                    for(let count = 0; count < 2; count++){
+                                        setTimeout(turn_com, timeDelay * (count+1));
+                                    };
+                                }
+    
+                            }else{
+                                check_markingWrong();
+    
+                                whosTurn = "com";
                                 for(let count = 0; count < 2; count++){
                                     setTimeout(turn_com, timeDelay * (count+1));
                                 }
-
+                            }
+                        }else{
+                            userDelay = true;
                         }
                     }, timeDelay);
-        */
+
                 }
             }
         })
     });
 }
-
 function turn_com(){
+    if(switch_playing){
         let com_idx;
         
-        // if(com_turnCount === 0){
-        //     diceResult = dice()
-        // };
         diceResult = dice();
 
         com_turnCount++;
@@ -348,7 +392,7 @@ function turn_com(){
         if(selectedCard.length){                                // 해당 턴에 선택된 카드가 있는 경우
             if(com_checkOpen(selectedCard[0])){                 // 현재 턴에 선택된 카드와 과거 오픈되었던 카드 중에 맞는 짝이 있는 경우
                 // console.log("1-1");
-                if(diceResult < difficulty.select || pairCase){
+                if(diceResult < difficulty.Select || pairCase){
                     com_idx = com_selectOpen(selectedCard[0]);
                     pairCase = false;
                 }else{
@@ -362,7 +406,7 @@ function turn_com(){
         }else{                                                  // 현재 턴에 선택된 카드가 없는 경우
             if(com_selectPair()){                               // 과거 오픈된 카드 중에 짝이 맞는 카드쌍이 있는 경우
                 // console.log("2-1")
-                if(diceResult < difficulty.pair){
+                if(diceResult < difficulty.Pair){
                     pairCase = true;
                     com_idx = com_selectPair();
                 }else{
@@ -375,15 +419,33 @@ function turn_com(){
         }
     
         pushOpenCard(com_idx);
+
+
     
         if(com_turnCount === 2){
             com_turnCount = 0;
-            func_comDealyTimeOut= setTimeout(()=>{
-                checkMatching("com");
-                whosTurn = "user";
-                countStart();
+            func_comDelayTimeOut= setTimeout(()=>{
+                // checkMatching("com");
+                if(selectedCard[0] === selectedCard[1]){
+                    check_markingRight();
+                    if(turnContinuos){
+                        for(let count = 0; count < 2; count++){
+                            setTimeout(turn_com, timeDelay * (count+1));
+                        }
+                    }else{
+                        whosTurn = "user";
+                        userDelay = true;
+                        count_start();
+                    }
+                }else{
+                    check_markingWrong();
+                    whosTurn = "user";
+                    userDelay = true;
+                    count_start();
+                }
             }, timeDelay);
         }
+    }
 }
 
 function com_checkOpen(num){    // num 카드의 짝 오픈여부 확인
@@ -402,21 +464,9 @@ function com_selectRandom(){    // 오픈되지 않았던 카드 중에서 랜�
     let diceResult = dice();
     let targetArray = [];
 
-/*
-    if(diceResult < difficulty.random.random){
-        targetArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_open)");
-
-    }else if(diceResult < difficulty.random.notOpen){
-        targetArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_open):not(.opend)");
-    }else{
-        targetArray = document.querySelectorAll(".opend:not(.card_open)");
-        if(targetArray.length === 0){       //오픈했던 카드가 존재하지 않는 경우 미오픈 카드를 선택 (바로 위 조건)
-            targetArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_open):not(.opend)");
-        }
-    }
-*/
-
-    if(diceResult < difficulty.Opend){
+    let opendRatio = (document.querySelectorAll(".opend").length + document.querySelectorAll(".correct").length) / cardArrayCopy.length * 100;
+    
+    if((difficulty.Remains !== 0 && difficulty.Remains > opendRatio) || diceResult < difficulty.Opend){
         targetArray = document.querySelectorAll(".opend:not(.card_open)");
         if(targetArray.length === 0){       //오픈했던 카드가 존재하지 않는 경우 미오픈 카드를 선택
             targetArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_open):not(.opend)");
@@ -426,8 +476,6 @@ function com_selectRandom(){    // 오픈되지 않았던 카드 중에서 랜�
     }else{
         targetArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_open)");
     }
-
-
 
     if(targetArray.length === 0){
         targetArray = document.querySelectorAll(".card_wrap:not(.correct):not(.card_open)");
@@ -441,19 +489,10 @@ function com_selectPair(){  // 과거 오픈되었던 카드 배열중에서 짝
     let firstIndex, lastIndex;
 
     for(let i = 0; i < openCard.length; i++){
-        /*
-        if(openCard[i] == null){
-            console.log("continue");
-            continue;
-        }else{
-            firstIndex = openCard.indexOf(openCard[i]);
-            lastIndex = openCard.lastIndexOf(openCard[i]);
-        }
-        */
+        
         if(openCard[i] !== null){
             firstIndex = openCard.indexOf(openCard[i]);
             lastIndex = openCard.lastIndexOf(openCard[i]);
-            // console.log(`firstIndex : ${firstIndex},  lastIndex : ${lastIndex}`);
         }
 
         if(firstIndex !== lastIndex){
@@ -463,66 +502,91 @@ function com_selectPair(){  // 과거 오픈되었던 카드 배열중에서 짝
     return firstIndex !== lastIndex ? firstIndex: false;
 }
 
+function count_start(){
 
-let btn_newSingle = document.querySelector("#btn_newSingle"),
-    btn_newVs = document.querySelector("#btn_newVs");
-
-btn_newSingle.addEventListener("click", ()=>newGame_single());
-
-btn_newVs.addEventListener("click", ()=>newGame_vs());
-
-// ---------------------------
-
-document.querySelector(".optionOpen").addEventListener("click", (e)=>{
-    e.preventDefault();
-    document.querySelector(".header").classList.toggle("active");
-})
-
-// document.querySelector(".optionClose").addEventListener("click", (e)=>{
-//     e.preventDefault();
-//     document.querySelector(".header").classList.remove("active");
-// })
-
-document.querySelector(".btn_openBtnGroup").addEventListener("click", (e)=>{
-    e.preventDefault();
-    e.currentTarget.classList.toggle("active");
-    document.querySelector(".group_btn").classList.toggle("active");
-})
-
-
-document.querySelector("#input_countTime").addEventListener("input", e=>{
-    let num = e.currentTarget.value;
-    if(num < 1 || num > 99){
-        alert("1초 ~ 99초 내에서 선택해주세요");
-        e.currentTarget.value = 30;
+    if(!case_noCount){
+        document.querySelector(".timer_wrap").setAttribute("class", "timer_wrap user");
+        for(let i of document.querySelectorAll(".clockHands")){
+            i.classList.add("animation");
+        }
+    
+        func_countTimeOut = setTimeout(()=>count_stop(), count_origin*1000+500);
+    
+        count_copy = count_origin;
+    
+        document.querySelector(".timer_wrap .clockNum").innerText = count_copy;
+        
+        func_timeCounter = setInterval(()=>{
+            document.querySelector(".timer_wrap .clockNum").innerText = --count_copy;
+            if(count_copy === 0){
+                clearInterval(func_timeCounter);
+    
+                userDelay = true;
+                for(let i of document.querySelectorAll(".card_open")){
+                    i.classList.remove("card_open");
+                };
+                whosTurn = "com";
+                selectedCard = [];
+                for(let count = 0; count < 2; count++){
+                    setTimeout(turn_com, timeDelay * (count+1));
+                }
+    
+            }
+        }, 1000);
     }else{
-        countSetting(num);
+        document.querySelector(".timer_wrap .clockNum").innerHTML = `<i class="fa-solid fa-infinity"></i>`;
     }
-})
 
+    
+}
+function count_stop(){
+        clearTimeout(func_countTimeOut);
+        for(let i of document.querySelectorAll(".clockHands")){
+            i.classList.remove("animation");
+        }
+        document.querySelector(".timer_wrap").setAttribute("class", "timer_wrap com");
+        document.querySelector(".timer_wrap .clockNum").innerHTML = `<i class="fa-solid fa-robot"></i>`;
+    
+        clearInterval(func_timeCounter);
+}
 
-
-
-
-// for(let i of document.querySelectorAll("*")){
-//     i.addEventListener("focus", e=>{
-//         console.log(e.currentTarget);
-//     })
-// }
-
-
-
-
-
-
-window.addEventListener("resize", e=>{
-    let screenSize = window.innerWidth;
-    cardSize_responsive(screenSize);
-})
-
-
-
-function cardSize_responsive(num){
+function option_cardNum(){
+    document.querySelector("#input_cardNum").addEventListener("change", e=>{
+        let num = e.currentTarget.value;
+        if(num < 2){
+            alert("2 이상의 수를 입력해주세요");
+            e.currentTarget.value = 6;
+        }else{
+            e.currentTarget.value = parseInt(e.currentTarget.value);
+        }
+    })
+}
+function option_countTime(){
+    document.querySelector("#input_countTime").addEventListener("change", e=>{
+        let num = e.currentTarget.value;
+        if(num < 1 || num > 99){
+            alert("1초 ~ 99초 내에서 선택해주세요");
+            e.currentTarget.value = 30;
+        }else{
+            e.currentTarget.value = parseInt(e.currentTarget.value);
+        }
+    })
+}
+function option_noCount(){
+    let inputCheck = document.querySelector("#input_noCount"),
+        inputNumber = document.querySelector("#input_countTime");
+    
+        inputCheck.addEventListener("input", ()=>{
+            if(inputCheck.checked){
+                inputNumber.parentNode.classList.add("disabled");
+                inputNumber.disabled = true;
+            }else{
+                inputNumber.parentNode.classList.remove("disabled");
+                inputNumber.disabled = false;
+            }
+    })
+}
+function option_cardResponsive(num){
 
     if(document.querySelector("#input_autoSize").checked){
         if(num < 459){
@@ -537,179 +601,60 @@ function cardSize_responsive(num){
         }
     }
 }
-
-
-for(let i of document.querySelectorAll("input[name=cardSize]")){
-    i.addEventListener("input", e=>{
-        let num = e.currentTarget.id;
-        switch(num){
-            case "cardSize1":
-                document.documentElement.style.setProperty("--cardSize_ratio", 1);
-                break;
-            case "cardSize2":
-                document.documentElement.style.setProperty("--cardSize_ratio", 0.8);
-                break;
-            case "cardSize3":
-                document.documentElement.style.setProperty("--cardSize_ratio", 0.6);
-                break;
-            default:
-                break;
-        }
-    })
-}
-
-
-
-function countSetting(num){
-    count_origin = num;
-    document.documentElement.style.setProperty("--turn_count", count_origin+"s");
-
-}
-function countStart(){
-
-    for(let i of document.querySelectorAll(".clockHands")){
-        i.classList.add("animation");
-    }
-
-    func_countTimeOut = setTimeout(()=>countStop(), count_origin*1000+500);
-
-    count_copy = count_origin;
-
-    document.querySelector(".timer_wrap .clockNum").innerText = count_copy;
-    
-    func_timeCounter = setInterval(()=>{
-        document.querySelector(".timer_wrap .clockNum").innerText = --count_copy;
-        if(count_copy === 0){
-            clearInterval(func_timeCounter);
-
-            userDelay = true;
-            for(let i of document.querySelectorAll(".card_open")){
-                i.classList.remove("card_open");
-            };
-            whosTurn = "com";
-            selectedCard = [];
-            for(let count = 0; count < 2; count++){
-                setTimeout(turn_com, timeDelay * (count+1));
+function option_cardSize(){
+    for(let i of document.querySelectorAll("input[name=cardSize]")){
+        i.addEventListener("input", e=>{
+            let num = e.currentTarget.id;
+            switch(num){
+                case "cardSize1":
+                    document.documentElement.style.setProperty("--cardSize_ratio", 1);
+                    break;
+                case "cardSize2":
+                    document.documentElement.style.setProperty("--cardSize_ratio", 0.8);
+                    break;
+                case "cardSize3":
+                    document.documentElement.style.setProperty("--cardSize_ratio", 0.6);
+                    break;
+                default:
+                    break;
             }
-
-        }
-    }, 1000);
-}
-
-function countStop(){
-    clearTimeout(func_countTimeOut);
-    for(let i of document.querySelectorAll(".clockHands")){
-        i.classList.remove("animation");
+        })
     }
-    document.querySelector(".timer_wrap .clockNum").innerText = "";
-
-    clearInterval(func_timeCounter);
 }
-
-
-
-function inputCountNoTime(){
-
-    let inputCheck = document.querySelector("#input_countNoTime"),
-        inputNumber = document.querySelector("#input_countTime");
-    
-        inputCheck.addEventListener("input", e=>{
-            if(inputCheck.checked){
-                inputNumber.parentNode.classList.add("disabled");
-                inputNumber.disabled = true;
-            }else{
-                inputNumber.parentNode.classList.remove("disabled");
-                inputNumber.disabled = false;
-            }
-    })
-}
-inputCountNoTime();
-
-
-
-
-
-
-document.querySelector(".modal_depthDetail a").addEventListener("click", e=>{
-    e.preventDefault();
-    document.querySelector(".arcodion_wrap").classList.toggle("active");
-})
-
-
-
-
-//  옵션창 난이도 관련 함수들 ---------------------
-
-/*
-
-input type=range 값을 input type=number 로 옮기는 함수
-input type=number 값을 input type=range로 옮기는 함수
-
-input type=range 값으로 css 적용하는 함수
-
-
-실제 난이도로 적용하는 함수
-
-
-*/
-
-
-
-function style_difficultyBg(targetDom, value){
-    targetDom.style.background = `linear-gradient(to right, var(--color_main) ${value}%, #fff ${value}%)`;
-}
-function update_difficulty_otherType(targetType, targetDataCategory, value){
-    document.querySelector(`input[type=${targetType}][data-category$=${targetDataCategory}]`).value = value;
-}
-
-function input_difficultyDetail(){
+function option_difficultyDetail(){
     let inputRange = document.querySelectorAll(".group_range input[type=range]");
     let inputNumber = document.querySelectorAll(".group_range input[type=number]");
 
     inputRange.forEach(i=>{
         i.addEventListener("input", e=>{
-            style_difficultyBg(e.currentTarget, e.currentTarget.value);
-            update_difficulty_otherType("number", e.currentTarget.dataset.category, e.currentTarget.value);
+            difficulty_updateProgressBar(e.currentTarget, e.currentTarget.value);
+            difficulty_updateOtherInput("number", e.currentTarget.dataset.category, e.currentTarget.value);
         })
     })
 
     inputNumber.forEach(i=>{
         i.addEventListener("change", e=>{
             let rangeDom = e.currentTarget.closest(".inputWrap").previousElementSibling;
-            // || !Number.isInteger(e.currentTarget.value)
-            if(e.currentTarget.value < 0 || e.currentTarget.value > 100 || Number.isInteger(e.currentTarget.value)){
+            if(e.currentTarget.value < 0 || e.currentTarget.value > 100 || !e.currentTarget.value){
                 alert("0 ~ 100 사이의 정수를 입력해주세요");
                 e.currentTarget.value = rangeDom.value;
             }else{
                 e.currentTarget.value = parseInt(e.currentTarget.value);
-                style_difficultyBg(rangeDom, e.currentTarget.value);
-                update_difficulty_otherType("range", e.currentTarget.dataset.category, e.currentTarget.value);
+                difficulty_updateProgressBar(rangeDom, e.currentTarget.value);
+                difficulty_updateOtherInput("range", e.currentTarget.dataset.category, e.currentTarget.value);
             }
         })
     })
 }
 
-function apply_difficultyDetail(){
 
+function difficulty_updateProgressBar(targetDom, value){
+    targetDom.style.background = `linear-gradient(to right, var(--color_main) ${value}%, #fff ${value}%)`;
 }
-
-
-
-
-input_difficultyDetail();
-
-function init_setDifficulty(){
-    difficulty ={
-        "Opend" : document.querySelector("#detail_randomOpend").value,
-        "NotOpen" : document.querySelector("#detail_randomNotOpen").value,
-        // "random" : 0.9,
-        "Select" : document.querySelector("#detail_designatedSelect").value,
-        "Pair" : document.querySelector("#detail_designatedPair").value,
-        "trick" : 0
-    }
+function difficulty_updateOtherInput(targetType, targetDataCategory, value){
+    document.querySelector(`input[type=${targetType}][data-category$=${targetDataCategory}]`).value = value;
 }
-
-function insert_difficultyDefault(){
+function difficulty_selectBtn(){
     document.querySelectorAll("input[name=difficulty]").forEach(i=>{
         i.addEventListener("change", e=>{
             let selectValue = e.currentTarget.id;
@@ -717,53 +662,49 @@ function insert_difficultyDefault(){
             switch(selectValue){
                 case "difficulty1":
                     var_difficulty = {
+                        "Remains" : 0,
                         "Opend" : 0,
                         "NotOpen" : 0,
-                        // "random" : 1,
                         "Select" : 0,
                         "Pair" : 0,
-                        "trick" : 0
                     }
                     break;
                 case "difficulty2":
                     
                     var_difficulty = {
+                        "Remains" : 0,
                         "Opend" : 0,
                         "NotOpen" : 100,
-                        // "random" : 0.5,
                         "Select" : 40,
                         "Pair" : 30,
-                        "trick" : 0
                     }
                     break;
                 case "difficulty3":
                     var_difficulty = {
+                        "Remains" : 0,
                         "Opend" : 0,
                         "NotOpen" : 100,
-                        // "random" : 0,
                         "Select" : 80,
                         "Pair" : 70,
-                        "trick" : 0
                     }
                     break;
                 case "difficulty4":
                     var_difficulty = {
+                        "Remains" : 10,
                         "Opend" : 50,
                         "NotOpen" : 100,
-                        // "random" : 0,
                         "Select" : 100,
                         "Pair" : 100,
-                        "trick" : 0
                     }
                     break;
                 default:
             }
-            let loopArray = ["Opend", "NotOpen", "Select", "Pair"];
+            let loopArray = ["Remains", "Opend", "NotOpen", "Select", "Pair"];
             loopArray.forEach(i=>{
                 let targetRange = document.querySelector(`input[type=range][data-category$=${i}]`);
-                style_difficultyBg(targetRange, var_difficulty[i]);
-                update_difficulty_otherType("range", i, var_difficulty[i]);
-                update_difficulty_otherType("number", i, var_difficulty[i]);
+                difficulty_updateProgressBar(targetRange, var_difficulty[i]);
+                difficulty_updateOtherInput("range", i, var_difficulty[i]);
+                difficulty_updateOtherInput("number", i, var_difficulty[i]);
             })
 
         })
@@ -771,3 +712,23 @@ function insert_difficultyDefault(){
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
