@@ -66,4 +66,11 @@
         게임 시작 시 clearInterval / clearTimeout 확실하게 적용시키기. 
         난이도 세부설정에 안내문 추가
 
+23.10.05
+    완료 :
+        게임 재시작 시 콤보 초기화 안되는 오류 수정
+            (init함수에 score_combo = 0 추가)
+        싱글모드 시간제한 없음 체크 시 타이머 깜빡꺼리는 현상 수정
+            (turn_single함수 > count_stop함수 실행할 때 조건문 추가)
+
         

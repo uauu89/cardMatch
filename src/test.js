@@ -128,7 +128,8 @@ function init(who){
 
     selectedCard = [];
     com_turnCount = 0;
-    score_com = score_user = 0
+    score_com = score_user = 0;
+    score_combo = 0;
     userDelay = false;
     switch_playing = true;
     
@@ -349,7 +350,9 @@ function turn_single(){
                 pushOpenCard(idx);
                 setTimeout(()=>{
                     if(selectedCard.length === 2){
-                        count_stop();
+                        if(!case_noCount){
+                            count_stop();
+                        }
                         if(selectedCard[0] === selectedCard[1]){
                             check_markingRight();
                         }else{
