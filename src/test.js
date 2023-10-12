@@ -24,7 +24,8 @@ let score_com = 0,
     score_user = 0,
     score_combo = 0;
 
-let func_timeCounter, func_countTimeOut, func_userDelayTimeOut, func_comDelayTimeOut;
+let func_timeCounter = null,
+    func_countTimeOut, func_userDelayTimeOut, func_comDelayTimeOut;
 let diceResult;
 
 let difficulty = {
@@ -557,30 +558,30 @@ function count_start(){
         
             document.querySelector(".timer_wrap .clockNum").innerText = count_copy;
             
-            func_timeCounter = setInterval(()=>{
-                document.querySelector(".timer_wrap .clockNum").innerText = --count_copy;
-                if(count_copy === 0){
-                    clearInterval(func_timeCounter);
-                    check_markingWrong();
-        
-                    userDelay = true;
-                    // for(let i of document.querySelectorAll(".card_open")){
-                    //     i.classList.remove("card_open");
-                    // };
+            if(func_timeCounter === null){
+                func_timeCounter = setInterval(()=>{
+                    document.querySelector(".timer_wrap .clockNum").innerText = --count_copy;
+                    if(count_copy === 0){
+                        clearInterval(func_timeCounter);
+                        func_timeCounter = null
 
-                    if(gameMode === "vs"){
-                        whosTurn = "com";
-                        // selectedCard = [];
-                        
-                        for(let count = 0; count < 2; count++){
-                            setTimeout(turn_com, timeDelay * (count+1));
+                        check_markingWrong();
+            
+                        userDelay = true;
+    
+                        if(gameMode === "vs"){
+                            whosTurn = "com";
+                            
+                            for(let count = 0; count < 2; count++){
+                                setTimeout(turn_com, timeDelay * (count+1));
+                            }
+                        }else{
+                            setTimeout(count_start, 1000);
                         }
-                    }else{
-                        // selectedCard = [];
-                        setTimeout(count_start, 1000);
                     }
-                }
-            }, 1000);
+                }, 1000);
+
+            }
         }else{
             document.querySelector(".timer_wrap .clockNum").innerHTML = `<i class="fa-solid fa-infinity"></i>`;
         }
@@ -597,6 +598,7 @@ function count_stop(){
     }
     document.querySelector(".timer_wrap .clockNum").innerHTML = "";
     clearInterval(func_timeCounter);
+    func_timeCounter = null;
     
     
 }

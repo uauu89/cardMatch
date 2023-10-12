@@ -74,3 +74,7 @@
             (turn_single함수 > count_stop함수 실행할 때 조건문 추가)
 
         
+23.10.12
+    완료 : 
+        타이머 중복 차감 오류 수정
+            (func_timeCounter === null 조건 추가)
