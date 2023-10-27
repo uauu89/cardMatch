@@ -124,6 +124,7 @@ function newGame_vs(){
     
 }
 function init(who){
+    document.querySelector(".header").classList.remove("active");
     count_stop();
     clearTimeout(func_comDelayTimeOut);
 
@@ -317,6 +318,16 @@ function check_gameOver(){
                 <div>
                     <p>게임이 끝났습니다.</p>
                     <p>새 게임 버튼으로 새로운 게임을 시작할 수 있습니다.</p>
+                </div>
+                <div class="group_btnInner">
+                    <button type="button" class="btn_commonStyle btn_newGame single" onclick="newGame_single()">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        새 게임<span></span>혼자
+                    </button>
+                    <button type="button" class="btn_commonStyle btn_newGame vs" onclick="newGame_vs()">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        새 게임<span></span>대전
+                    </button>
                 </div>
             `
         }else{

@@ -101,6 +101,11 @@ body{
 }
 
 
+
+.gameOver_inner .group_btnInner{
+    justify-content: center;
+}
+
 .wrap{
     width: 90%;
     margin: 0 auto;
@@ -447,6 +452,7 @@ input.transparent:checked + label{
     background: linear-gradient(to right, var(--color_main) 50%, #fff 50%);
     border-radius: 3px;
     box-shadow: inset 0 0 0 1px var(--color_main);
+    margin: 0 1px;
 }
 .group_range input[type=range]::-webkit-slider-thumb{
     appearance: none;
@@ -457,6 +463,7 @@ input.transparent:checked + label{
     background-color: #fff;
     border: 2px solid #408E51;
     border-radius: 4px;
+    transform: scaleX(1.01);
 }
 .group_range input[type=range]::-moz-range-thumb{
     appearance: none;
