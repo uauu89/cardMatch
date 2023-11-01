@@ -1,0 +1,72 @@
+.btnNewGameWrap{
+    display: flex;
+    gap: 30px;
+    overflow: hidden;
+}
+
+.btnCommonStyle{
+    display: block;
+    background-color: #fff;
+    border: 2px solid var(--color_main);
+    border-radius: 5px;
+    color: #408E51;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    line-height: 26px;
+}
+
+.btnCommonStyle:hover{
+    background-color: var(--color_main);
+    color: #fff;
+}
+
+.tabIndex:focus-within{
+    outline: auto;
+    outline-color: #000;
+    border-radius: 5px;
+    outline-offset: 1px;
+}
+
+
+.btnNewGame{
+    padding: 10px;
+    height: 44px;
+    font-size: 20px;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.iconSize16{
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.verticalLine{
+    display: inline-block;
+    width: 3px;
+    height: 20px;
+    margin: 0 8px;
+    background-color: #408E51;
+    transition: 0.3s;
+}
+
+.btnNewGame:hover .icon16{
+    color: #fff;
+    rotate: 360deg;
+    transition: color 0.3s, rotate 1s 0.3s ;
+}
+.btnNewGame:hover .verticalLine{
+    background-color: #fff;
+}
+
+
+
+
+@media (min-width: 1101px) {
+    .btn_openBtnGroup{
+        display: none;
+    }
+}

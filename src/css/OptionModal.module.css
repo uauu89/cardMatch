@@ -1,0 +1,295 @@
+.wrap{
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 600px;
+    max-height: 98vh;
+    padding: 30px 50px 30px 30px;
+
+    background-color: var(--color_gray1);
+    border-bottom-left-radius: 10px;
+
+    box-shadow: -3px 5px 4px rgba(0, 0, 0, 0.25);
+    z-index: 1;
+
+    transform: translateX(100%);
+    transition: 0.3s;
+    font-size: 14px;
+    visibility: hidden;
+    color: #242;
+    overflow-y: scroll;
+}
+
+.wrap.active {
+    transform: translateX(0%);
+    visibility: visible;
+}
+
+.wrap h2{
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color_main);
+}
+.wrap h3{
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 30px;
+}
+
+
+.depth{
+    margin-left: 10px;
+}
+
+.sub > li{
+    margin-top: 20px;
+}
+
+.depthDetail{
+    margin-left: 20px;    
+}
+
+.depthDetail p{
+    font-size: 12px;
+    margin: 10px 0 5px;
+}
+
+
+
+.grid{
+    display: grid;
+    grid-template-columns: 70px auto;
+    align-items: center;
+    column-gap: 30px;
+    row-gap: 10px;
+}
+
+.template3{
+    grid-template-columns: 70px min-content max-content;
+}
+.gridCol2{
+    grid-column: 2;
+}
+
+
+
+.btnWrap{
+    display: flex;
+    gap: 5px;
+    flex: 1;
+    margin-left: 0;
+}
+
+.btnWrap > li{
+    flex: 1;
+}
+
+
+
+
+.inputWrap, .inputWrap input{
+    font-size: 14px;
+    font-weight: 700;
+    color: #408E51;
+}
+
+.inputWrap{
+    /* display: flex; */
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    border: 2px solid var(--color_main);
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 0 10px;
+    justify-self: start;
+}
+.inputWrap input{
+    width: 80px;
+    line-height: 26px;
+    border: none;
+    background: transparent;
+}
+.inputWrap input::-webkit-inner-spin-button{
+    margin-left: 5px;
+}
+.inputWrap input:focus{
+    outline: none;
+}
+.inputWrap:focus-within{
+    outline: 2px solid black;
+}
+.inputWrap.disabled{
+    border-color: var(--color_gray2);
+    color: var(--color_gray2);
+}
+.inputWrap.disabled input{
+    color: var(--color_gray2);
+}
+
+
+.posRel{
+    position: relative;
+}
+
+.checkboxWrap{
+    display: flex;
+    align-items: center;
+    justify-self: flex-start;
+    gap: 10px;
+}
+
+.checkboxStyle{
+    display: block;
+    position: relative;
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border: 3px solid var(--color_main);
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
+.inputHidden:checked + label{
+    background-color: var(--color_main);
+    color: #fff;
+}
+
+.inputHidden:checked + .checkboxStyle::before{
+    position: absolute;
+    left: 4px;
+    bottom: 2px;
+    display: block;
+    content: "";
+    width: 4px;
+    height: 10px;
+    background-color: #fff;
+    border-radius: 2px;
+    transform-origin: 2px 8px;
+    transform: rotate(-40deg);
+}
+.inputHidden:checked + .checkboxStyle::after{
+    position: absolute;
+    left: 4px;
+    bottom: 2px;
+    display: block;
+    content: "";
+    width: 4px;
+    height: 16px;
+    background-color: #fff;
+    border-radius: 2px;
+    transform-origin: 2px 14px;
+    transform: rotate(40deg);
+}
+
+
+
+
+.icon{
+    margin-left: 10px;
+    transition: transform 0.5s;
+}
+
+.icon.rotate{
+    transform: rotate(180deg);
+}
+
+
+
+.detailWrap{
+    display: grid;
+    grid-template-rows: 0fr;
+    /* overflow: hidden; */
+    transition: 0.5s;
+}
+.detailWrap.active{
+    grid-template-rows: 1fr;
+}
+
+.detailWrap .depth{
+    overflow: hidden;
+}
+
+
+
+
+
+
+
+.btnNewGameSection p{
+    text-align: right;
+    margin: 50px 0 10px;
+}
+
+.justifyEnd{
+    justify-content: end;
+}
+
+
+
+.inputHidden{
+    opacity: 0;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.cursorPointer{
+    cursor: pointer;
+}
+
+.textCenter{text-align: center;}
+.textRight{text-align: right;}
+.textNoWrap{white-space: nowrap;}
+.unit{
+    display: block;
+    width: 20px;
+    text-align: center;
+}
+
+
+@media (max-width: 835px) {
+    .wrap{width: 90%;}
+}
+
+
+@media (max-width: 500px){
+    .wrap{
+        position: fixed;
+        padding: 30px 10px;
+    }
+}
+
+@media (max-width: 459px){
+    .wrap{
+        width: 100%;
+        padding: 10px;
+    }
+
+
+    .mobileGridRow2{
+        grid-row: 2;
+    }
+    .mobileGridCol2{
+        grid-column: 2;
+    }
+
+    .grid.mobile{
+        grid-template-columns: 1fr;
+    }
+    
+
+    li.mobile_grid .gridCol_2{
+        grid-column: auto;
+    }
+
+    .group_range{
+        margin: 20px 0;
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+
+}

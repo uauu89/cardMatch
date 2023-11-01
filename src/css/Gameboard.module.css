@@ -1,0 +1,13 @@
+.wrap{
+    width: 90%;
+    margin: 200px auto 0;
+    border: 1px solid #ccc;
+    background-color: var(--color_gray1);
+    margin-top: 200px;
+    padding: 50px 40px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    /* transform: translateY(0px); */
+}

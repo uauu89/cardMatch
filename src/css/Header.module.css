@@ -1,0 +1,176 @@
+.wrap{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    margin-bottom: 30px;
+    background-color: #fff;
+    box-shadow: 3px 0 3px rgba(0, 0, 0, 0.25);
+    z-index: 1;
+}
+
+.ui{
+    position: relative;
+    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.ui::before{
+    position: fixed;
+    display: block;
+    content: "";
+    width: 10px;
+    height: 100vh;
+    background-color: var(--color_main);
+    top: 0;
+    right: 0;
+    z-index: 10;
+}
+
+.scoreWrap{
+    height: 140px;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin-left: 5%;
+
+    font-weight: 700;
+    color: #242;
+}
+
+.timerWrap{
+    margin: 0 auto;
+    position: relative;
+    width: 100px;
+    height: 100px;
+
+    background-color: #fff;
+    border-radius: 50%;
+    border: 2px solid var(--color_gray1);
+    overflow: hidden;
+
+    z-index: -1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-variant-numeric: tabular-nums;
+
+    color: #242;
+    font-size: 48px;
+    font-weight: 700;
+
+    font-family: 'Fjalla One', sans-serif;
+}
+
+
+.btnOpenOption{
+    position: fixed;
+    top: 0;
+    right: 10px;
+    display: block;
+    width: 50px;
+    height: 50px;
+    background-color: var(--color_main);
+    border-bottom-left-radius: 30px;
+    color: #fff;
+    font-size: 26px;
+    text-align: center;
+    line-height: 44px;
+    z-index: 2;
+    
+}
+
+.iconGear{
+    transition: transform 1.2s ease-in-out;
+}
+
+
+.btnOpenOption:hover .iconGear{
+    transform: rotate(360deg);
+}
+
+.active .fa-gear:before{
+    content: "\58";
+}
+.active .optionOpen i{
+    transform: rotate(360deg);
+}
+.active .optionOpen:hover i{
+    transition: none;
+}
+
+.btnOpenNewGame{
+    position: absolute;
+    right: 10px;
+    bottom: 0;
+    width: 44px;
+    height: 44px;
+    border-top-left-radius: 20px;
+    background-color: var(--color_main);
+    
+    font-size: 36px;
+    color: #fff;
+    text-align: center;
+    line-height: 40px;
+}
+
+
+
+.btnNewGameSection{
+    display: grid;
+    /* overflow: hidden; */
+    /* position: absolute; */
+}
+
+.icon{
+    transition: transform 0.5s;
+}
+
+
+.rotate{
+    transform: rotate(180deg);
+}
+
+
+
+@media (min-width: 1101px) {
+    .btnNewGameSection{
+        position: absolute;
+        right: 5%;
+        bottom: 20px;
+        padding-right: 30px;
+    }
+    .btnOpenNewGame{
+        display: none;
+    }
+}
+
+@media (max-width: 1100px) {
+    .btnNewGameSection{
+        background-color: var(--color_gray1);
+        justify-content: center;
+        transition: 0.5s;
+        grid-template-rows: 0fr;
+    }
+    .btnNewGameSection.active{
+        grid-template-rows: 1fr;
+    }
+}
+
+
+@media (max-width: 500px){
+    .timerWrap{
+        width: 80px;
+        height: 80px;
+        /* margin: 0; */
+        /* top: 10px; */
+    }
+    .scoreWrap{
+        height: 100px;
+        padding: 10px 0;
+    }
+
+
+}

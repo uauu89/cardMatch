@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Noto+Sans+KR:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap');
+
+:root{
+    --color_main: #53B167;
+    --color_green1: #608A69;
+    --color_gray1: #f4f4f4;
+    --color_gray2: #ddd;
+
+    --cardSize_ratio : 1;
+    
+    --cardSize_width: calc(120px * var(--cardSize_ratio));
+    --cardSize_height: calc(180px * var(--cardSize_ratio));
+
+    --cardSize_decoBorderWidth: calc(var(--cardSize_width) * 0.25);
+    --cardSize_decoBorderHeight: calc(var(--cardSize_height) * 0.25);
+
+    --cardSize_decoWidth: calc(var(--cardSize_decoBorderWidth) - 2px);
+    --cardSize_decoHeight: calc(var(--cardSize_decoBorderHeight) - 4px);
+}
+
+
+
+html,body,p,ol,ul,li,dl,dt,dd,blockquote,figure,fieldset,legend,textarea,pre,iframe,hr,h1,h2,h3,h4,h5,h6,button,input,label{margin:0;padding:0}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
+html{box-sizing:border-box}
+
+button, input, label{
+    font-size: inherit;
+    line-height: 1;
+}
+
+body{
+    box-sizing:border-box;
+    line-height: 1.5;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+button{
+    cursor: pointer;
+}
+ul{
+    list-style: none;
+}
+
+div{
+    box-sizing: border-box;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
+
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: #242;
+    border: 2px solid var(--color_main);
+    border-radius:5px;
+}
+::-webkit-scrollbar-track {
+	background: var(--color_main); 
+}
+

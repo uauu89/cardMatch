@@ -1,0 +1,108 @@
+
+
+.wrap{
+    display: block;
+    position: relative;
+    width: var(--cardSize_width);
+    height: var(--cardSize_height);
+    cursor: pointer;
+}
+
+.card{
+    position: absolute;
+    width: var(--cardSize_width);
+    height: var(--cardSize_height);
+    border-radius: 5px;
+    border: 2px solid var(--color_green1);
+    transition: transform 0.5s;
+    backface-visibility: hidden;
+    box-shadow: 2px 2px 3px 0px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    
+}
+
+
+.front{
+    transform: rotateY(180deg);
+    background-image: linear-gradient(to left, #fff 50%, var(--color_gray1) 50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    font-weight: bold;
+    color: #47634d;
+}
+.back{
+    background-image: linear-gradient(to left, #fff 50%, var(--color_main) 50%);
+}
+
+.deco{
+    position: absolute;
+    border-style: solid;
+    border-width: var(--cardSize_decoHeight) var(--cardSize_decoWidth);
+}
+
+
+.deco.top{top: 0; transform: translateY(2px);}
+.deco.bottom{bottom: 0; transform: translateY(-2px);}
+.deco.left{right: 50%;}
+.deco.right{left: 50%;}
+
+
+.border{border-width: var(--cardSize_decoBorderHeight) var(--cardSize_decoBorderWidth);}
+
+.border.top{transform: translateY(-2px);}
+.border.bottom{transform: translateY(2px);}
+
+.back .deco.top.left{border-color: transparent #fff transparent transparent;}
+.back .deco.top.right{border-color: transparent transparent transparent #fff;}
+.back .deco.bottom.left{border-color: transparent var(--color_main) transparent transparent;}
+.back .deco.bottom.right{border-color: transparent transparent transparent var(--color_main);}
+.back .deco.border.top.left{border-color: transparent var(--color_main) transparent transparent;}
+.back .deco.border.top.right{border-color: transparent transparent transparent var(--color_main);}
+.back .deco.border.bottom.left{border-color: transparent #fff transparent transparent;}
+.back .deco.border.bottom.right{border-color: transparent transparent transparent #fff;}
+
+.front .deco{z-index: -1;}
+
+.front .deco.top.left{border-color: transparent #fff transparent transparent;}
+.front .deco.top.right{border-color: transparent transparent transparent #fff;}
+.front .deco.bottom.left{border-color: transparent var(--color_gray1) transparent transparent;}
+.front .deco.bottom.right{border-color: transparent transparent transparent var(--color_gray1);}
+.front .deco.border.top.left{border-color: transparent var(--color_gray1) transparent transparent;}
+.front .deco.border.top.right{border-color: transparent transparent transparent var(--color_gray1);}
+.front .deco.border.bottom.left{border-color: transparent #fff transparent transparent;}
+.front .deco.border.bottom.right{border-color: transparent transparent transparent #fff;}
+
+.open .back{transform: rotateY(180deg);}
+.open .front{transform: rotateY(360deg);}
+
+.correct .back{transform: rotateY(180deg);}
+.correct .front{transform: rotateY(360deg);}
+
+.front::after{
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    z-index: 1;
+    border-style: solid;
+    border-width: 4px;
+}
+
+.single .front::after{
+    content: "";
+    border-color: #579757;
+    box-shadow: inset 0 0 10px 0 #0f0;
+}
+.user .front::after{
+    content: "";
+    border-color: #575797;
+    box-shadow: inset 0 0 10px 0 #00f;
+}
+.com .front::after{
+    content: "";
+    border-color: #975757;
+    box-shadow: inset 0 0 10px 0 #f00;
+}
