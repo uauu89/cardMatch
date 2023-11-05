@@ -1,12 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faRotateRight } from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect } from "react";
+
+import CompOptCardNum from "./CompOptCardNum";
+import CompOptTime from "./CompOptTime";
+import CompOptDifficultyDetails from "./CompOptDifficultyDetails";
 
 import css from "../css/CommonStyle.module.css";
 import modal from "../css/OptionModal.module.css";
-import { useState, useEffect } from "react";
-import CompInputRange from "./CompInputRange";
-import CompTime from "./CompTime";
-import CompCardNum from "./CompCardNum";
 
 export default function OptionModal(props){
 
@@ -49,13 +50,13 @@ export default function OptionModal(props){
                     <h3>공통 옵션</h3>
                     <ul className={`${modal.depth} ${modal.sub}`}>
                         <li className={modal.grid}>
-                            <label htmlFor="input_cardNum">카드 범위</label>
-                            <CompCardNum />
+                            <label htmlFor="inputCardNum">카드 범위</label>
+                            <CompOptCardNum />
                         </li>
 
                         <li className={`${modal.grid} ${modal.template3}`}>
-                            <label htmlFor="input_countTime">시간 제한</label>
-                            <CompTime />
+                            <label htmlFor="inputTimer">시간 제한</label>
+                            <CompOptTime />
                         </li>
                         
                         <li className={`${modal.grid} ${modal.mobile}`}>
@@ -104,11 +105,11 @@ export default function OptionModal(props){
                     <h3>싱글 옵션</h3>
                     <ul className={`${modal.depth} ${modal.sub}`}>
                         <li className={modal.grid}>
-                            <label htmlFor="input_noAnimation" className={`${modal.cursorPointer} ${modal.textNoWrap}`}>카드 확인 여부</label>
+                            <label htmlFor="inputCheckCard" className={`${modal.cursorPointer} ${modal.textNoWrap}`}>카드 확인 여부</label>
                             <div className={`${modal.checkboxWrap}`}>
                                 <div className={`${modal.posRel} ${css.tabIndex}`} >
-                                    <input type="checkbox" id="input_noAnimation" className={modal.inputHidden} defaultChecked />
-                                    <label htmlFor="input_noAnimation" className={`${modal.checkboxStyle} ${modal.cursorPointer}`} />
+                                    <input type="checkbox" id="inputCheckCard" className={modal.inputHidden} defaultChecked />
+                                    <label htmlFor="inputCheckCard" className={`${modal.checkboxStyle} ${modal.cursorPointer}`} />
                                 </div>
                             </div>
 
@@ -120,10 +121,10 @@ export default function OptionModal(props){
                     <h3>대전 옵션</h3>
                     <ul className={`${modal.depth} ${modal.sub}`}>
                         <li className={modal.grid}>
-                            <label htmlFor="input_keepTurn" className={`${modal.cursorPointer} ${modal.textNoWrap}`}>연속 선택 여부</label>
+                            <label htmlFor="inputKeepTurn" className={`${modal.cursorPointer} ${modal.textNoWrap}`}>연속 선택 여부</label>
                             <div className={`${modal.checkboxWrap} ${modal.posRel} ${css.tabIndex}`}>
-                                <input type="checkbox" id="input_keepTurn" className={modal.inputHidden} />
-                                <label htmlFor="input_keepTurn" className={`${modal.checkboxStyle} ${modal.cursorPointer}`} />
+                                <input type="checkbox" id="inputKeepTurn" className={modal.inputHidden} />
+                                <label htmlFor="inputKeepTurn" className={`${modal.checkboxStyle} ${modal.cursorPointer}`} />
                             </div>
                         </li>
                         <li className={`${modal.grid} ${modal.mobile}`}>
@@ -204,26 +205,26 @@ export default function OptionModal(props){
                                 </a>
                             </div>
                             <div className={`${modal.detailWrap} ${openDetail > 0 ? modal.active: ""}`}>
-                                <ul className={modal.depth} id="option_difficultyDetail">
+                                <ul className={modal.depth} id="optionDifficultyDetail">
                                     <li>
                                         <p>남은 카드 비율  ※열어본 카드비율이 설정값 이하일 경우 열어 본 카드 선택 </p>
-                                        <CompInputRange data={difficulty.remains} />
+                                        <CompOptDifficultyDetails id="remains" data={difficulty.remains} />
                                     </li>
                                     <li>
                                         <p>임의선택 : 이미 열어 본 카드를 다시 선택할 확률</p>
-                                        <CompInputRange data={difficulty.opend} />
+                                        <CompOptDifficultyDetails id="opend" data={difficulty.opend} />
                                     </li>
                                     <li>
                                         <p>임의선택 : 열어보지 않은 카드를 선택할 확률</p>
-                                        <CompInputRange data={difficulty.notOpen} />
+                                        <CompOptDifficultyDetails id="notOpen" data={difficulty.notOpen} />
                                     </li>
                                     <li>
                                         <p>확정선택 : 현재 선택한 카드와 맞는 카드를 선택할 확률</p>
-                                        <CompInputRange data={difficulty.select} />
+                                        <CompOptDifficultyDetails id="select" data={difficulty.select} />
                                     </li>
                                     <li>
                                         <p>확정선택 : 이미 열어 본 카드 중 짝이 맞는 카드를 선택할 확률</p>
-                                        <CompInputRange data={difficulty.pair} />
+                                        <CompOptDifficultyDetails id="pair" data={difficulty.pair} />
                                     </li>
 
                                 </ul>

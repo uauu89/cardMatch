@@ -2,7 +2,7 @@ import { useState } from "react";
 import modal from "../css/OptionModal.module.css";
 
 
-export default function CompCardNum(){
+export default function CompOptCardNum(){
     
     const [cardNum, setCardNum] = useState(6);
 
@@ -19,7 +19,7 @@ export default function CompCardNum(){
     return(
         <div className={`${modal.inputWrap} ${modal.textRight}`}>
         <input
-            type="number" id="input_cardNum" min="2"
+            type="number" id="inputCardNum" min="2"
             value={cardNum}
             className={modal.textRight}
             onChange={e=>{

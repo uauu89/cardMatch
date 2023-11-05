@@ -22,6 +22,9 @@
 }
 
 
+
+
+
 .front{
     transform: rotateY(180deg);
     background-image: linear-gradient(to left, #fff 50%, var(--color_gray1) 50%);

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import modal from "../css/OptionModal.module.css";
-import range from "../css/CompInputRange.module.css"
+import details from "../css/CompOptDifficultyDetails.module.css"
 
-export default function CompInputRange(props){
+export default function CompOptDifficultyDetails(props){
 
     const [inputVal, setInputVal] = useState(props.data);
     // console.log("inputRange props.data : ", props.data)
@@ -28,10 +28,10 @@ export default function CompInputRange(props){
     console.log("inputrange render")
     return(
         
-        <div className={range.rangeWrap}>
+        <div className={details.rangeWrap}>
             <input
                 type="range"
-                id="detail_ratioRemains"
+                id={`difficultyDetail_${props.id}`}
                 // data-category="detail_ratioRemains" 
                 tabIndex={-1}
                 style={{background : `linear-gradient(to right, var(--color_main) ${inputVal}%, #fff ${inputVal}%)`}}
@@ -40,8 +40,9 @@ export default function CompInputRange(props){
             />
             <div className={`${modal.inputWrap} ${modal.textRight}`}>
                 <input 
+                    name="difficultyDetail"
                     type="number" min="0" max="100"
-                    data-category="detail_ratioRemains"
+                    // data-category="detail_ratioRemains"
                     className={modal.textRight}
                     value={inputVal}
                     onInput={e=>{
@@ -51,6 +52,15 @@ export default function CompInputRange(props){
                     onBlur={e=>{
                         if(e.target.value===""){
                             setInputVal(0)
+                        }
+                    }}
+                    onKeyDown={e=>{
+                        console.log(e.key)
+                        if(e.key==="Enter"){
+                            // let nextInput = e.target.closest("li").nextSibling.querySelector("input[name=difficultyDetail]");
+                            if(e.target.closest("li").nextSibling){
+                                e.target.closest("li").nextSibling.querySelector("input[name=difficultyDetail]").focus();
+                            }
                         }
                     }}
                 />

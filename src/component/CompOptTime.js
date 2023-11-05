@@ -3,10 +3,10 @@ import { useState } from "react";
 import css from "../css/CommonStyle.module.css";
 import modal from "../css/OptionModal.module.css";
 
-export default function CompTime(){
+export default function CompOptTime(){
 
     const [timer, setTimer] = useState({
-        count : 30, noLimit : -1
+        count : 30, noCount : -1
     });
 
     function timerValidation(val){
@@ -26,11 +26,11 @@ export default function CompTime(){
     console.log("input time render")
     return(
         <>
-            <div className={`${modal.inputWrap} ${modal.textRight} ${timer.noLimit > 0 ? modal.disabled : ""}`}>
-                <input type="number" id="input_countTime" min="1" max="99" 
+            <div className={`${modal.inputWrap} ${modal.textRight} ${timer.noCount > 0 ? modal.disabled : ""}`}>
+                <input type="number" id="inputTimer" min="1" max="99" 
                     value={timer.count}
                     className={modal.textRight}
-                    disabled={timer.noLimit > 0 ? true : false}
+                    disabled={timer.noCount > 0 ? true : false}
                     onChange={e=>{
                         if(e.target.value===""){
                             setTimer({...timer, count : e.target.value})
@@ -55,19 +55,19 @@ export default function CompTime(){
                 <span className={modal.unit}>s</span>
             </div>
             <div className={`${modal.checkboxWrap} ${modal.mobileGridRow2} ${modal.mobileGridCol2}`}>
-                <label htmlFor="input_noCount" className={modal.cursorPointer}>제한 없음</label>
+                <label htmlFor="inputNoCount" className={modal.cursorPointer}>제한 없음</label>
                 <div className={`${modal.posRel} ${css.tabIndex}`} >
                     <input
-                        type="checkbox" id="input_noCount"
+                        type="checkbox" id="inputNoCount"
                         className={modal.inputHidden}
                         onChange={()=>{
                             setTimer({
                                 ...timer,
-                                noLimit : timer.noLimit * -1
+                                noCount : timer.noCount * -1
                             })
                         }}
                     />
-                    <label htmlFor="input_noCount" className={`${modal.checkboxStyle} ${modal.cursorPointer}`} />
+                    <label htmlFor="inputNoCount" className={`${modal.checkboxStyle} ${modal.cursorPointer}`} />
                 </div>
             </div>
         </>

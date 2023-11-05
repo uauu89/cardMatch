@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear, faCaretDown, faInfinity, faRotateRight, faX } from "@fortawesome/free-solid-svg-icons";
+import { faGear, faCaretDown, faRotateRight, faX } from "@fortawesome/free-solid-svg-icons";
 
 import OptionModal from "./OptionModal";
 
 import css from "../css/CommonStyle.module.css";
 import header from "../css/Header.module.css";
+import CompHeaderTimer from "./CompHeaderTimer";
 
 
 export default function Header(props){
@@ -19,18 +20,27 @@ export default function Header(props){
         <header className={header.wrap}>
             <div className={header.ui}>
                 <div className={header.scoreWrap}>
-                    <p className={header.score_user}>유저 : <span></span></p>
-                    <p className={header.score_com}>컴퓨터 : <span></span></p>
+                    {props.setting.mode==="single" ?
+                    <>
+                        <p>점수 : {props.score.user}</p>
+                        <p>콤보 : {props.score.combo}</p>
+                    </>:
+                    <>
+                        <p>유저 : {props.score.user}</p>
+                        <p>컴퓨터 : {props.score.com}</p>
+                    </>
+                    }
+                    
                 </div>
 
-                <div className={header.timerWrap}>
-                    <div className={`${header.clockHands} ${header.half}`}></div>
-                    <div className={`${header.clockHands} ${header.full}`}></div>
-                    <div className={`${header.clockHands} ${header.cover}`}></div>
-                    <div className={header.clockNum}>
-                        <FontAwesomeIcon icon={faInfinity} />
-                    </div>
-                </div>
+                <CompHeaderTimer 
+                    whosTurn={props.whosTurn}
+                    setWhosTurn={props.setWhosTurn}
+                    count={props.setting.count}
+                    noCount={props.setting.noCount}
+                    setTimeout={props.setTimeout}
+                    playing={props.setting.newGame}
+                />
 
                 <a href="#optionModal"
                     className={header.btnOpenOption}
@@ -58,11 +68,26 @@ export default function Header(props){
 
             <div id="btnNewGame" className={`${header.btnNewGameSection} ${openBtn > 0? header.active: ""}`}>
                 <div className={css.btnNewGameWrap}>
-                    <button type="button" className={`${css.btnCommonStyle} ${css.btnNewGame}`}>
+                    <button 
+                        type="button"
+                        className={`${css.btnCommonStyle} ${css.btnNewGame}`}
+                        onClick={()=>{
+                            props.startNewGame("single")
+                        }}
+                    >
                         <FontAwesomeIcon icon={faRotateRight} className={css.iconSize16} />
                         새 게임<span className={css.verticalLine}/>혼자
                     </button>
-                    <button type="button" className={`${css.btnCommonStyle} ${css.btnNewGame}`}>
+                    <button
+                        type="button"
+                        className={`${css.btnCommonStyle} ${css.btnNewGame}`}
+                        onClick={()=>{
+                            props.setSetting({
+                                ...props.setting,
+                                start : false,
+                            })
+                        }}
+                    >
                         <FontAwesomeIcon icon={faRotateRight} className={css.iconSize16} />
                         새 게임<span className={css.verticalLine}/>대전
                     </button>

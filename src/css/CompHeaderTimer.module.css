@@ -1,0 +1,77 @@
+:root{
+    --turn_count : 30s
+}
+
+
+.timerWrap{
+    margin: 0 auto;
+    position: relative;
+    width: 100px;
+    height: 100px;
+
+    background-color: #fff;
+    border-radius: 50%;
+    border: 2px solid var(--color_gray1);
+    overflow: hidden;
+
+    z-index: -1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-variant-numeric: tabular-nums;
+
+    color: #242;
+    font-size: 48px;
+    font-weight: 700;
+
+    font-family: 'Fjalla One', sans-serif;
+}
+
+
+.clockHands{
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    left: 0;
+    background-color: #FDB6B6;
+    z-index: -1;
+    transform-origin: 100% 50%;
+}
+.clockHands.cover{
+    background-color: #fff;
+}
+
+
+.animation .clockHands.half{
+    animation: clock_half var(--turn_count) forwards linear;
+}
+.animation .clockHands.full{
+    animation: clock_full var(--turn_count) forwards linear;
+}
+.animation .clockHands.cover{
+    animation: clock_cover var(--turn_count) forwards linear;
+}
+
+@keyframes clock_half {
+    0%{transform: rotate(0deg);}
+    50%{transform: rotate(180deg);}
+    100%{transform: rotate(180deg);}
+}
+
+@keyframes clock_full {
+    0%{transform: rotate(0deg);}
+    50%{transform: rotate(180deg);}
+    100%{transform: rotate(360deg);}
+}
+@keyframes clock_cover {
+    0%{visibility: visible;}
+    50%{visibility: hidden;}
+    100%{visibility: hidden;}
+}
+
+
+.hidden{
+    display: none;
+}
