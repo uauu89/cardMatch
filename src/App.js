@@ -5,7 +5,6 @@ import Gameboard from "./component/Gameboard";
 import { useEffect, useState } from "react";
 function App() {
 
-  const [cardSizeRatio, setCardSizeRatio] = useState(1)
   const [score, setScore] = useState({
     user : 0,
     com : 0,
@@ -55,25 +54,12 @@ function App() {
       setWhosTurn("");
     })
   }
-  
-
-
-  
-  useEffect(()=>{
-
-    function option_changeCardSize(){
-      document.documentElement.style.setProperty("--cardSize_ratio", cardSizeRatio);
-    }
-
-    option_changeCardSize();
-  }, [cardSizeRatio])
 
   console.log("App render");
   return (
     <>
       <Header 
         setting={setting} setSetting={setSetting}
-        setCardSizeRatio={setCardSizeRatio}
         startNewGame={startNewGame}
         whosTurn={whosTurn} setWhosTurn={setWhosTurn}
         score={score}

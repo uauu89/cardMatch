@@ -31,6 +31,14 @@ export default function Gameboard(props){
         clearTimeout(timeoutTimeout);
     }
 
+
+    function dice(){
+        return Math.floor(Math.random()*100);
+    }
+
+
+
+
     function resetProcess(){
         props.setWhosTurn("");
         setTurnCount(0);
@@ -117,7 +125,7 @@ export default function Gameboard(props){
     }
     function resetWhosTurn(){
         if(props.gameOver){
-            props.setWhosTurn("gameover");
+            props.setWhosTurn("");
         }else{
             if(props.setting.mode === "single"){
                 props.setWhosTurn("single");
@@ -130,39 +138,61 @@ export default function Gameboard(props){
 
 
 
-    function pushOpenCard(e, idx, num){
+
+    function selectCard(e, idx, num){
 
         let condition1 = props.whosTurn === "single" || props.whosTurn === "user",
             condition2 = !e.currentTarget.classList.contains("openCard"),
             condition3 = !e.currentTarget.classList.contains("correct");
 
         if(condition1 && condition2 && condition3){
+            pushOpenCard(e, idx, num);
+        }
+    }
 
-            e.currentTarget.classList.add("openCard");
-            e.currentTarget.classList.add("opend");
-    
-            let openArray = [...openCard];
-            openArray[idx] = num;
-            setOpenCard(openArray);
-            
-            let selectedArray = [...selectedCard, num];
+    function pushOpenCard(e, idx, num){
+        e.currentTarget.classList.add("openCard");
+        e.currentTarget.classList.add("opend");
+
+        let openArray = [...openCard];
+        openArray[idx] = num;
+        setOpenCard(openArray);
+        
+        let selectedArray = [...selectedCard, num];
+        setSelectedCard(selectedArray);
+
+        if(turnCount === 1){
+            resetProcess();
+            let timerCheckMatching = setTimeout(()=>{
+                checkMatching(selectedArray);
+                clearTimeout(timerCheckMatching);
+            }, 500)
+            setTimeoutCheckMatching(timerCheckMatching)
+        }else{
+            setTurnCount(Number(turnCount)+1);
             setSelectedCard(selectedArray);
-
-            if(turnCount === 1){
-                resetProcess();
-                let timerCheckMatching = setTimeout(()=>{
-                    checkMatching(selectedArray);
-                    clearTimeout(timerCheckMatching);
-                }, 500)
-                setTimeoutCheckMatching(timerCheckMatching)
-            }else{
-                setTurnCount(Number(turnCount)+1);
-                setSelectedCard(selectedArray);
-                
-            }
             
         }
     }
+
+
+    function comTurn(){
+        let comIdx;
+        let random = dice();
+        if(selectedCard.length){
+
+        }else{
+
+        }
+    }
+
+    function comSelectRandom(){
+        let diceResult = dice();
+    }
+
+
+
+
 
     useEffect(()=>{
         function timeout(){
@@ -201,6 +231,9 @@ export default function Gameboard(props){
             setOpenCard(new Array(cardArray.length*2).fill(null))
             setArrayCorrect(suffleArray);
         }
+
+
+
         
         function gameStart(){
             
@@ -218,11 +251,11 @@ export default function Gameboard(props){
                 loadingTime = loadingTimeDefault
             }
 
+            let whosTurn = props.setting.mode === "single" ? "single" : "user";
+
             let loadingComplete = setTimeout(()=>{
-                // alert("loading complete")
-                // setClickPrevent(true);
+                props.setWhosTurn(whosTurn);
                 clearTimeout(loadingComplete);
-                props.setWhosTurn("single");
             }, loadingTime);
             setTimeoutLoadingComplete(loadingComplete);
         }
@@ -259,7 +292,7 @@ export default function Gameboard(props){
                         mode={props.setting.mode}
                         checkCard={props.setting.checkCard}
                         openCard={openCard} setOpenCard={setOpenCard}
-                        pushOpenCard={pushOpenCard}
+                        selectCard={selectCard}
                         // clickPrevent={clickPrevent}
                     /> ) :
                 ""

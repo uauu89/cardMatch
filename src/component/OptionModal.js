@@ -8,38 +8,25 @@ import CompOptDifficultyDetails from "./CompOptDifficultyDetails";
 
 import css from "../css/CommonStyle.module.css";
 import modal from "../css/OptionModal.module.css";
+import CompOptCardSize from "./CompOptCardSize";
 
 export default function OptionModal(props){
+
+    
 
     const [openDetail, setOpenDetail] = useState(-1);
     const [difficulty, setDifficulty] = useState({
         remains: 0, opend : 0, notOpen : 0, select : 0, pair : 0
     });
-    const [cardAutoSizing, setCardAutoSizing] = useState(1)
+    
+
+    const [cardAutoSizing, setCardAutoSizing] = useState(true)
 
     useEffect(()=>{
         document.querySelector("#difficulty2").click();
-        // document.querySelector("#cardSizeL").click();
-        // document.querySelector("#input_autoSize").click();
+    }, [])
 
-        
-        function option_cardAutoSizing(num){
-            if(cardAutoSizing > 0){
-                if(num < 459){
-                    document.querySelector("#cardSizeS").click();
-                }else if(num < 592){
-                    document.querySelector("#cardSizeM").click();
-                }else{
-                    document.querySelector("#cardSizeL").click();
-                }
-            }
-        }
 
-        window.addEventListener("resize", e=>option_cardAutoSizing(window.innerWidth));
-
-        return ()=>window.removeEventListener("resize", e=>option_cardAutoSizing(window.innerWidth));
-        
-    },[cardAutoSizing])
 
     console.log("optionmodal render")
     return(
@@ -61,41 +48,9 @@ export default function OptionModal(props){
                         
                         <li className={`${modal.grid} ${modal.mobile}`}>
                             카드 크기
-                            <ul className={modal.btnWrap}>
-                                <li className={css.tabIndex}>
-                                    <input type="radio" name="cardSize" id="cardSizeL"
-                                        defaultChecked
-                                        className={modal.inputHidden}
-                                        onChange={()=>props.setCardSizeRatio(1)}
-                                    />
-                                    <label htmlFor="cardSizeL" className={css.btnCommonStyle}>대</label>
-                                </li>
-                                <li className={css.tabIndex}>
-                                    <input type="radio" name="cardSize" id="cardSizeM"
-                                        className={modal.inputHidden} 
-                                        onChange={()=>props.setCardSizeRatio(0.8)}
-                                    />
-                                    <label htmlFor="cardSizeM" className={css.btnCommonStyle}>중</label>
-                                </li>
-                                <li className={css.tabIndex}>
-                                    <input type="radio" name="cardSize" id="cardSizeS"
-                                        className={modal.inputHidden}
-                                        onChange={()=>props.setCardSizeRatio(0.6)}
-                                    />
-                                    <label htmlFor="cardSizeS" className={css.btnCommonStyle}>소</label>
-                                </li>
-                            </ul>
-                            <div className={`${modal.checkboxWrap} ${modal.gridCol2}`}>
-                                <label htmlFor="input_autoSize" className={modal.cursorPointer}>화면 크기에 따라 자동 변경</label>
-                                <div className={`${modal.posRel} ${css.tabIndex}`} >
-                                    <input type="checkbox" id="input_autoSize"
-                                        className={modal.inputHidden}
-                                        checked = {cardAutoSizing > 0 ? true: false}
-                                        onChange={()=>setCardAutoSizing(cardAutoSizing * -1)}
-                                    />
-                                    <label htmlFor="input_autoSize" className={`${modal.checkboxStyle} ${modal.cursorPointer}`} />
-                                </div>
-                            </div>
+                            <CompOptCardSize 
+                                cardAutoSizing={cardAutoSizing}
+                                setCardAutoSizing={setCardAutoSizing} />
                         </li>
 
                     </ul>

@@ -83,10 +83,7 @@ export default function Header(props){
                         type="button"
                         className={`${css.btnCommonStyle} ${css.btnNewGame}`}
                         onClick={()=>{
-                            props.setSetting({
-                                ...props.setting,
-                                start : false,
-                            })
+                            props.startNewGame("vs")
                         }}
                     >
                         <FontAwesomeIcon icon={faRotateRight} className={css.iconSize16} />
@@ -97,10 +94,7 @@ export default function Header(props){
 
 
             
-            <OptionModal 
-                open={openModal}
-                setCardSizeRatio={props.setCardSizeRatio}
-            />
+            <OptionModal open={openModal}/>
 
             
         </header>

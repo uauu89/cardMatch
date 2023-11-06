@@ -65,7 +65,7 @@ export default function CompHeaderTimer(props){
         }
 
         if(!props.noCount  && !props.gameOver){
-            if(props.whosTurn === "single"){
+            if(props.whosTurn === "single" || props.whosTurn === "user"){
                 modeSingleRenewal();
             }
         }
@@ -83,7 +83,15 @@ export default function CompHeaderTimer(props){
 
     console.log("timer render")
     return(
-        <div className={`${timer.timerWrap} ${timerTrigger? timer.animation:""}`}>
+        <div 
+            className={`${timer.wrap} 
+                        ${props.whosTurn === "single" ? 
+                            timer.single : 
+                            props.whosTurn === "user" ? 
+                                timer.user : 
+                                props.whosTurn === "com" ? 
+                                    timer.com : "" 
+                        } ${timerTrigger? timer.animation:""}`}>
             <div className={`${timer.clockHands} ${timer.half}`}></div>
             <div className={`${timer.clockHands} ${timer.full}`}></div>
             <div className={`${timer.clockHands} ${timer.cover}`}></div>

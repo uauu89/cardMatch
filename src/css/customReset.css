@@ -129,7 +129,7 @@ a{
 .single [class*=front]::after{
     content: "";
     border-color: #579757;
-    box-shadow: inset 0 0 10px 0 #0f0;
+    box-shadow: inset 0 0 10px 0 #070;
 }
 .user [class*=front]::after{
     content: "";
