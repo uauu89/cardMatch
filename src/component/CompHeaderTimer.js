@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfinity, faRobot, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faInfinity, faRobot, faSpinner, faTrophy } from "@fortawesome/free-solid-svg-icons";
 import timer from "../css/CompHeaderTimer.module.css";
 import { useEffect, useState } from "react";
 
@@ -7,10 +7,11 @@ export default function CompHeaderTimer(props){
 
 
     const [setTimeTimer, setSetTimeTimer] = useState();
+    const [intervalTimer, setIntervalTimer] = useState();
 
 
     function initClearTimeAll(){
-        clearInterval(setTimeTimer);
+        clearInterval(intervalTimer);
     }
 
     function setTimer(){
@@ -44,48 +45,56 @@ export default function CompHeaderTimer(props){
     
 
     useEffect(()=>{
-        document.querySelector("#timerNumber").innerText = "";
 
-        function modeSingle(){
-            if(props.whosTurn && !props.noCount){
-                let time = props.count;
-                document.querySelector("#timerNumber").innerText = time;
-    
-                let timer = setInterval(()=>{
-                    time--;
-                    document.querySelector("#timerNumber").innerText = time;
-                    if(time === 0){
-                        clearInterval(timer);
-                        props.setTimeout(true);
-                        props.setWhosTurn("");
-                        document.querySelector("#timerNumber").innerText = "";
-                    }
-                }, 1000)
-                setSetTimeTimer(timer);
-            }
+        document.querySelector("#timerDisplay").innerText = "";
+        initClearTimeAll();
+
+        function modeSingleRenewal(){
+            document.querySelector("#timerDisplay").innerText = props.count;
+            let time = props.count;
+            let timer = setInterval(()=>{
+                time = time - 1;
+                document.querySelector("#timerDisplay").innerText = time;
+                if(time === 0){
+                    clearInterval(timer);
+                    props.setTimeout(true);
+                    props.setWhosTurn("");
+                }
+            }, 1000)
+            setIntervalTimer(timer);
         }
 
-        modeSingle();
-
-        return (()=>{
-            initClearTimeAll();
-        })
-    }, [props])
+        if(!props.noCount  && !props.gameOver){
+            if(props.whosTurn === "single"){
+                modeSingleRenewal();
+            }
+        }
+    }, [props.whosTurn])
     
-    let timerTrigger = (props.whosTurn === "single" || props.whosTurn === "user") && !props.noCount;
+
+
+
+    let condition1 = props.whosTurn === "single" || props.whosTurn === "user",
+        condition2 = props.noCount === false,
+        condition3 = props.gameOver === false;
+
+    let timerTrigger = condition1 && condition2 && condition3;
+
+
     console.log("timer render")
     return(
         <div className={`${timer.timerWrap} ${timerTrigger? timer.animation:""}`}>
             <div className={`${timer.clockHands} ${timer.half}`}></div>
             <div className={`${timer.clockHands} ${timer.full}`}></div>
             <div className={`${timer.clockHands} ${timer.cover}`}></div>
-            <div id="timerNumber" />
+            <div id="timerDisplay" />
             <FontAwesomeIcon 
                 className={timerTrigger ? timer.hidden: ""}
                 icon={
-                    props.whosTurn==="com" ? 
-                    faRobot: 
-                    props.noCount? faInfinity : faSpinner
+                    props.gameOver? faTrophy :  
+                        props.whosTurn === "com" ? 
+                            faRobot: 
+                            props.noCount? faInfinity : faSpinner
                 }
             />
         </div>

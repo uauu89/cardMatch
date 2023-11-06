@@ -4,7 +4,7 @@ import modal from "../css/OptionModal.module.css";
 
 export default function CompOptCardNum(){
     
-    const [cardNum, setCardNum] = useState(6);
+    const [cardNum, setCardNum] = useState(2);
 
     function cardNumValidation(val){
         if(val === "" || val < 2){

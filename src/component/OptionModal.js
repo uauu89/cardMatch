@@ -108,7 +108,7 @@ export default function OptionModal(props){
                             <label htmlFor="inputCheckCard" className={`${modal.cursorPointer} ${modal.textNoWrap}`}>카드 확인 여부</label>
                             <div className={`${modal.checkboxWrap}`}>
                                 <div className={`${modal.posRel} ${css.tabIndex}`} >
-                                    <input type="checkbox" id="inputCheckCard" className={modal.inputHidden} defaultChecked />
+                                    <input type="checkbox" id="inputCheckCard" className={modal.inputHidden} />
                                     <label htmlFor="inputCheckCard" className={`${modal.checkboxStyle} ${modal.cursorPointer}`} />
                                 </div>
                             </div>
@@ -236,7 +236,7 @@ export default function OptionModal(props){
             </ul>
             <div className={modal.btnNewGameSection}>
                 <p>※ 카드 크기를 제외한 변경된 옵션은 다음 게임부터 적용됩니다.</p>
-                <div className={`${css.btnNewGameWrap} ${modal.justifyEnd}`}>
+                <div className={`${css.btnNewGameWrap} ${css.justifyEnd}`}>
                     <button type="button" className={`${css.btnCommonStyle} ${css.btnNewGame}`}>
                         <FontAwesomeIcon icon={faRotateRight} className={css.iconSize16} />
                         새 게임<span className={css.verticalLine}/>혼자

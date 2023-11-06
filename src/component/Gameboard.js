@@ -1,32 +1,34 @@
+import { useEffect, useState } from "react";
 import Card from "./Card";
 import board from "../css/Gameboard.module.css";
-import { useEffect, useState } from "react";
+import GameOverNotice from "./GameOverNotice";
 
 export default function Gameboard(props){
 
     const [cardArraySetted, setCardArraySetted] = useState([]);
+
+    
+    const [arrayCorrect, setArrayCorrect] = useState([]);
     const [openCard, setOpenCard] = useState([]);
     const [selectedCard, setSelectedCard] = useState([]);
+
     const [turnCount, setTurnCount] = useState(0);
 
-    const [clickPrevent, setClickPrevent] = useState(false);
 
 
     /*--- setTimeout 변수들  ---*/
-    const [setTimeLoadingComplete, setSetTimeloadingComplete] = useState();
-    const [setTimeClickPrevent, setSetTimeClickPrevent] = useState()
+    const [timeoutLoadingComplete, setTimeoutLoadingComplete] = useState();
+    const [timeoutCheckMatching, setTimeoutCheckMatching] = useState();
+    const [timeoutTimeout, setTimeoutTimeout] = useState();
+    // const [timeoutMarkingCorrect, setTimeoutMarkingCorrect] = useState();
     
     /*--- /setTimeout 변수들  ---*/
 
 
     function initClearTimeAll(){
-        clearTimeout(setTimeLoadingComplete);
-        clearTimeout(setTimeClickPrevent);
-    }
-    
-
-    function removeClassOpencard(){
-        document.querySelectorAll(".openCard").forEach(i=>i.classList.remove("openCard"));
+        clearTimeout(timeoutLoadingComplete);
+        clearTimeout(timeoutCheckMatching);
+        clearTimeout(timeoutTimeout);
     }
 
     function resetProcess(){
@@ -34,17 +36,28 @@ export default function Gameboard(props){
         setTurnCount(0);
         setSelectedCard([]);
     }
+   
 
-    function resetWhosTurn(){
-        setTimeout(()=>{
-            if(props.setting.mode === "single"){
-                props.setWhosTurn("single");
-            }else{
-                props.setWhosTurn("com");
-            }
-        }, 500)
+    function checkMatching(array){
+        
+        if(array[0] === array[1]){
+            markingCorrect();
+            addScore();
+            arrayCorrectMod(array);
+        }else{
+            resetCombo();
+        }
+        removeClassOpencard();
+        resetWhosTurn();
     }
 
+    function markingCorrect(){
+        document.querySelectorAll(".openCard").forEach(i=>{
+            i.classList.remove("opend");
+            i.classList.add("correct");
+            i.classList.add(props.whosTurn);
+        })
+    }
     function addScore(){
         if(props.whosTurn==="com"){
             let score = props.score.com + (props.socre.comCombo+1) * 100
@@ -54,12 +67,36 @@ export default function Gameboard(props){
                 comCombo : props.score.comCombo + 1
             })
         }else{
-            let score = props.score.user + props.score.combo+1 * 100
+            let score = props.score.user + (props.score.combo+1) * 100
             props.setScore({
                 ...props.score, 
                 user : score,
                 combo : props.score.combo + 1
             })
+        }
+    }
+    function arrayCorrectMod(array){
+        array.forEach(correctNum=>{
+            let tempArray = [...arrayCorrect];
+            tempArray.forEach((item, idx)=>{
+                if(correctNum === item){
+                    tempArray[idx] = 0;
+                }
+            })
+            setArrayCorrect(tempArray);
+            checkGameover(tempArray);
+        })
+    }
+    function checkGameover(array){
+        let result = true;
+        for(let i of array){
+            if(i !== 0){
+                result = false;
+                break;
+            }
+        }
+        if(result){
+            props.setGameOver(true);
         }
     }
     function resetCombo(){
@@ -75,64 +112,49 @@ export default function Gameboard(props){
             })
         }
     }
-    function markingCorrect(){
-        document.querySelectorAll(".openCard").forEach(i=>{
-            i.classList.remove("opend");
-            setTimeout(()=>{
-                i.classList.add("correct");
-                i.classList.add(props.whosTurn);
-            }, 500)
-        })
+    function removeClassOpencard(){
+        document.querySelectorAll(".openCard").forEach(i=>i.classList.remove("openCard"));
     }
-
-
-    function checkMatching(array){
-        console.log(array);
-        if(array[0] === array[1]){
-            markingCorrect();
-            addScore();
+    function resetWhosTurn(){
+        if(props.gameOver){
+            props.setWhosTurn("gameover");
         }else{
-            resetCombo();
+            if(props.setting.mode === "single"){
+                props.setWhosTurn("single");
+            }else{
+                props.setWhosTurn("com");
+            }
         }
     }
 
 
-    function setClickEvent(){
-        setClickPrevent(false);
-            
-        let setTimeClickPrevent = setTimeout(()=>{
-            setClickPrevent(true);
-            clearTimeout(setTimeClickPrevent);
-        }, 500);
 
-        setSetTimeClickPrevent(setTimeClickPrevent);
-    }
 
     function pushOpenCard(e, idx, num){
-        let condition1 = !e.currentTarget.classList.contains("openCard");
-        let condition2 = !e.currentTarget.classList.contains("correct");
 
-        if(clickPrevent && condition1 && condition2){
-            setClickEvent();
+        let condition1 = props.whosTurn === "single" || props.whosTurn === "user",
+            condition2 = !e.currentTarget.classList.contains("openCard"),
+            condition3 = !e.currentTarget.classList.contains("correct");
+
+        if(condition1 && condition2 && condition3){
 
             e.currentTarget.classList.add("openCard");
             e.currentTarget.classList.add("opend");
     
             let openArray = [...openCard];
             openArray[idx] = num;
+            setOpenCard(openArray);
             
             let selectedArray = [...selectedCard, num];
-            setOpenCard(openArray);
             setSelectedCard(selectedArray);
 
             if(turnCount === 1){
-                
                 resetProcess();
-                resetWhosTurn();
-                checkMatching(selectedArray);
-                setTimeout(()=>{
-                    removeClassOpencard();
+                let timerCheckMatching = setTimeout(()=>{
+                    checkMatching(selectedArray);
+                    clearTimeout(timerCheckMatching);
                 }, 500)
+                setTimeoutCheckMatching(timerCheckMatching)
             }else{
                 setTurnCount(Number(turnCount)+1);
                 setSelectedCard(selectedArray);
@@ -141,16 +163,22 @@ export default function Gameboard(props){
             
         }
     }
-    
+
     useEffect(()=>{
         function timeout(){
-            if(props.timeout){
-                props.setTimeout(false);
+            if(props.timeout && !props.gameOver){
                 removeClassOpencard();
                 resetProcess();
                 resetCombo();
-                setClickEvent();
-                resetWhosTurn();
+
+                let timerTimeout = setTimeout(()=>{
+                    props.setTimeout(false);
+                    resetWhosTurn();
+                    clearTimeout(timerTimeout);
+                }, 500)
+
+                setTimeoutTimeout(timerTimeout);
+
            }
         }
 
@@ -168,8 +196,10 @@ export default function Gameboard(props){
                 cardArray.push(i+1);
                 i++;
             }
-            setCardArraySetted([...cardArray, ...cardArray].sort(()=>Math.random() - 0.5))
+            let suffleArray = [...cardArray, ...cardArray].sort(()=>Math.random() - 0.5);
+            setCardArraySetted(suffleArray);
             setOpenCard(new Array(cardArray.length*2).fill(null))
+            setArrayCorrect(suffleArray);
         }
         
         function gameStart(){
@@ -190,25 +220,25 @@ export default function Gameboard(props){
 
             let loadingComplete = setTimeout(()=>{
                 // alert("loading complete")
-                setClickPrevent(true);
+                // setClickPrevent(true);
                 clearTimeout(loadingComplete);
                 props.setWhosTurn("single");
             }, loadingTime);
-            setSetTimeloadingComplete(loadingComplete);
+            setTimeoutLoadingComplete(loadingComplete);
         }
 
         function init(){            // 새 게임 초기화 함수
+            props.setGameOver(false)
+            props.setScore({single : 0, user : 0, com : 0, combo : 0, comCombo : 0})
             initClearTimeAll()      // setTimeout/setInterval 초기화
             setSelectedCard([]);    // 선택한 카드 내역 초기화
             setTurnCount([]);       // 카드 선택 횟수 초기화
-            props.setScore({single : 0, user : 0, com : 0, combo : 0, comCombo : 0})
             setCardArray();         // 카드 배열 생성
             gameStart();            // 카드애니메이션 완료 후 클릭 방지 해제
         }
 
         if(props.setting.newGame){
             init();
-
         }
 
     }, [props.setting])
@@ -232,8 +262,13 @@ export default function Gameboard(props){
                         pushOpenCard={pushOpenCard}
                         // clickPrevent={clickPrevent}
                     /> ) :
-                <p>테스트</p>
+                ""
             }
+            <GameOverNotice 
+                mode={props.setting.mode}
+                gameOver={props.gameOver}
+                score={props.score}
+            />
         </div>
     )
 }

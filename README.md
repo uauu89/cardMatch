@@ -139,6 +139,12 @@
 1.  > + 리액트로 변환 작업 중 → 게임 진행 관련 기능 작업중
     >   + 조건으로 fontawesome 제거 시 Failed to execute 'removeChild' on 'Node' 에러   
         → hidden 클래스 추가
+
+#### 23.11.06
+
+1.  > + 싱글모드 기능 변환 완료, 버그 테스트 필요
+    > + 클릭 딜레이 삭제 
+    > + setTimeout, setInterval 동작 완료/새 게임 시작 시 clear 이벤트 추가 중
     
 
 

@@ -4,6 +4,13 @@
     overflow: hidden;
 }
 
+.justifyCenter{
+    justify-content: center;
+}
+.justifyEnd{
+    justify-content: end;
+}
+
 .btnCommonStyle{
     display: block;
     background-color: #fff;

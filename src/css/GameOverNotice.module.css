@@ -1,0 +1,47 @@
+.wrap{
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.active{
+    display: block;
+}
+
+.inner{
+    background-color: var(--color_gray2);
+    /* background-color: #fff; */
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 700px;
+    padding: 20px 5%;
+    text-align: center;
+    color: #242;
+    font-size: 18px;
+    font-weight: 700;
+}
+.inner h2{
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.inner div{
+    color: #242;
+    font-weight: 400;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+
+
+.gameOver_inner .group_btnInner{
+    justify-content: center;
+}

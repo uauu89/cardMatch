@@ -40,6 +40,7 @@ export default function Header(props){
                     noCount={props.setting.noCount}
                     setTimeout={props.setTimeout}
                     playing={props.setting.newGame}
+                    gameOver={props.gameOver}
                 />
 
                 <a href="#optionModal"
