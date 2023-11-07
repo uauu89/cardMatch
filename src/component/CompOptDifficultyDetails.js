@@ -5,8 +5,10 @@ import details from "../css/CompOptDifficultyDetails.module.css"
 export default function CompOptDifficultyDetails(props){
 
     const [inputVal, setInputVal] = useState(props.data);
-    // console.log("inputRange props.data : ", props.data)
-    // console.log("inputVal : ", inputVal);
+
+    useEffect(()=>{
+        setInputVal(props.data)
+    }, [props.data])
 
     function inputValidation(val){
         let num = Number(val);
@@ -20,10 +22,6 @@ export default function CompOptDifficultyDetails(props){
             return false;
         }
     }
-
-    useEffect(()=>{
-        setInputVal(props.data);
-    }, [props])
 
     console.log("inputrange render")
     return(

@@ -49,7 +49,7 @@ export default function CompHeaderTimer(props){
         document.querySelector("#timerDisplay").innerText = "";
         initClearTimeAll();
 
-        function modeSingleRenewal(){
+        function timer(){
             document.querySelector("#timerDisplay").innerText = props.count;
             let time = props.count;
             let timer = setInterval(()=>{
@@ -58,27 +58,29 @@ export default function CompHeaderTimer(props){
                 if(time === 0){
                     clearInterval(timer);
                     props.setTimeout(true);
-                    props.setWhosTurn("");
+                    // props.setWhosTurn("");
+                    props.setPlay(false);
                 }
             }, 1000)
             setIntervalTimer(timer);
         }
 
-        if(!props.noCount  && !props.gameOver){
+        if(!props.noCount  && !props.gameOver && props.play){
             if(props.whosTurn === "single" || props.whosTurn === "user"){
-                modeSingleRenewal();
+                timer();
             }
         }
-    }, [props.whosTurn])
+    }, [props.play])
     
 
 
 
     let condition1 = props.whosTurn === "single" || props.whosTurn === "user",
-        condition2 = props.noCount === false,
-        condition3 = props.gameOver === false;
+        condition2 = props.play,
+        condition3 = props.noCount === false,
+        condition4 = props.gameOver === false;
 
-    let timerTrigger = condition1 && condition2 && condition3;
+    let timerTrigger = condition1 && condition2 && condition3 && condition4;
 
 
     console.log("timer render")

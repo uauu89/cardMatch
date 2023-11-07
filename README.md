@@ -152,5 +152,15 @@
     > + 타이머에 누락된 턴 표시 컬러 추가
     > + 카드 자동 사이즈 변경 옵션 에러 수정
 
+#### 23.11.07
+
+1.  > + play state 추가, 타이머 중단 조건을 play / whosTurn으로 세분화하여 기존 함수를 comTurn()에도 활용할 수 있도록 수정
+    > + GameOverNotice 컴포넌트 보완
+    > + Gameboard 컴포넌트에서 바로 comTurn() 작성 시 setTurnCount가 적용되지 않아 compCom 컴포넌트 새로 작성
+    > + 컴퓨터 알고리즘 작성 중
+    > + state 이름 수정 → 카드 배열 관련 state를 cardArray로 시작하도록 통일
+    > + cardArrayOpend에도 정답 카드의 값을 0으로 변경하도록 수정
+
+
 
 </details>

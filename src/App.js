@@ -13,6 +13,7 @@ function App() {
   })
 
   const [whosTurn, setWhosTurn] = useState("gameover")
+  const [play, setPlay] = useState(false);
   const [timeout, setTimeout] = useState(false);
   const [gameOver, setGameOver] = useState(true);
 
@@ -62,6 +63,7 @@ function App() {
         setting={setting} setSetting={setSetting}
         startNewGame={startNewGame}
         whosTurn={whosTurn} setWhosTurn={setWhosTurn}
+        play={play} setPlay={setPlay}
         score={score}
         setTimeout={setTimeout}
         gameOver={gameOver}
@@ -69,6 +71,7 @@ function App() {
       <Gameboard
         setting={setting} setSetting={setSetting}
         whosTurn={whosTurn} setWhosTurn={setWhosTurn}
+        play={play} setPlay={setPlay}
         score={score} setScore={setScore}
         timeout={timeout} setTimeout={setTimeout}
         gameOver={gameOver} setGameOver={setGameOver}

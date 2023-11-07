@@ -35,12 +35,13 @@ export default function Header(props){
 
                 <CompHeaderTimer 
                     whosTurn={props.whosTurn}
-                    setWhosTurn={props.setWhosTurn}
+                    // setWhosTurn={props.setWhosTurn}
                     count={props.setting.count}
                     noCount={props.setting.noCount}
                     setTimeout={props.setTimeout}
-                    playing={props.setting.newGame}
+                    // playing={props.setting.newGame}
                     gameOver={props.gameOver}
+                    play={props.play} setPlay={props.setPlay}
                 />
 
                 <a href="#optionModal"

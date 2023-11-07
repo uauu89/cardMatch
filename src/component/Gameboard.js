@@ -2,18 +2,19 @@ import { useEffect, useState } from "react";
 import Card from "./Card";
 import board from "../css/Gameboard.module.css";
 import GameOverNotice from "./GameOverNotice";
+import CompCom from "./CompCom";
 
 export default function Gameboard(props){
 
-    const [cardArraySetted, setCardArraySetted] = useState([]);
-
-    
-    const [arrayCorrect, setArrayCorrect] = useState([]);
-    const [openCard, setOpenCard] = useState([]);
-    const [selectedCard, setSelectedCard] = useState([]);
+    const [cardArrayDefault, setCardArrayDefault] = useState([]);
+    // 기초 카드배열
+    const [cardArrayOpend, setCardArrayOpend] = useState([]);
+    // 열어본 카드 >> null 배열에서 열어본 카드 데이터 추가 / 정답 카드 0으로 삭제
+    const [cardArrayCorrect, setCardArrayCorrect] = useState([]);
+    // 정답 카드 >> 최초 배열에서 정답 카드 0으로 삭제
+    const [cardArraySelected, setCardArraySelected] = useState([]);     // 선택한 카드
 
     const [turnCount, setTurnCount] = useState(0);
-
 
 
     /*--- setTimeout 변수들  ---*/
@@ -30,20 +31,53 @@ export default function Gameboard(props){
         clearTimeout(timeoutCheckMatching);
         clearTimeout(timeoutTimeout);
     }
-
-
-    function dice(){
-        return Math.floor(Math.random()*100);
-    }
-
-
-
-
     function resetProcess(){
-        props.setWhosTurn("");
+        // props.setWhosTurn("");
+        props.setPlay(false);
         setTurnCount(0);
-        setSelectedCard([]);
+        setCardArraySelected([]);
     }
+
+
+
+    function selectCard(dom, idx, num){
+
+        let condition1 = props.whosTurn === "single" || props.whosTurn === "user",
+            condition2 = props.play, 
+            condition3 = !dom.classList.contains("openCard"),
+            condition4 = !dom.classList.contains("correct");
+
+        if(condition1 && condition2 && condition3 && condition4){
+            pushOpenCard(dom, idx, num);
+        }
+    }
+
+    function pushOpenCard(dom, idx, num){
+        dom.classList.add("openCard");
+        dom.classList.add("opend");
+
+        let openArray = [...cardArrayOpend];
+        openArray[idx] = num;
+        setCardArrayOpend(openArray);
+        
+        let selectedArray = [...cardArraySelected, num];
+        setCardArraySelected(selectedArray);
+
+        if(turnCount === 1){
+            resetProcess();
+            let timerCheckMatching = setTimeout(()=>{
+                checkMatching(selectedArray);
+                clearTimeout(timerCheckMatching);
+            }, 500)
+            setTimeoutCheckMatching(timerCheckMatching)
+        }else{
+            setTurnCount(Number(turnCount)+1);
+            setCardArraySelected(selectedArray);
+        }
+    }
+
+
+
    
 
     function checkMatching(array){
@@ -68,7 +102,7 @@ export default function Gameboard(props){
     }
     function addScore(){
         if(props.whosTurn==="com"){
-            let score = props.score.com + (props.socre.comCombo+1) * 100
+            let score = props.score.com + (props.score.comCombo+1) * 100
             props.setScore({
                 ...props.score, 
                 com : score,
@@ -85,14 +119,17 @@ export default function Gameboard(props){
     }
     function arrayCorrectMod(array){
         array.forEach(correctNum=>{
-            let tempArray = [...arrayCorrect];
-            tempArray.forEach((item, idx)=>{
+            let tempArrayCorrect = [...cardArrayCorrect],
+                tempArrayOpend = [...cardArrayOpend];
+            tempArrayCorrect.forEach((item, idx)=>{
                 if(correctNum === item){
-                    tempArray[idx] = 0;
+                    tempArrayCorrect[idx] = 0;
+                    tempArrayOpend[idx] = 0;
                 }
             })
-            setArrayCorrect(tempArray);
-            checkGameover(tempArray);
+            setCardArrayCorrect(tempArrayCorrect);
+            setCardArrayOpend(tempArrayOpend);
+            checkGameover(tempArrayCorrect);
         })
     }
     function checkGameover(array){
@@ -127,71 +164,16 @@ export default function Gameboard(props){
         if(props.gameOver){
             props.setWhosTurn("");
         }else{
-            if(props.setting.mode === "single"){
-                props.setWhosTurn("single");
-            }else{
-                props.setWhosTurn("com");
+            if(props.setting.mode === "vs"){
+                if(props.whosTurn === "user"){
+                    props.setWhosTurn("com")
+                }else{
+                    props.setWhosTurn("user")
+                }
             }
+            props.setPlay(true);
         }
     }
-
-
-
-
-
-    function selectCard(e, idx, num){
-
-        let condition1 = props.whosTurn === "single" || props.whosTurn === "user",
-            condition2 = !e.currentTarget.classList.contains("openCard"),
-            condition3 = !e.currentTarget.classList.contains("correct");
-
-        if(condition1 && condition2 && condition3){
-            pushOpenCard(e, idx, num);
-        }
-    }
-
-    function pushOpenCard(e, idx, num){
-        e.currentTarget.classList.add("openCard");
-        e.currentTarget.classList.add("opend");
-
-        let openArray = [...openCard];
-        openArray[idx] = num;
-        setOpenCard(openArray);
-        
-        let selectedArray = [...selectedCard, num];
-        setSelectedCard(selectedArray);
-
-        if(turnCount === 1){
-            resetProcess();
-            let timerCheckMatching = setTimeout(()=>{
-                checkMatching(selectedArray);
-                clearTimeout(timerCheckMatching);
-            }, 500)
-            setTimeoutCheckMatching(timerCheckMatching)
-        }else{
-            setTurnCount(Number(turnCount)+1);
-            setSelectedCard(selectedArray);
-            
-        }
-    }
-
-
-    function comTurn(){
-        let comIdx;
-        let random = dice();
-        if(selectedCard.length){
-
-        }else{
-
-        }
-    }
-
-    function comSelectRandom(){
-        let diceResult = dice();
-    }
-
-
-
 
 
     useEffect(()=>{
@@ -227,9 +209,9 @@ export default function Gameboard(props){
                 i++;
             }
             let suffleArray = [...cardArray, ...cardArray].sort(()=>Math.random() - 0.5);
-            setCardArraySetted(suffleArray);
-            setOpenCard(new Array(cardArray.length*2).fill(null))
-            setArrayCorrect(suffleArray);
+            setCardArrayDefault(suffleArray);
+            setCardArrayOpend(new Array(cardArray.length*2).fill(null))
+            setCardArrayCorrect(suffleArray);
         }
 
 
@@ -255,16 +237,18 @@ export default function Gameboard(props){
 
             let loadingComplete = setTimeout(()=>{
                 props.setWhosTurn(whosTurn);
+                props.setPlay(true);
                 clearTimeout(loadingComplete);
             }, loadingTime);
             setTimeoutLoadingComplete(loadingComplete);
         }
 
         function init(){            // 새 게임 초기화 함수
-            props.setGameOver(false)
+            props.setGameOver(false);
+            props.setPlay(false);
             props.setScore({single : 0, user : 0, com : 0, combo : 0, comCombo : 0})
             initClearTimeAll()      // setTimeout/setInterval 초기화
-            setSelectedCard([]);    // 선택한 카드 내역 초기화
+            setCardArraySelected([]);    // 선택한 카드 내역 초기화
             setTurnCount([]);       // 카드 선택 횟수 초기화
             setCardArray();         // 카드 배열 생성
             gameStart();            // 카드애니메이션 완료 후 클릭 방지 해제
@@ -282,26 +266,39 @@ export default function Gameboard(props){
     
     return(
         <div className={board.wrap}>
-            {props.setting.newGame && cardArraySetted.length ?
-                cardArraySetted.map((i, idx)=>
+            <CompCom
+                cardArrayDefault={cardArrayDefault}
+                cardArrayOpend={cardArrayOpend}
+                cardArrayCorrect={cardArrayCorrect}
+                cardArraySelected={cardArraySelected}
+                turnCount={turnCount}
+                play={props.play}
+                whosTurn={props.whosTurn}
+                gameOver={props.gameOver}
+                pushOpenCard={pushOpenCard}
+            />
+            {props.setting.newGame && cardArrayDefault.length ?
+                cardArrayDefault.map((i, idx)=>
                     <Card 
                         key={idx}
                         idx={idx}
                         num={i}
-                        cardLength={cardArraySetted.length}
+                        cardLength={cardArrayDefault.length}
                         mode={props.setting.mode}
                         checkCard={props.setting.checkCard}
-                        openCard={openCard} setOpenCard={setOpenCard}
+                        // cardArrayOpend={cardArrayOpend} setCardArrayOpend={setCardArrayOpend}
                         selectCard={selectCard}
                         // clickPrevent={clickPrevent}
                     /> ) :
                 ""
             }
+            {props.gameOver?
             <GameOverNotice 
                 mode={props.setting.mode}
                 gameOver={props.gameOver}
                 score={props.score}
-            />
+            /> : ""
+            }
         </div>
     )
 }

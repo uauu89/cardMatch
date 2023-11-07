@@ -53,7 +53,7 @@ function Card(props){
             // className={`${card.wrap} ${click > 0? card.open: ""} init`}
             className={`${card.wrap} init`}
             onClick={(e)=>{
-                props.selectCard(e, props.idx, props.num);
+                props.selectCard(e.currentTarget, props.idx, props.num);
                 // console.log(e.currentTarget);
                 // e.currentTarget.classList.add("openCard");
                 // e.currentTarget.classList.add("opend");

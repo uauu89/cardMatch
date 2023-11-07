@@ -19,13 +19,12 @@ export default function OptionModal(props){
         remains: 0, opend : 0, notOpen : 0, select : 0, pair : 0
     });
     
-
-    const [cardAutoSizing, setCardAutoSizing] = useState(true)
-
     useEffect(()=>{
         document.querySelector("#difficulty2").click();
     }, [])
 
+    useEffect(()=>{
+    }, [difficulty])
 
 
     console.log("optionmodal render")
@@ -48,9 +47,7 @@ export default function OptionModal(props){
                         
                         <li className={`${modal.grid} ${modal.mobile}`}>
                             카드 크기
-                            <CompOptCardSize 
-                                cardAutoSizing={cardAutoSizing}
-                                setCardAutoSizing={setCardAutoSizing} />
+                            <CompOptCardSize />
                         </li>
 
                     </ul>
