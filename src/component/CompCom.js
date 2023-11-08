@@ -1,10 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 
 
 
 export default function CompCom(props){
 
+
+    const [testNotice, setTestNotice] = useState("");
+    const [testNoticeRandom, setTestNoticeRandom] = useState("");
 
     function dice(){
         return Math.floor(Math.random()*100);
@@ -13,69 +16,80 @@ export default function CompCom(props){
 
 
 
+        /*
 
+        props.comAlgorithm
+
+        props.setting.remains
+        props.setting.opend
+        props.setting.notOpen
+        props.setting.select
+
+        props.setting.pair
+        */
 
     function comTurn(){
-        // let comIdx = comSelectRandomCompletely();
-        // let comIdx = comSelectRandomNotOpen();
-        let comIdx = comIdxSelected();
+        setTestNoticeRandom("")
+        let comIdx;
+        
+        let conditionSelect = props.comAlgorithm < props.setting.select,
+            conditionPair = props.comAlgorithm < props.setting.pair;
 
+        if(props.cardArraySelected.length){         // 1. 이미 선택한 카드가 있는 경우
+            if(conditionSelect){
+                comIdx = comIdxSelected();              // 1-1. 선택한 카드의 짝의 위치를 아는 경우
+                
+                if(!comIdx){
+                    setTestNotice("1-2")
+                    comIdx = comIdxRandomProcess();     // 1-2. 선택한 카드의 짝의 위치를 모르는 경우
+                }else{
+                    setTestNotice("1-1")
+                }
+            }else{
+                setTestNotice("1-3")
+                comIdx = comIdxRandomProcess();         // 1-3. 옵션에서 설정한 1-1 확률을 충족하지 못한 경우
+            }
+        }else{                                      // 2. 선택한 카드가 없는 경우 ( 첫 선택인 경우 )
+            if(conditionPair){                      
+                comIdx = comIdxPair();                  // 2-1. 짝이 맞는 카드의 위치를 아는 경우
+                if(!comIdx){        
+                    setTestNotice("2-2")
+                    comIdx = comIdxRandomProcess();     // 2-2. 짝이 맞는 카드의 위치를 모르는 경우
+                }else{
+                    setTestNotice("2-1")
+                }
+            }else{                                      // 2-3. 옵션에서 설정한 2-1 확률을 충족하지 못한 경우
+                setTestNotice("2-3")
+                comIdx = comIdxRandomProcess();
+            }
+            
+        }
+        
         let dom = document.querySelectorAll("[class*=Card_wrap]")[comIdx];
         let num = props.cardArrayDefault[comIdx];
         setTimeout(()=>{
             props.pushOpenCard(dom, comIdx, num);
-        }, 500)
-        /*
-        if(이미 선택한 카드가 있는 경우){
-            if(선택한 카드와 짝이 맞는 카드의 위치를 아는 경우){
-
-            }else{ 선택한 카드와 짝이 맞는 카드의 위치를 모르는 경우
-
-            }
-
-        }else{ 선택한 카드가 없는 경우 (첫 선택인 경우)
-            if(짝이 맞는 카드가 이미 공개되어있는 경우){
-
-            }else{ 랜덤선택
-
-            }
-        }
-        
-        */
+        }, 2000)
     }
 
-
     function comIdxSelected(){
-
-        let idx = comSelectRandomNotOpen();
-
+        let idx = false;
         let selected = props.cardArraySelected[0];
         if(selected){
             let dom = document.querySelectorAll("[class*=Card_wrap]");
-    
             let firstIndex = props.cardArrayOpend.indexOf(selected),
                 lastIndex = props.cardArrayOpend.lastIndexOf(selected);
-
             let condition1 = firstIndex !== lastIndex;
-
             if(condition1){
                 idx = dom[firstIndex].classList.contains("openCard")? lastIndex: firstIndex;
             }
         }
-
         return idx;
-
-
-
-        // return dom[firstIndex].classList.contains("openCard")? lastIndex: firstIndex;
     }
-
     function comIdxPair(){
-        let idx;
+        let idx = false;
         let range = props.cardArrayDefault.length / 2, 
             count = 0;
-        let firstIndex, lastIndex;
-
         while(count < range){
             count++;
             let firstIndex = props.cardArrayOpend.indexOf(count),
@@ -91,13 +105,56 @@ export default function CompCom(props){
         }
         return idx;
     }
-
-
-
-    function comSelectRandomNotOpen(){
-
+    function comIdxRandomProcess(){
         let idx;
-        let array = props.cardArrayOpend.filter(i=>i===null);
+        let rerollAlgorith = dice();
+        let opendRatio = props.cardArrayOpend.filter(i=>i!==null).length / props.cardArrayDefault.length * 100;
+
+        let conditionRemains = opendRatio <= props.setting.remains,        
+            conditionOpend = rerollAlgorith < props.setting.opend,
+            conditionNotOpen = rerollAlgorith < props.setting.notOpen;
+
+        if(conditionRemains || conditionOpend){     // 열어본 카드를 다시 선택할 확률
+            idx = comIdxRandomOpend();
+            setTestNoticeRandom("opend")
+        }else if(conditionNotOpen){                 // 열어보지 않은 카드 중에서 선택할 확률 
+            idx = comIdxRandomNotOpen();
+            setTestNoticeRandom("notOpen")
+        }else{                                      // 전체 카드에서 랜덤 선택
+            idx = comIdxRandomCompletely();
+            setTestNoticeRandom("completely")
+        }
+        if(!idx){
+            idx = comIdxRandomCompletely();         // 열어본 카드 또는 열어보지 않은 카드가 없는 경우 전체 랜덤
+            setTestNoticeRandom("return false")
+        }
+
+        return idx;
+    }
+    function comIdxRandomOpend(){
+        let idx = false;
+
+        let array = props.cardArrayOpend.filter(i => i !== null);
+        
+        if(array.length){
+            while(true){
+                idx = Math.floor(Math.random() * props.cardArrayDefault.length);
+
+                let condition1 = props.cardArrayOpend[idx] !== null,
+                    condition2 = props.cardArrayOpend[idx] !== 0,
+                    condition3 = !document.querySelectorAll("[class*=Card_wrap]")[idx].classList.contains("openCard");
+                if(condition1 && condition2 && condition3){
+                    break;
+                }
+            }
+        }
+
+        return idx;
+    }
+    function comIdxRandomNotOpen(){
+
+        let idx = false;
+        let array = props.cardArrayOpend.filter(i => i === null);
 
         if(array.length){
             while(true){
@@ -108,17 +165,13 @@ export default function CompCom(props){
                     break;
                 }
             }
-        }else{
-            idx = comSelectRandomCompletely();
         }
         return idx;
     }
-
-    function comSelectRandomCompletely(){
-        let diceroll = dice();
-        // let targetArray = cardArrayCorrect;
+    function comIdxRandomCompletely(){
+        // let diceroll = dice();
         let array = props.cardArrayCorrect.filter(i => i !== 0);
-        let idx; 
+        let idx = false;
         if(array.length){
             while(true){
                 idx = Math.floor(Math.random() * props.cardArrayDefault.length);
@@ -162,5 +215,13 @@ export default function CompCom(props){
             comTurn();
         }
     }, [props.turnCount, props.whosTurn, props.gameOver])
+ 
     
+    return(
+        <div>
+            <p>percentage = {props.comAlgorithm}</p>
+            <p>algorithm case = {testNotice}</p>
+            <p>randomCase = {testNoticeRandom}</p>
+        </div>
+    )
 }

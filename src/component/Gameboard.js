@@ -16,6 +16,8 @@ export default function Gameboard(props){
 
     const [turnCount, setTurnCount] = useState(0);
 
+    const [comAlgorithm, setComAlgorithm] = useState();
+
 
     /*--- setTimeout 변수들  ---*/
     const [timeoutLoadingComplete, setTimeoutLoadingComplete] = useState();
@@ -24,6 +26,11 @@ export default function Gameboard(props){
     // const [timeoutMarkingCorrect, setTimeoutMarkingCorrect] = useState();
     
     /*--- /setTimeout 변수들  ---*/
+
+    function dice(){
+        return Math.floor(Math.random()*100);
+    }
+
 
 
     function initClearTimeAll(){
@@ -51,7 +58,6 @@ export default function Gameboard(props){
             pushOpenCard(dom, idx, num);
         }
     }
-
     function pushOpenCard(dom, idx, num){
         dom.classList.add("openCard");
         dom.classList.add("opend");
@@ -77,9 +83,6 @@ export default function Gameboard(props){
     }
 
 
-
-   
-
     function checkMatching(array){
         
         if(array[0] === array[1]){
@@ -92,7 +95,6 @@ export default function Gameboard(props){
         removeClassOpencard();
         resetWhosTurn();
     }
-
     function markingCorrect(){
         document.querySelectorAll(".openCard").forEach(i=>{
             i.classList.remove("opend");
@@ -166,7 +168,8 @@ export default function Gameboard(props){
         }else{
             if(props.setting.mode === "vs"){
                 if(props.whosTurn === "user"){
-                    props.setWhosTurn("com")
+                    props.setWhosTurn("com");
+                    setComAlgorithm(dice());
                 }else{
                     props.setWhosTurn("user")
                 }
@@ -247,11 +250,12 @@ export default function Gameboard(props){
             props.setGameOver(false);
             props.setPlay(false);
             props.setScore({single : 0, user : 0, com : 0, combo : 0, comCombo : 0})
-            initClearTimeAll()      // setTimeout/setInterval 초기화
-            setCardArraySelected([]);    // 선택한 카드 내역 초기화
-            setTurnCount([]);       // 카드 선택 횟수 초기화
-            setCardArray();         // 카드 배열 생성
-            gameStart();            // 카드애니메이션 완료 후 클릭 방지 해제
+            initClearTimeAll()              // setTimeout/setInterval 초기화
+            setCardArraySelected([]);       // 선택한 카드 내역 초기화
+            setTurnCount([]);               // 카드 선택 횟수 초기화
+            setCardArray();                 // 카드 배열 생성
+            setComAlgorithm(dice());        // 임시함수 -> 대전모드 시작 시 최초 턴 랜덤 기능 추가 대비 컴퓨터 동작확률 초기세팅
+            gameStart();                    // 카드애니메이션 완료 후 클릭 방지 해제
         }
 
         if(props.setting.newGame){
@@ -267,6 +271,7 @@ export default function Gameboard(props){
     return(
         <div className={board.wrap}>
             <CompCom
+                setting={props.setting}
                 cardArrayDefault={cardArrayDefault}
                 cardArrayOpend={cardArrayOpend}
                 cardArrayCorrect={cardArrayCorrect}
@@ -276,6 +281,7 @@ export default function Gameboard(props){
                 whosTurn={props.whosTurn}
                 gameOver={props.gameOver}
                 pushOpenCard={pushOpenCard}
+                comAlgorithm={comAlgorithm}
             />
             {props.setting.newGame && cardArrayDefault.length ?
                 cardArrayDefault.map((i, idx)=>
