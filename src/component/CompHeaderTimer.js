@@ -41,9 +41,6 @@ export default function CompHeaderTimer(props){
             }
         }
     }, [props.play])
-    
-
-
 
     let condition1 = props.whosTurn === "single" || props.whosTurn === "user",
         condition2 = props.play,
@@ -52,8 +49,6 @@ export default function CompHeaderTimer(props){
 
     let timerTrigger = condition1 && condition2 && condition3 && condition4;
 
-
-    console.log("timer render")
     return(
         <div 
             className={`${timer.wrap} 

@@ -73,14 +73,6 @@
     background-color: #fff;
 }
 
-
-@media (min-width: 1101px) {
-    /* .btn_openBtnGroup{
-        display: none;
-    } */
-}
-
-
 @media (max-width: 480px){
     .btnNewGameWrap{
         flex-direction: column;

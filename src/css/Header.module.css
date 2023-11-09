@@ -163,12 +163,10 @@
 }
 
 @media (max-width: 480px){
-    .ui{
-        grid-template-columns: 1fr 1fr 70px;
-    }
-    .score{
-        flex-direction: column;
-        align-items: start;
+
+
+    .btnNewGameSection{
+        justify-content: unset;
     }
     .btnMargin{
         margin: unset;
@@ -183,8 +181,9 @@
     }
 }
 
-@media (max-width: 480px){
-    .btnNewGameSection{
-        justify-content: unset;
+@media (max-width: 400px){
+    .score{
+        flex-direction: column;
+        align-items: start;
     }
 }

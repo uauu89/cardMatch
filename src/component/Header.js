@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear, faCaretDown, faRotateRight, faX } from "@fortawesome/free-solid-svg-icons";
 
@@ -10,12 +9,6 @@ import CompHeaderTimer from "./CompHeaderTimer";
 
 
 export default function Header(props){
-
-    const [openBtn, setOpenBtn] = useState(-1);
-    // const [openModal, setOpenModal] = useState(-1);
-
-    console.log("header render");
-
     return(
         <header className={header.wrap}>
             <div className={header.ui}>
@@ -35,11 +28,9 @@ export default function Header(props){
 
                 <CompHeaderTimer 
                     whosTurn={props.whosTurn}
-                    // setWhosTurn={props.setWhosTurn}
                     count={props.setting.count}
                     noCount={props.setting.noCount}
                     setTimeout={props.setTimeout}
-                    // playing={props.setting.newGame}
                     gameOver={props.gameOver}
                     play={props.play} setPlay={props.setPlay}
                 />
@@ -60,15 +51,15 @@ export default function Header(props){
                     className={header.btnOpenNewGame}
                     onClick={e=>{
                         e.preventDefault();
-                        setOpenBtn(openBtn * -1);
+                        props.setOpenBtn(props.openBtn * -1);
                     }}
                 >
-                    <FontAwesomeIcon icon={faCaretDown} className={`${header.icon} ${openBtn > 0? header.rotate: ""}`}/>
+                    <FontAwesomeIcon icon={faCaretDown} className={`${header.icon} ${props.openBtn > 0? header.rotate: ""}`}/>
                 </a>
 
             </div>
 
-            <div id="btnNewGame" className={`${header.btnNewGameSection} ${openBtn > 0? header.active: ""}`}>
+            <div id="btnNewGame" className={`${header.btnNewGameSection} ${props.openBtn > 0? header.active: ""}`}>
                 <div className={css.btnNewGameWrap}>
                     <button 
                         type="button"
@@ -88,8 +79,6 @@ export default function Header(props){
                     </button>
                 </div>
             </div>
-
-
             
             <OptionModal
                 open = {props.openModal}

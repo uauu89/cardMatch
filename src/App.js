@@ -6,7 +6,8 @@ import { useState } from "react";
 function App() {
 
   const [openModal, setOpenModal] = useState(-1);
-
+  const [openBtn, setOpenBtn] = useState(-1);
+  
   
   const [score, setScore] = useState({
     user : 0, com : 0, combo : 0, comCombo : 0,
@@ -54,14 +55,15 @@ function App() {
       })
       setWhosTurn("");
       setOpenModal(-1);
+      setOpenBtn(-1);
     })
   }
 
-  console.log("App render");
   return (
     <>
       <Header 
         openModal={openModal} setOpenModal={setOpenModal}
+        openBtn={openBtn} setOpenBtn={setOpenBtn}
         setting={setting} setSetting={setSetting}
         startNewGame={startNewGame}
         whosTurn={whosTurn} setWhosTurn={setWhosTurn}

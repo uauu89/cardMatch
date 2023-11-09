@@ -262,10 +262,6 @@ export default function Gameboard(props){
 
     }, [props.setting])
 
-
-
-    console.log("gameboard render")
-    
     return(
         <div className={board.wrap}>
             <CompCom

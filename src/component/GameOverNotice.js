@@ -51,7 +51,7 @@ function ComponentVs(props){
     return(
         <>
             <h2>{resultWord[0]}</h2>
-            <p className={over.wordBreak}>{props.score.user}점 : {props.score.com}점으로 {resultWord[1]}.</p>
+            <p className={over.wordBreak}>{props.score.user}점 : {props.score.com}점 으로 {resultWord[1]}.</p>
             <div>
                 <p className={over.wordBreak}>게임이 끝났습니다.</p>
                 <p className={over.wordBreak}>새 게임 버튼으로 새로운 게임을 시작할 수 있습니다.</p>

@@ -1,16 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function CompCom(props){
-    const [testNotice, setTestNotice] = useState("");
-    const [testNoticeRandom, setTestNoticeRandom] = useState("");
 
     function dice(){
         return Math.floor(Math.random()*100);
     }
 
     function comTurn(){
-        setTestNoticeRandom("")
-        let comIdx
+        let comIdx;
         
         let conditionSelect = props.comAlgorithm < props.setting.select,
             conditionPair = props.comAlgorithm < props.setting.pair;
@@ -19,26 +16,18 @@ export default function CompCom(props){
             if(conditionSelect){
                 comIdx = comIdxSelected();              // 1-1. 선택한 카드의 짝의 위치를 아는 경우
                 if(!comIdx){
-                    setTestNotice("1-2")
                     comIdx = comIdxRandomProcess();     // 1-2. 선택한 카드의 짝의 위치를 모르는 경우
-                }else{
-                    setTestNotice("1-1")
                 }
             }else{
-                setTestNotice("1-3")
                 comIdx = comIdxRandomProcess();         // 1-3. 옵션에서 설정한 1-1 확률을 충족하지 못한 경우
             }
         }else{                                      // 2. 선택한 카드가 없는 경우 ( 첫 선택인 경우 )
             if(conditionPair){                      
                 comIdx = comIdxPair();                  // 2-1. 짝이 맞는 카드의 위치를 아는 경우
                 if(!comIdx){        
-                    setTestNotice("2-2")
                     comIdx = comIdxRandomProcess();     // 2-2. 짝이 맞는 카드의 위치를 모르는 경우
-                }else{
-                    setTestNotice("2-1")
                 }
             }else{                                      // 2-3. 옵션에서 설정한 2-1 확률을 충족하지 못한 경우
-                setTestNotice("2-3")
                 comIdx = comIdxRandomProcess();
             }
         }
@@ -95,17 +84,14 @@ export default function CompCom(props){
             conditionNotOpen = rerollAlgorithm < props.setting.notOpen;
         
         if(conditionRemains || conditionOpend){     // 열어본 카드를 다시 선택할 확률
-            setTestNoticeRandom("opend")
             idx = comIdxRandomOpend();
         }else if(conditionNotOpen){                 // 열어보지 않은 카드 중에서 선택할 확률 
             idx = comIdxRandomNotOpen();
-            setTestNoticeRandom("notOpen")
         }else{                                      // 전체 카드에서 랜덤 선택
             idx = comIdxRandomCompletely();
-            setTestNoticeRandom("completely")
         }
+
         if(!idx){
-            setTestNoticeRandom("return false")
             idx = comIdxRandomCompletely();         // 열어본 카드 또는 열어보지 않은 카드가 없는 경우 전체 랜덤
         }
 
@@ -165,13 +151,4 @@ export default function CompCom(props){
         }
     }, [props.turnCount, props.whosTurn, props.gameOver])
     
-    /*
-    return(
-        <div style={{position : "absolute", top:"40px", left:"400px", zIndex:"999"}}>
-            <p>percentage = {props.comAlgorithm}</p>
-            <p>algorithm case = {testNotice}</p>
-            <p>randomCase = {testNoticeRandom}</p>
-        </div>
-    )
-    */
 }

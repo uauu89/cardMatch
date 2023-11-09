@@ -1,10 +1,9 @@
 import { useState } from "react";
 import modal from "../css/OptionModal.module.css";
 
-
 export default function CompOptCardNum(){
     
-    const [cardNum, setCardNum] = useState(2);
+    const [cardNum, setCardNum] = useState(6);
 
     function cardNumValidation(val){
         if(val === "" || val < 2){

@@ -1,7 +1,9 @@
 :root{
     --turn_count : 30s
 }
-
+.hidden{
+    display: none;
+}
 
 .wrap{
     margin: 0 auto;
@@ -41,8 +43,6 @@
     z-index: 1;
 }
 
-
-
 .single::before{
     box-shadow: inset 0 0 8px 0 #070;
 }
@@ -52,8 +52,6 @@
 .com::before{
     box-shadow: inset 0 0 8px 0 #f00;
 }
-
-
 
 .clockHands{
     position: absolute;
@@ -96,17 +94,9 @@
     100%{visibility: hidden;}
 }
 
-
-.hidden{
-    display: none;
-}
-
-
 @media (max-width: 500px){
     .wrap{
         width: 80px;
         height: 80px;
-        /* justify-self: start; */
-        margin: unset;
     }
 }

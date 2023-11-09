@@ -22,8 +22,6 @@ export default function CompOptTime(){
             return true;
         }
     }
-
-    console.log("input time render")
     return(
         <>
             <div className={`${modal.inputWrap} ${modal.textRight} ${timer.noCount > 0 ? modal.disabled : ""}`}>

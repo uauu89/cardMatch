@@ -32,8 +32,6 @@ export default function Card(props){
         cardCheckAnimation();
     }, [data])
 
-    console.log("card render")
-
     return(
         <div className={`${card.wrap} init`}
             onClick={e=>props.selectCard(e.currentTarget, props.idx, props.num)}

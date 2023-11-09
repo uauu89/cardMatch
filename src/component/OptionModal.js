@@ -24,7 +24,6 @@ export default function OptionModal(props){
     useEffect(()=>{
     }, [difficulty])
 
-    console.log("optionmodal render")
     return(
         <div id="optionModal" className={`${modal.wrap} ${props.open > 0 ? modal.active: ""}`}>
             <h2>옵션</h2>
@@ -57,7 +56,7 @@ export default function OptionModal(props){
                             <label htmlFor="inputCheckCard" className={`${modal.cursorPointer} ${modal.textNoWrap}`}>카드 확인 여부</label>
                             <div className={`${modal.checkboxWrap}`}>
                                 <div className={`${modal.posRel} ${css.tabIndex}`} >
-                                    <input type="checkbox" id="inputCheckCard" className={modal.inputHidden} />
+                                    <input type="checkbox" id="inputCheckCard" defaultChecked className={modal.inputHidden} />
                                     <label htmlFor="inputCheckCard" className={`${modal.checkboxStyle} ${modal.cursorPointer}`} />
                                 </div>
                             </div>

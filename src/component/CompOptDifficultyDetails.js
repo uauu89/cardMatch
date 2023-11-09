@@ -22,8 +22,6 @@ export default function CompOptDifficultyDetails(props){
             return false;
         }
     }
-
-    console.log("inputrange render")
     return(
         
         <div className={details.rangeWrap}>
