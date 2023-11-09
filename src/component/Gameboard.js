@@ -6,12 +6,9 @@ import CompCom from "./CompCom";
 
 export default function Gameboard(props){
 
-    const [cardArrayDefault, setCardArrayDefault] = useState([]);
-    // 기초 카드배열
-    const [cardArrayOpend, setCardArrayOpend] = useState([]);
-    // 열어본 카드 >> null 배열에서 열어본 카드 데이터 추가 / 정답 카드 0으로 삭제
-    const [cardArrayCorrect, setCardArrayCorrect] = useState([]);
-    // 정답 카드 >> 최초 배열에서 정답 카드 0으로 삭제
+    const [cardArrayDefault, setCardArrayDefault] = useState([]);       // 원본 카드배열
+    const [cardArrayOpend, setCardArrayOpend] = useState([]);           // 열어본 카드 >> null 배열에서 열어본 카드 데이터 추가 / 정답 카드 0으로 삭제
+    const [cardArrayCorrect, setCardArrayCorrect] = useState([]);       // 정답 카드 >> 최초 배열에서 정답 카드 0으로 삭제
     const [cardArraySelected, setCardArraySelected] = useState([]);     // 선택한 카드
 
     const [turnCount, setTurnCount] = useState(0);
@@ -22,24 +19,21 @@ export default function Gameboard(props){
     /*--- setTimeout 변수들  ---*/
     const [timeoutLoadingComplete, setTimeoutLoadingComplete] = useState();
     const [timeoutCheckMatching, setTimeoutCheckMatching] = useState();
-    const [timeoutTimeout, setTimeoutTimeout] = useState();
-    // const [timeoutMarkingCorrect, setTimeoutMarkingCorrect] = useState();
-    
+    const [timeoutTimerTimeout, setTimeoutTimerTimeout] = useState();
+    const [timeoutGameover, setTimeoutGameover] = useState();
     /*--- /setTimeout 변수들  ---*/
 
     function dice(){
         return Math.floor(Math.random()*100);
     }
 
-
-
     function initClearTimeAll(){
         clearTimeout(timeoutLoadingComplete);
         clearTimeout(timeoutCheckMatching);
-        clearTimeout(timeoutTimeout);
+        clearTimeout(timeoutTimerTimeout);
+        clearTimeout(timeoutGameover);
     }
     function resetProcess(){
-        // props.setWhosTurn("");
         props.setPlay(false);
         setTurnCount(0);
         setCardArraySelected([]);
@@ -84,7 +78,6 @@ export default function Gameboard(props){
 
 
     function checkMatching(array){
-        
         if(array[0] === array[1]){
             markingCorrect();
             addScore();
@@ -144,6 +137,12 @@ export default function Gameboard(props){
         }
         if(result){
             props.setGameOver(true);
+            let timeGameover = setTimeout(()=>{
+                props.setPlay(false);
+                props.setWhosTurn("");
+                clearTimeout(timeGameover);
+            })
+            setTimeoutGameover(timeGameover);
         }
     }
     function resetCombo(){
@@ -164,7 +163,9 @@ export default function Gameboard(props){
     }
     function resetWhosTurn(){
         if(props.gameOver){
+            alert("game over");
             props.setWhosTurn("");
+            props.setPlay(false);
         }else{
             if(props.setting.mode === "vs"){
                 if(props.whosTurn === "user"){
@@ -192,7 +193,7 @@ export default function Gameboard(props){
                     clearTimeout(timerTimeout);
                 }, 500)
 
-                setTimeoutTimeout(timerTimeout);
+                setTimeoutTimerTimeout(timerTimeout);
 
            }
         }
@@ -216,9 +217,6 @@ export default function Gameboard(props){
             setCardArrayOpend(new Array(cardArray.length*2).fill(null))
             setCardArrayCorrect(suffleArray);
         }
-
-
-
         
         function gameStart(){
             
@@ -292,17 +290,16 @@ export default function Gameboard(props){
                         cardLength={cardArrayDefault.length}
                         mode={props.setting.mode}
                         checkCard={props.setting.checkCard}
-                        // cardArrayOpend={cardArrayOpend} setCardArrayOpend={setCardArrayOpend}
                         selectCard={selectCard}
-                        // clickPrevent={clickPrevent}
                     /> ) :
                 ""
             }
             {props.gameOver?
-            <GameOverNotice 
+            <GameOverNotice
                 mode={props.setting.mode}
                 gameOver={props.gameOver}
                 score={props.score}
+                startNewGame={props.startNewGame}
             /> : ""
             }
         </div>

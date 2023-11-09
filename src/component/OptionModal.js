@@ -12,8 +12,6 @@ import CompOptCardSize from "./CompOptCardSize";
 
 export default function OptionModal(props){
 
-    
-
     const [openDetail, setOpenDetail] = useState(-1);
     const [difficulty, setDifficulty] = useState({
         remains: 0, opend : 0, notOpen : 0, select : 0, pair : 0
@@ -25,7 +23,6 @@ export default function OptionModal(props){
 
     useEffect(()=>{
     }, [difficulty])
-
 
     console.log("optionmodal render")
     return(
@@ -159,24 +156,24 @@ export default function OptionModal(props){
                             <div className={`${modal.detailWrap} ${openDetail > 0 ? modal.active: ""}`}>
                                 <ul className={modal.depth} id="optionDifficultyDetail">
                                     <li>
-                                        <p>남은 카드 비율  ※열어본 카드비율이 설정값 이하일 경우 열어 본 카드 선택 </p>
-                                        <CompOptDifficultyDetails id="remains" data={difficulty.remains} />
+                                        <p>남은 카드 비율  <span>※열어본 카드비율이 설정값 이하일 경우 열어 본 카드 선택</span></p>
+                                        <CompOptDifficultyDetails id="remains" openDetail={openDetail} data={difficulty.remains} />
                                     </li>
                                     <li>
-                                        <p>임의선택 : 이미 열어 본 카드를 다시 선택할 확률</p>
-                                        <CompOptDifficultyDetails id="opend" data={difficulty.opend} />
+                                        <p>임의선택 : <span>이미 열어 본 카드를 다시 선택할 확률</span></p>
+                                        <CompOptDifficultyDetails id="opend" openDetail={openDetail} data={difficulty.opend} />
                                     </li>
                                     <li>
-                                        <p>임의선택 : 열어보지 않은 카드를 선택할 확률</p>
-                                        <CompOptDifficultyDetails id="notOpen" data={difficulty.notOpen} />
+                                        <p>임의선택 : <span>열어보지 않은 카드를 선택할 확률</span></p>
+                                        <CompOptDifficultyDetails id="notOpen" openDetail={openDetail} data={difficulty.notOpen} />
                                     </li>
                                     <li>
-                                        <p>확정선택 : 현재 선택한 카드와 맞는 카드를 선택할 확률</p>
-                                        <CompOptDifficultyDetails id="select" data={difficulty.select} />
+                                        <p>확정선택 : <span>현재 선택한 카드와 맞는 카드를 선택할 확률</span></p>
+                                        <CompOptDifficultyDetails id="select" openDetail={openDetail} data={difficulty.select} />
                                     </li>
                                     <li>
-                                        <p>확정선택 : 이미 열어 본 카드 중 짝이 맞는 카드를 선택할 확률</p>
-                                        <CompOptDifficultyDetails id="pair" data={difficulty.pair} />
+                                        <p>확정선택 : <span>이미 열어 본 카드 중 짝이 맞는 카드를 선택할 확률</span></p>
+                                        <CompOptDifficultyDetails id="pair" openDetail={openDetail} data={difficulty.pair} />
                                     </li>
 
                                 </ul>
@@ -187,14 +184,22 @@ export default function OptionModal(props){
                 </li>
             </ul>
             <div className={modal.btnNewGameSection}>
-                <p>※ 카드 크기를 제외한 변경된 옵션은 다음 게임부터 적용됩니다.</p>
+                <p className={modal.textMobile}>※ 카드 크기를 제외한 변경된 옵션은 다음 게임부터 적용됩니다.</p>
                 <div className={`${css.btnNewGameWrap} ${css.justifyEnd}`}>
-                    <button type="button" className={`${css.btnCommonStyle} ${css.btnNewGame}`}>
-                        <FontAwesomeIcon icon={faRotateRight} className={css.iconSize16} />
+                    <button
+                        type="button"
+                        className={`${css.btnCommonStyle} ${css.btnNewGame}`}
+                        onClick={()=>props.startNewGame("single")}
+                    >
+                        <FontAwesomeIcon icon={faRotateRight} className={`${css.iconRotate} ${css.iconSize16}`} />
                         새 게임<span className={css.verticalLine}/>혼자
                     </button>
-                    <button type="button" className={`${css.btnCommonStyle} ${css.btnNewGame}`}>
-                        <FontAwesomeIcon icon={faRotateRight} className={css.iconSize16} />
+                    <button
+                        type="button"
+                        className={`${css.btnCommonStyle} ${css.btnNewGame}`}
+                        onClick={()=>props.startNewGame("vs")}
+                    >
+                        <FontAwesomeIcon icon={faRotateRight} className={`${css.iconRotate} ${css.iconSize16}`} />
                         새 게임<span className={css.verticalLine}/>대전
                     </button>
                 </div>

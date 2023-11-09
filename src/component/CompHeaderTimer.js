@@ -4,45 +4,16 @@ import timer from "../css/CompHeaderTimer.module.css";
 import { useEffect, useState } from "react";
 
 export default function CompHeaderTimer(props){
-
-
-    const [setTimeTimer, setSetTimeTimer] = useState();
     const [intervalTimer, setIntervalTimer] = useState();
-
 
     function initClearTimeAll(){
         clearInterval(intervalTimer);
     }
-
-    function setTimer(){
-        
-        if((props.whosTurn === "single" || props.whosTurn === "user") && !props.noCount){
-            let time = props.count;
-            document.querySelector("#timerNumber").innerText = time;
-
-            let timer = setInterval(()=>{
-                time--;
-                document.querySelector("#timerNumber").innerText = time;
-                if(time === 0){
-                    clearInterval(timer);
-                    props.setWhosTurn("com");
-                    document.querySelector("#timerNumber").innerText = "";
-                }
-            }, 1000)
-            
-        }
+    function changeOptTimeValue(){
+        document.documentElement.style.setProperty("--turn_count", `${props.count}s`);
     }
 
-
-    function changeTime(){
-        document.documentElement.style.setProperty("--turn_count", `${props.count}s`);
-      }
-
-
-    
-    changeTime();
-
-    
+    changeOptTimeValue();
 
     useEffect(()=>{
 
@@ -58,14 +29,13 @@ export default function CompHeaderTimer(props){
                 if(time === 0){
                     clearInterval(timer);
                     props.setTimeout(true);
-                    // props.setWhosTurn("");
                     props.setPlay(false);
                 }
             }, 1000)
             setIntervalTimer(timer);
         }
 
-        if(!props.noCount  && !props.gameOver && props.play){
+        if(!props.noCount && !props.gameOver && props.play){
             if(props.whosTurn === "single" || props.whosTurn === "user"){
                 timer();
             }
@@ -89,9 +59,9 @@ export default function CompHeaderTimer(props){
             className={`${timer.wrap} 
                         ${props.whosTurn === "single" ? 
                             timer.single : 
-                            props.whosTurn === "user" ? 
+                            props.play && props.whosTurn === "user" ? 
                                 timer.user : 
-                                props.whosTurn === "com" ? 
+                                props.play && props.whosTurn === "com" ? 
                                     timer.com : "" 
                         } ${timerTrigger? timer.animation:""}`}>
             <div className={`${timer.clockHands} ${timer.half}`}></div>
@@ -102,7 +72,7 @@ export default function CompHeaderTimer(props){
                 className={timerTrigger ? timer.hidden: ""}
                 icon={
                     props.gameOver? faTrophy :  
-                        props.whosTurn === "com" ? 
+                        props.play && props.whosTurn === "com" ? 
                             faRobot: 
                             props.noCount? faInfinity : faSpinner
                 }

@@ -38,6 +38,15 @@
     color: #242;
 }
 
+.score{
+    display: flex;
+    column-gap: 150px;
+    align-items: end;
+}
+.score small{
+    color: #999;
+}
+
 .btnOpenOption{
     position: fixed;
     top: 0;
@@ -130,6 +139,14 @@
     .btnNewGameSection.active{
         grid-template-rows: 1fr;
     }
+    .btnMargin{
+        margin: 10px 0;
+    }
+    .score{
+        column-gap: unset;
+        justify-content: space-between;
+    }
+
 }
 
 
@@ -137,13 +154,37 @@
     .timerWrap{
         width: 80px;
         height: 80px;
-        /* margin: 0; */
-        /* top: 10px; */
     }
     .scoreWrap{
         height: 100px;
         padding: 10px 0;
+        font-size: 12px;
     }
+}
 
+@media (max-width: 480px){
+    .ui{
+        grid-template-columns: 1fr 1fr 70px;
+    }
+    .score{
+        flex-direction: column;
+        align-items: start;
+    }
+    .btnMargin{
+        margin: unset;
+        margin-left: 10px;
+        margin-right: 20px;
+    }
+    .btnMarginTop{
+        margin-top: 10px;
+    }
+    .btnMarginBottom{
+        margin-bottom: 10px;
+    }
+}
 
+@media (max-width: 480px){
+    .btnNewGameSection{
+        justify-content: unset;
+    }
 }

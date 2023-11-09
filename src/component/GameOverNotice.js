@@ -10,12 +10,12 @@ export default function GameOverNotice(props){
         <div className={`${over.wrap} ${props.gameOver? over.active: ""}`}>
             <div className={over.inner}>
                 {props.mode==="" ? 
-                    <p>새 게임 버튼으로 새로운 게임을 시작할 수 있습니다.</p> :
+                    <p className={over.wordBreak}>새 게임 버튼으로 새로운 게임을 시작할 수 있습니다.</p> :
                     <>
                         {props.mode==="single" ?
                             <ComponentSingle scoreUser={props.score.user} /> :
                             <ComponentVs score={props.score} />}
-                        <ComponentBtn />
+                        <ComponentBtn startNewGame={props.startNewGame} />
                     </>
                 }
             </div>
@@ -28,10 +28,10 @@ function ComponentSingle(props){
     return(
         <>
             <h2>게임 종료</h2>
-            <p>최종점수 : {props.scoreUser}</p>
+            <p className={over.wordBreak}>최종점수 : {props.scoreUser}</p>
             <div>
-                <p>게임이 끝났습니다.</p>
-                <p>새 게임 버튼으로 새로운 게임을 시작할 수 있습니다.</p>
+                <p className={over.wordBreak}>게임이 끝났습니다.</p>
+                <p className={over.wordBreak}>새 게임 버튼으로 새로운 게임을 시작할 수 있습니다.</p>
             </div>
         </>
     )
@@ -51,26 +51,34 @@ function ComponentVs(props){
     return(
         <>
             <h2>{resultWord[0]}</h2>
-            <p>{props.score.user}점 : {props.score.com}점으로 {resultWord[1]}.</p>
+            <p className={over.wordBreak}>{props.score.user}점 : {props.score.com}점으로 {resultWord[1]}.</p>
             <div>
-                <p>게임이 끝났습니다.</p>
-                <p>새 게임 버튼으로 새로운 게임을 시작할 수 있습니다.</p>
+                <p className={over.wordBreak}>게임이 끝났습니다.</p>
+                <p className={over.wordBreak}>새 게임 버튼으로 새로운 게임을 시작할 수 있습니다.</p>
             </div>
         </>
     )
 }
 
 
-function ComponentBtn(){
+function ComponentBtn(props){
     return(
         <>
             <div className={`${css.btnNewGameWrap} ${css.justifyCenter}`}>
-                <button type="button" className={`${css.btnCommonStyle} ${css.btnNewGame}`}>
-                    <FontAwesomeIcon icon={faRotateRight} className={css.iconSize16} />
+                <button
+                    type="button"
+                    className={`${css.btnCommonStyle} ${css.btnNewGame}`}
+                    onClick={()=>props.startNewGame("single")}
+                >
+                    <FontAwesomeIcon icon={faRotateRight} className={`${css.iconRotate} ${css.iconSize16}`} />
                     새 게임<span className={css.verticalLine}/>혼자
                 </button>
-                <button type="button" className={`${css.btnCommonStyle} ${css.btnNewGame}`}>
-                    <FontAwesomeIcon icon={faRotateRight} className={css.iconSize16} />
+                <button
+                    type="button"
+                    className={`${css.btnCommonStyle} ${css.btnNewGame}`}
+                    onClick={()=>props.startNewGame("vs")}
+                >
+                    <FontAwesomeIcon icon={faRotateRight} className={`${css.iconRotate} ${css.iconSize16}`} />
                     새 게임<span className={css.verticalLine}/>대전
                 </button>
             </div>

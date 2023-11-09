@@ -74,9 +74,9 @@
 
 
 .btnWrap{
+    position: relative;
     display: flex;
     gap: 5px;
-    flex: 1;
     margin-left: 0;
 }
 
@@ -212,20 +212,10 @@
     padding: 0 2px 2px 0;
 }
 
-
-
-
-
-
-
 .btnNewGameSection p{
     text-align: right;
     margin: 50px 0 10px;
 }
-
-
-
-
 
 .inputHidden{
     opacity: 0;
@@ -249,8 +239,8 @@
 }
 
 
-@media (max-width: 835px) {
-    .wrap{width: 90%;}
+@media (max-width: 735px) {
+    .wrap{width: 95%;}
 }
 
 
@@ -267,16 +257,19 @@
         padding: 10px;
     }
 
-
-    .mobileGridRow2{
+    .mobileGridPosition{
         grid-row: 2;
-    }
-    .mobileGridCol2{
         grid-column: 2;
     }
 
     .grid.mobile{
         grid-template-columns: 1fr;
+    }
+    .template3{
+        grid-template-columns: 70px auto;
+    }
+    .mobile .gridCol2{
+        grid-column: unset;
     }
     
 
@@ -290,5 +283,29 @@
         gap: 20px;
     }
 
+    .depthDetail{
+        margin-left: unset;
+    }
+    .btnNewGameSection .textMobile{
+        font-size: 14px;
+        word-break: keep-all;
+        text-align: center;
+        padding: 0 20px;
+    }
 
+}
+
+@media (max-width: 350px){
+    .inputWrap{
+        justify-self: unset;
+    }
+    .inputWrap input{
+        width: 100%;
+    }
+    .detailWrap p span{
+        display: block;
+        margin-top: 5px;
+        color: #909090;
+        word-break: keep-all;
+    }
 }

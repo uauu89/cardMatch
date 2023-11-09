@@ -44,18 +44,13 @@ export default function CompOptTime(){
                     onBlur={e=>{
                         timerValidation(e.target.value);
                     }}
-                    onKeyDown={e=>{
-                        if(e.key === "Enter"){
-                            if(timerValidation(e.target.value)){
-                                document.querySelector("#input_cardNum").focus();
-                            };
-                        }
-                    }}
                 />
                 <span className={modal.unit}>s</span>
             </div>
-            <div className={`${modal.checkboxWrap} ${modal.mobileGridRow2} ${modal.mobileGridCol2}`}>
-                <label htmlFor="inputNoCount" className={modal.cursorPointer}>제한 없음</label>
+            <div className={`${modal.checkboxWrap} ${modal.mobileGridPosition}`}>
+                <label htmlFor="inputNoCount" 
+                    className={`${modal.cursorPointer}`} >
+                    제한 없음</label>
                 <div className={`${modal.posRel} ${css.tabIndex}`} >
                     <input
                         type="checkbox" id="inputNoCount"

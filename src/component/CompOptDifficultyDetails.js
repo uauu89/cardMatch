@@ -30,7 +30,6 @@ export default function CompOptDifficultyDetails(props){
             <input
                 type="range"
                 id={`difficultyDetail_${props.id}`}
-                // data-category="detail_ratioRemains" 
                 tabIndex={-1}
                 style={{background : `linear-gradient(to right, var(--color_main) ${inputVal}%, #fff ${inputVal}%)`}}
                 value={inputVal}
@@ -40,11 +39,10 @@ export default function CompOptDifficultyDetails(props){
                 <input 
                     name="difficultyDetail"
                     type="number" min="0" max="100"
-                    // data-category="detail_ratioRemains"
-                    className={modal.textRight}
+                    tabIndex={props.openDetail > 0 ? 0 : -1}
+                    className={`${modal.textRight} ${details.inputNumber}`}
                     value={inputVal}
                     onInput={e=>{
-                        console.log(typeof(e.target.value))
                         setInputVal(inputValidation(e.target.value)? e.target.value : inputVal);
                     }}
                     onBlur={e=>{
@@ -53,9 +51,7 @@ export default function CompOptDifficultyDetails(props){
                         }
                     }}
                     onKeyDown={e=>{
-                        console.log(e.key)
                         if(e.key==="Enter"){
-                            // let nextInput = e.target.closest("li").nextSibling.querySelector("input[name=difficultyDetail]");
                             if(e.target.closest("li").nextSibling){
                                 e.target.closest("li").nextSibling.querySelector("input[name=difficultyDetail]").focus();
                             }

@@ -8,13 +8,16 @@
     background-color: rgba(0, 0, 0, 0.6);
 }
 
+.wordBreak{
+    word-break: keep-all;
+}
+
 .active{
     display: block;
 }
 
 .inner{
     background-color: var(--color_gray2);
-    /* background-color: #fff; */
     position: absolute;
     top: 30%;
     left: 50%;
@@ -39,8 +42,6 @@
     margin-top: 20px;
     font-size: 14px;
 }
-
-
 
 .gameOver_inner .group_btnInner{
     justify-content: center;

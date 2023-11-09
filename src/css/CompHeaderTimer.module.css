@@ -100,3 +100,13 @@
 .hidden{
     display: none;
 }
+
+
+@media (max-width: 500px){
+    .wrap{
+        width: 80px;
+        height: 80px;
+        /* justify-self: start; */
+        margin: unset;
+    }
+}

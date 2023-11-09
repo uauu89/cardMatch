@@ -12,7 +12,7 @@ import CompHeaderTimer from "./CompHeaderTimer";
 export default function Header(props){
 
     const [openBtn, setOpenBtn] = useState(-1);
-    const [openModal, setOpenModal] = useState(-1);
+    // const [openModal, setOpenModal] = useState(-1);
 
     console.log("header render");
 
@@ -26,8 +26,8 @@ export default function Header(props){
                         <p>콤보 : {props.score.combo}</p>
                     </>:
                     <>
-                        <p>유저 : {props.score.user}</p>
-                        <p>컴퓨터 : {props.score.com}</p>
+                        <p className={header.score}>유저 : {props.score.user}<small>콤보 : {props.score.combo}</small></p>
+                        <p className={header.score}>컴퓨터 : {props.score.com}<small>콤보 : {props.score.comCombo}</small></p>
                     </>
                     }
                     
@@ -48,10 +48,10 @@ export default function Header(props){
                     className={header.btnOpenOption}
                     onClick={e=>{
                         e.preventDefault();
-                        setOpenModal(openModal * -1);
+                        props.setOpenModal(props.openModal * -1);
                     }}
                 >
-                    {openModal > 0 ? 
+                    {props.openModal > 0 ? 
                         <FontAwesomeIcon icon={faX} /> : 
                         <FontAwesomeIcon icon={faGear} className={header.iconGear}/>
                     }
@@ -72,22 +72,18 @@ export default function Header(props){
                 <div className={css.btnNewGameWrap}>
                     <button 
                         type="button"
-                        className={`${css.btnCommonStyle} ${css.btnNewGame}`}
-                        onClick={()=>{
-                            props.startNewGame("single")
-                        }}
+                        className={`${css.btnCommonStyle} ${css.btnNewGame} ${header.btnMargin} ${header.btnMarginTop}`}
+                        onClick={()=>props.startNewGame("single")}
                     >
-                        <FontAwesomeIcon icon={faRotateRight} className={css.iconSize16} />
+                        <FontAwesomeIcon icon={faRotateRight} className={`${css.iconRotate} ${css.iconSize16}`} />
                         새 게임<span className={css.verticalLine}/>혼자
                     </button>
                     <button
                         type="button"
-                        className={`${css.btnCommonStyle} ${css.btnNewGame}`}
-                        onClick={()=>{
-                            props.startNewGame("vs")
-                        }}
+                        className={`${css.btnCommonStyle} ${css.btnNewGame} ${header.btnMargin} ${header.btnMarginBottom}`}
+                        onClick={()=>props.startNewGame("vs")}
                     >
-                        <FontAwesomeIcon icon={faRotateRight} className={css.iconSize16} />
+                        <FontAwesomeIcon icon={faRotateRight} className={`${css.iconRotate} ${css.iconSize16}`} />
                         새 게임<span className={css.verticalLine}/>대전
                     </button>
                 </div>
@@ -95,7 +91,10 @@ export default function Header(props){
 
 
             
-            <OptionModal open={openModal}/>
+            <OptionModal
+                open = {props.openModal}
+                startNewGame = {props.startNewGame}
+            />
 
             
         </header>

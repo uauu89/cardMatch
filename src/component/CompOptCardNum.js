@@ -38,7 +38,7 @@ export default function CompOptCardNum(){
             onKeyDown={e=>{
                 if(e.key === "Enter"){
                     if(cardNumValidation(e.target.value)){
-                        document.querySelector("#input_countTime").focus();
+                        document.querySelector("#inputTimer").focus();
                     };
                 }
             }}

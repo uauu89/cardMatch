@@ -2,17 +2,17 @@
 import Header from "./component/Header";
 
 import Gameboard from "./component/Gameboard";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 function App() {
 
+  const [openModal, setOpenModal] = useState(-1);
+
+  
   const [score, setScore] = useState({
-    user : 0,
-    com : 0,
-    combo : 0,
-    comCombo : 0,
+    user : 0, com : 0, combo : 0, comCombo : 0,
   })
 
-  const [whosTurn, setWhosTurn] = useState("gameover")
+  const [whosTurn, setWhosTurn] = useState("")
   const [play, setPlay] = useState(false);
   const [timeout, setTimeout] = useState(false);
   const [gameOver, setGameOver] = useState(true);
@@ -53,6 +53,7 @@ function App() {
         pair : document.querySelector("#difficultyDetail_pair").value,
       })
       setWhosTurn("");
+      setOpenModal(-1);
     })
   }
 
@@ -60,6 +61,7 @@ function App() {
   return (
     <>
       <Header 
+        openModal={openModal} setOpenModal={setOpenModal}
         setting={setting} setSetting={setSetting}
         startNewGame={startNewGame}
         whosTurn={whosTurn} setWhosTurn={setWhosTurn}
@@ -69,7 +71,9 @@ function App() {
         gameOver={gameOver}
       />
       <Gameboard
+        setOpenModal={setOpenModal}
         setting={setting} setSetting={setSetting}
+        startNewGame={startNewGame}
         whosTurn={whosTurn} setWhosTurn={setWhosTurn}
         play={play} setPlay={setPlay}
         score={score} setScore={setScore}

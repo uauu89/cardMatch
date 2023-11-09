@@ -28,6 +28,10 @@
     color: #fff;
 }
 
+
+.tabIndex{
+    position: relative;
+}
 .tabIndex:focus-within{
     outline: auto;
     outline-color: #000;
@@ -60,20 +64,30 @@
     transition: 0.3s;
 }
 
-.btnNewGame:hover .icon16{
+.btnNewGame:hover .iconRotate{
     color: #fff;
-    rotate: 360deg;
-    transition: color 0.3s, rotate 1s 0.3s ;
+    transform : rotate(360deg);
+    transition: transform 1s 0.3s;
 }
 .btnNewGame:hover .verticalLine{
     background-color: #fff;
 }
 
 
-
-
 @media (min-width: 1101px) {
-    .btn_openBtnGroup{
+    /* .btn_openBtnGroup{
         display: none;
+    } */
+}
+
+
+@media (max-width: 480px){
+    .btnNewGameWrap{
+        flex-direction: column;
+        gap: 10px;
+    }
+    .btnNewGame{
+        justify-content: center;
+        margin: 0 10px;
     }
 }
