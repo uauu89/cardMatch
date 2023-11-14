@@ -17,20 +17,20 @@
 + 컴퓨터와의 대전 기능 및 난이도 옵션 구현
 + 타이머 기능 및 제한 없음 옵션 구현
 + 반응형 페이지로 제작
++ 입력창 커스텀 디자인 적용 및 접근성을 고려하여 탭키로 접근 가능하도록 제작
++ 외부 이미지 없이 CSS로 디자인 
 
 ### 기간
-+ 2023-09-01 ~ 진행중
++ 2023-09-01 ~ 2023-11-14
   
 ### 인원
 + 1인
    
 ### 링크
-+ [기능테스트 버전](https://uauu89.github.io/cardMatch/src/test.html)  
++ [피그마](https://www.figma.com/file/18oZ5fY88khXRZmIaKN5Yj/MatchingCard?type=design&node-id=0-1&mode=design&t=CJmv1sZihV10cdHF-0)
++ [구현사이트(자바스크립트 버전)](https://uauu89.github.io/cardMatch/src/test.html)
++ [구현사이트(리액트 버전)](https://uauu89.github.io/deployCardMatch/)
 
-
-### 후기
-<details>
-</details>
 
 <br />
 
@@ -184,5 +184,10 @@
     > + 반응형에서 타이머 위치 조정
     > + 각 컴포넌트 console.log 삭제
     > + 그 외 css, 텍스트 수정
+
+
+#### 23.11.14
+1.  > + 모바일에서 옵션 모달창 padding-bottom 추가
+    > + 난이도 기본 값 변경
 
 </details>

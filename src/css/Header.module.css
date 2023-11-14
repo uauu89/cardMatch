@@ -41,7 +41,7 @@
 .score{
     display: flex;
     column-gap: 150px;
-    align-items: end;
+    align-items: flex-end;
 }
 .score small{
     color: #999;

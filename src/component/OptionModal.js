@@ -18,7 +18,7 @@ export default function OptionModal(props){
     });
     
     useEffect(()=>{
-        document.querySelector("#difficulty2").click();
+        document.querySelector("#difficulty3").click();
     }, [])
 
     useEffect(()=>{
