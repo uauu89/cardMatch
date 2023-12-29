@@ -82,11 +82,13 @@ export default function Gameboard(props){
             markingCorrect();
             addScore();
             arrayCorrectMod(array);
+            resetWhosTurn("correct");
         }else{
             resetCombo();
+            resetWhosTurn("discorrect");
         }
         removeClassOpencard();
-        resetWhosTurn();
+        
     }
     function markingCorrect(){
         document.querySelectorAll(".openCard").forEach(i=>{
@@ -161,22 +163,24 @@ export default function Gameboard(props){
     function removeClassOpencard(){
         document.querySelectorAll(".openCard").forEach(i=>i.classList.remove("openCard"));
     }
-    function resetWhosTurn(){
+
+    function resetWhosTurn(result){
         if(props.gameOver){
-            alert("game over");
             props.setWhosTurn("");
-            props.setPlay(false);
         }else{
             if(props.setting.mode === "vs"){
-                if(props.whosTurn === "user"){
-                    props.setWhosTurn("com");
-                    setComAlgorithm(dice());
-                }else{
-                    props.setWhosTurn("user")
+                setComAlgorithm(dice());
+                if(!(result === "correct" && props.setting.keepTurn)){
+                    changeTurn();
                 }
             }
             props.setPlay(true);
         }
+    }
+
+    function changeTurn(){
+        let nextTurn = props.whosTurn === "user"? "com": "user";
+        props.setWhosTurn(nextTurn);
     }
 
 
@@ -189,7 +193,7 @@ export default function Gameboard(props){
 
                 let timerTimeout = setTimeout(()=>{
                     props.setTimeout(false);
-                    resetWhosTurn();
+                    resetWhosTurn("timeout");
                     clearTimeout(timerTimeout);
                 }, 500)
 

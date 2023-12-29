@@ -7,7 +7,7 @@ export default function CompCom(props){
     }
 
     function comTurn(){
-        let comIdx;
+                let comIdx;
         
         let conditionSelect = props.comAlgorithm < props.setting.select,
             conditionPair = props.comAlgorithm < props.setting.pair;
@@ -148,7 +148,8 @@ export default function CompCom(props){
     useEffect(()=>{
         if(props.whosTurn === "com" && props.play && !props.gameOver){
             comTurn();
+            // console.log("compCom");
         }
-    }, [props.turnCount, props.whosTurn, props.gameOver])
+    }, [props.turnCount, props.whosTurn, props.gameOver, props.play])
     
 }

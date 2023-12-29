@@ -190,4 +190,15 @@
 1.  > + 모바일에서 옵션 모달창 padding-bottom 추가
     > + 난이도 기본 값 변경
 
+#### 23.12.29
+1.  > + 대전모드에서 누락된 '정답 시 턴 유지 기능' 추가, 테스트 필요
+    >   + whosTurn 스테이트 변경 부분을 changeTurn()으로 분리  
+    >   + resetWhosTurn() 내용 수정
+    >   + CompCom.js 에서 useEffect 조건에 props.play 추가
+    > + resetWhosTurn() → if(props.gameOver) 조건에서 무의미한 내용 삭제
+    >   + alert('game over') → 테스트 목적 코드로 예상되어 삭제
+    >   + props.setPlay(false) → 중복 코드 삭제
+    
+
+
 </details>
