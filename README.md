@@ -6,7 +6,6 @@
 
 ### 기획의도
 + 리액트 공부를 위한 프로젝트 
-  + 클래스형 컴포넌트와 함수형 컴포넌트 차이점을 알기 위해 클래스형 컴포넌트를 사용
   + 컴포넌트 사이의 값, 함수 전달을 학습하기 위해 Redux 라이브러리는 배제
   + css-module 사용
 
@@ -41,16 +40,6 @@
 
 ## 수정내역
 <details>
-
-#### 23.10.26
-
-1. > + README.MD 추가
-   > + BrowserRouter → HashRouter 변경
-   > + 파비콘 추가
-   > + 관리자 페이지 > 태그리스트 관리페이지 > 되돌리기 버튼 작동오류 수정
-   >    + ModTagItem > ComponentDidUpdate 조건 추가
-   >    + ModTagItem > defualtValue → value 변경
-   > + CSS 스타일 수정
 
 #### 23.09.13
 
@@ -198,6 +187,9 @@
     > + resetWhosTurn() → if(props.gameOver) 조건에서 무의미한 내용 삭제
     >   + alert('game over') → 테스트 목적 코드로 예상되어 삭제
     >   + props.setPlay(false) → 중복 코드 삭제
+
+#### 24.01.03
+1.  > + README.md 잘못된 내용 수정
     
 
 
