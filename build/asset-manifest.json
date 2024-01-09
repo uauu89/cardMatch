@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/deployCardMatch/static/css/main.078ca63b.css",
+    "main.js": "/deployCardMatch/static/js/main.671471bf.js",
+    "static/js/787.7788a683.chunk.js": "/deployCardMatch/static/js/787.7788a683.chunk.js",
+    "index.html": "/deployCardMatch/index.html",
+    "main.078ca63b.css.map": "/deployCardMatch/static/css/main.078ca63b.css.map",
+    "main.671471bf.js.map": "/deployCardMatch/static/js/main.671471bf.js.map",
+    "787.7788a683.chunk.js.map": "/deployCardMatch/static/js/787.7788a683.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.078ca63b.css",
+    "static/js/main.671471bf.js"
+  ]
+}
