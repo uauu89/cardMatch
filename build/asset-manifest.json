@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/deployCardMatch/static/css/main.078ca63b.css",
-    "main.js": "/deployCardMatch/static/js/main.671471bf.js",
-    "static/js/787.7788a683.chunk.js": "/deployCardMatch/static/js/787.7788a683.chunk.js",
-    "index.html": "/deployCardMatch/index.html",
-    "main.078ca63b.css.map": "/deployCardMatch/static/css/main.078ca63b.css.map",
-    "main.671471bf.js.map": "/deployCardMatch/static/js/main.671471bf.js.map",
-    "787.7788a683.chunk.js.map": "/deployCardMatch/static/js/787.7788a683.chunk.js.map"
+    "main.css": "/cardMatch/build/static/css/main.078ca63b.css",
+    "main.js": "/cardMatch/build/static/js/main.78e375da.js",
+    "static/js/787.7788a683.chunk.js": "/cardMatch/build/static/js/787.7788a683.chunk.js",
+    "index.html": "/cardMatch/build/index.html",
+    "main.078ca63b.css.map": "/cardMatch/build/static/css/main.078ca63b.css.map",
+    "main.78e375da.js.map": "/cardMatch/build/static/js/main.78e375da.js.map",
+    "787.7788a683.chunk.js.map": "/cardMatch/build/static/js/787.7788a683.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.078ca63b.css",
-    "static/js/main.671471bf.js"
+    "static/js/main.78e375da.js"
   ]
 }

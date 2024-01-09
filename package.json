@@ -2,7 +2,7 @@
   "name": "card-match",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://uauu89.github.io/deployCardMatch/",
+  "homepage": "https://uauu89.github.io/cardMatch/build/",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-regular-svg-icons": "^6.4.2",
