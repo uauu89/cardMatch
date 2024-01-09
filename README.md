@@ -28,7 +28,7 @@
 ### 링크
 + [피그마](https://www.figma.com/file/18oZ5fY88khXRZmIaKN5Yj/MatchingCard?type=design&node-id=0-1&mode=design&t=CJmv1sZihV10cdHF-0)
 + [구현사이트(자바스크립트 버전)](https://uauu89.github.io/cardMatch/src/test.html)
-+ [구현사이트(리액트 버전)](https://uauu89.github.io/deployCardMatch/)
++ [구현사이트(리액트 버전)](https://uauu89.github.io/cardMatch/build/)
 
 
 <br />
@@ -192,7 +192,9 @@
 1.  > + README.md 잘못된 내용 수정
 
 #### 24.01.09
-1.  > + git에 build 폴더 추가
+1.  > + git에 build 폴더 추가  
+    >  <br />
+2.  > + 현재 repository 에서 배포 페이지 작동 확인 및 README.md 경로 수정
     
 
 
