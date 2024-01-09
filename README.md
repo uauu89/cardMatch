@@ -193,8 +193,10 @@
 
 #### 24.01.09
 1.  > + git에 build 폴더 추가  
-    >  <br />
-2.  > + 현재 repository 에서 배포 페이지 작동 확인 및 README.md 경로 수정
+    ><br />
+2.  > + 현재 repository 에서 배포 페이지 작동 확인 및 README.md 경로 수정  
+    ><br />   
+3.  > + build 내부경로 수정 (/build 추가)
     
 
 
